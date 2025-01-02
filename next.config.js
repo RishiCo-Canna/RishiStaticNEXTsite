@@ -27,6 +27,10 @@ const nextConfig = {
     outputFileTracingIncludes: {
       '/**': ['./public/**/*']
     }
+  },
+  // Expose environment variables to the browser
+  env: {
+    NEXT_PUBLIC_GITHUB_REPO_FULL_NAME: process.env.GITHUB_REPO_FULL_NAME,
   }
 }
 

@@ -1,11 +1,12 @@
 import NextAuth from 'next-auth'
 import GithubProvider from 'next-auth/providers/github'
 
-export default NextAuth({
+export const authOptions = {
   providers: [
     GithubProvider({
       clientId: process.env.OAUTH_CLIENT_ID,
       clientSecret: process.env.OAUTH_CLIENT_SECRET,
+      scope: 'repo,user',
     }),
   ],
   callbacks: {
@@ -18,6 +19,10 @@ export default NextAuth({
     async session({ session, token }) {
       session.accessToken = token.accessToken
       return session
-    }
-  }
-})
+    },
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+  debug: process.env.NODE_ENV === 'development',
+}
+
+export default NextAuth(authOptions)
