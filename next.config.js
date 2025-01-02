@@ -32,6 +32,14 @@ const nextConfig = {
       ? `https://${process.env.REPL_SLUG}.worf.replit.dev` 
       : process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
   },
+  async rewrites() {
+    return [
+      {
+        source: '/admin',
+        destination: '/admin/index.html',
+      }
+    ]
+  },
   async headers() {
     return [
       {

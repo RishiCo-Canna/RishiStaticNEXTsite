@@ -27,8 +27,8 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "NODE_ENV=development npx next dev -p 3000 -H 0.0.0.0"
-waitForPort = 3000
+args = "NODE_ENV=development npx next dev -p 80 -H 0.0.0.0"
+waitForPort = 80
 
 [deployment]
 run = ["sh", "-c", "NODE_ENV=development npx next dev -p 3000 -H 0.0.0.0"]
