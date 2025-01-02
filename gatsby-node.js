@@ -6,13 +6,13 @@ exports.createSchemaCustomization = ({ actions }) => {
   // Define our schema explicitly
   const typeDefs = `
     type MarkdownRemark implements Node {
-      frontmatter: Frontmatter
+      frontmatter: Frontmatter!
       html: String
     }
 
     type Frontmatter {
       title: String!
-      date: Date @dateformat
+      date: Date @dateformat(formatString: "MMMM DD, YYYY")
       thumbnail: String
     }
   `
@@ -20,6 +20,23 @@ exports.createSchemaCustomization = ({ actions }) => {
 }
 
 // Create pages dynamically
+exports.onCreateNode = ({ node, actions, getNode }) => {
+  const { createNodeField } = actions
+
+  if (node.internal.type === `MarkdownRemark`) {
+    const value = node.frontmatter.title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)+/g, '')
+
+    createNodeField({
+      name: `slug`,
+      node,
+      value: `/${value}`,
+    })
+  }
+}
+
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions
   const result = await graphql(`
