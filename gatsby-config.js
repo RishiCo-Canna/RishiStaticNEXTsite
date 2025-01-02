@@ -1,12 +1,14 @@
 module.exports = {
   siteMetadata: {
     title: 'Cannabis Industry Website',
-    description: 'A static website for the cannabis industry built with Gatsby and Decap CMS',
+    description: 'A modern website for the cannabis industry built with Gatsby',
     author: 'Your Name',
     siteUrl: `https://${process.env.REPLIT_SLUG}.${process.env.REPLIT_ENVIRONMENT_DOMAIN || 'repl.co'}`,
   },
   plugins: [
-    'gatsby-plugin-decap-cms',
+    'gatsby-plugin-image',
+    'gatsby-plugin-sharp',
+    'gatsby-transformer-sharp',
     {
       resolve: 'gatsby-source-filesystem',
       options: {
@@ -17,8 +19,8 @@ module.exports = {
     {
       resolve: 'gatsby-source-filesystem',
       options: {
-        name: 'blog',
-        path: `${__dirname}/src/content/blog`,
+        name: 'images',
+        path: `${__dirname}/src/images`,
       },
     },
     {

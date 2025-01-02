@@ -1,16 +1,15 @@
 import React from 'react'
-import { navigate } from 'gatsby'
 
 const AdminPage = () => {
   React.useEffect(() => {
     // Decap CMS needs to be loaded in the browser
-    import('decap-cms-app').then(({ default: CMS }) => {
+    import('decap-cms').then(() => {
       // Initialize the CMS
-      CMS.init()
+      window.CMS.init()
     })
   }, [])
 
-  return <div>Loading Admin...</div>
+  return <div>Loading Admin Dashboard...</div>
 }
 
 export default AdminPage
