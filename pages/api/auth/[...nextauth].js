@@ -6,9 +6,37 @@ export const authOptions = {
     GithubProvider({
       clientId: process.env.OAUTH_CLIENT_ID,
       clientSecret: process.env.OAUTH_CLIENT_SECRET,
-      scope: 'repo,user',
+      scope: 'repo,user'
     }),
   ],
+  cookies: {
+    sessionToken: {
+      name: 'next-auth.session-token',
+      options: {
+        httpOnly: true,
+        sameSite: 'none',
+        path: '/',
+        secure: true
+      }
+    },
+    callbackUrl: {
+      name: 'next-auth.callback-url',
+      options: {
+        sameSite: 'none',
+        path: '/',
+        secure: true
+      }
+    },
+    csrfToken: {
+      name: 'next-auth.csrf-token',
+      options: {
+        httpOnly: true,
+        sameSite: 'none',
+        path: '/',
+        secure: true
+      }
+    }
+  },
   callbacks: {
     async jwt({ token, account }) {
       if (account) {
@@ -19,10 +47,9 @@ export const authOptions = {
     async session({ session, token }) {
       session.accessToken = token.accessToken
       return session
-    },
+    }
   },
-  secret: process.env.NEXTAUTH_SECRET,
-  debug: process.env.NODE_ENV === 'development',
+  secret: process.env.NEXTAUTH_SECRET
 }
 
 export default NextAuth(authOptions)

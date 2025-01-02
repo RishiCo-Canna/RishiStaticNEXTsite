@@ -8,10 +8,9 @@ export default function CmsComponent() {
     if (session?.accessToken) {
       (async () => {
         try {
-          console.log('Loading Decap CMS with session token...')
+          console.log('Loading Decap CMS...')
           const CMS = (await import('decap-cms-app')).default
 
-          // Initialize CMS with GitHub backend
           await CMS.init({
             config: {
               load_config_file: false,
@@ -19,16 +18,8 @@ export default function CmsComponent() {
                 name: 'github',
                 repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME,
                 branch: 'main',
-                auth_type: 'github',
-                base_url: window.location.origin,
-                auth_endpoint: 'api/auth',
-                commit_messages: {
-                  create: 'Create {{collection}} "{{slug}}"',
-                  update: 'Update {{collection}} "{{slug}}"',
-                  delete: 'Delete {{collection}} "{{slug}}"',
-                  uploadMedia: 'Upload "{{path}}"',
-                  deleteMedia: 'Delete "{{path}}"'
-                }
+                auth_type: 'implicit', 
+                token: session.accessToken
               },
               media_folder: 'public/uploads',
               public_folder: '/uploads',
@@ -55,7 +46,8 @@ export default function CmsComponent() {
                     { label: 'Price', name: 'price', widget: 'number', value_type: 'float' }
                   ]
                 }
-              ]
+              ],
+              local_backend: false 
             }
           })
           console.log('CMS initialized successfully')
@@ -64,7 +56,7 @@ export default function CmsComponent() {
         }
       })()
     } else if (status === "unauthenticated") {
-      signIn('github')
+      signIn('github', { callbackUrl: window.location.origin + '/admin' })
     }
   }, [session, status])
 
@@ -82,7 +74,7 @@ export default function CmsComponent() {
         <h2>Admin Access Required</h2>
         <p>Please sign in with GitHub to access the admin panel</p>
         <button 
-          onClick={() => signIn('github')}
+          onClick={() => signIn('github', { callbackUrl: window.location.origin + '/admin' })}
           style={{
             background: '#24292e',
             color: 'white',
