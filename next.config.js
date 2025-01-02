@@ -40,13 +40,13 @@ const nextConfig = {
           {
             key: 'Content-Security-Policy',
             value: [
-              "frame-ancestors 'self' https://*.repl.co https://*.repl.dev https://*.worf.replit.dev;",
-              "default-src 'self' https://api.github.com https://github.com https://identity.netlify.com https://unpkg.com;",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://identity.netlify.com https://unpkg.com;",
+              "frame-ancestors 'self';",
+              "default-src 'self' https://api.github.com https://github.com https://unpkg.com;",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com;",
               "style-src 'self' 'unsafe-inline';",
               "img-src 'self' data: https:;",
               "connect-src 'self' https://api.github.com https://*.repl.co https://*.repl.dev https://*.worf.replit.dev https://github.com;",
-              "form-action 'self' https://github.com https://*.repl.co https://*.repl.dev https://*.worf.replit.dev;"
+              "form-action 'self' https://github.com;"
             ].join(' ')
           }
         ]

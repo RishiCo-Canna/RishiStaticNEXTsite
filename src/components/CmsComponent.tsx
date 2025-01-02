@@ -11,32 +11,22 @@ interface CMSError {
 
 const CmsComponent: React.FC<Props> = () => {
   const [error, setError] = useState<CMSError | null>(null);
-  const [initializationAttempts, setInitializationAttempts] = useState(0);
-  const MAX_RETRY_ATTEMPTS = 3;
 
   useEffect(() => {
-    const validateConfig = () => {
-      const repo = process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME;
-      const clientId = process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID;
-      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
-
-      const missingConfigs = [];
-      if (!repo) missingConfigs.push('NEXT_PUBLIC_GITHUB_REPO_FULL_NAME');
-      if (!clientId) missingConfigs.push('NEXT_PUBLIC_OAUTH_CLIENT_ID');
-      if (!siteUrl) missingConfigs.push('NEXT_PUBLIC_SITE_URL');
-
-      if (missingConfigs.length > 0) {
-        throw new Error(`Missing required configuration: ${missingConfigs.join(', ')}`);
-      }
-
-      return { repo, clientId, siteUrl };
-    };
-
     const initCMS = async () => {
       try {
-        const { repo, clientId, siteUrl } = validateConfig();
+        // Validate required environment variables
+        const repo = process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME;
+        const clientId = process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID;
+        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
-        // Initialize CMS with config
+        if (!repo || !clientId || !siteUrl) {
+          throw new Error('Missing required environment variables');
+        }
+
+        console.log('Initializing CMS with:', { repo, siteUrl });
+
+        // Initialize CMS with minimal required config
         CMS.init({
           config: {
             backend: {
@@ -45,9 +35,8 @@ const CmsComponent: React.FC<Props> = () => {
               branch: 'main',
               base_url: siteUrl,
               auth_endpoint: 'api/auth',
-              app_id: clientId
+              app_id: clientId,
             },
-            load_config_file: false,
             media_folder: 'public/uploads',
             public_folder: '/uploads',
             collections: [
@@ -77,36 +66,18 @@ const CmsComponent: React.FC<Props> = () => {
           }
         });
 
-        // Handle authentication callback
-        if (typeof window !== 'undefined') {
-          const hash = window.location.hash;
-          if (hash && hash.startsWith('#access_token=')) {
-            const token = hash.replace('#access_token=', '');
-            sessionStorage.setItem('cms.token', token);
-            window.location.hash = '';
-          }
-        }
-
         setError(null);
       } catch (err: any) {
         console.error('CMS initialization error:', err);
-        const errorDetails: CMSError = {
+        setError({
           message: 'Failed to initialize CMS',
           details: err.message
-        };
-        setError(errorDetails);
-
-        if (initializationAttempts < MAX_RETRY_ATTEMPTS - 1) {
-          setInitializationAttempts(prev => prev + 1);
-          setTimeout(() => {
-            setError(null);
-          }, 3000);
-        }
+        });
       }
     };
 
     initCMS();
-  }, [initializationAttempts]);
+  }, []);
 
   if (error) {
     return (
@@ -115,14 +86,6 @@ const CmsComponent: React.FC<Props> = () => {
         <p className="text-red-600">{error.message}</p>
         {error.details && (
           <p className="text-red-500 text-sm mt-2">{error.details}</p>
-        )}
-        {initializationAttempts < MAX_RETRY_ATTEMPTS && (
-          <button
-            className="mt-4 px-4 py-2 bg-red-100 text-red-800 rounded hover:bg-red-200"
-            onClick={() => setInitializationAttempts(prev => prev + 1)}
-          >
-            Retry
-          </button>
         )}
       </div>
     );
