@@ -17,6 +17,18 @@ export default function Home() {
         <p className={styles.description}>
           Your trusted source for cannabis industry information
         </p>
+
+        <a href="/admin" style={{
+          display: 'inline-block',
+          background: '#0070f3',
+          color: 'white',
+          padding: '10px 20px',
+          borderRadius: '5px',
+          textDecoration: 'none',
+          marginTop: '20px'
+        }}>
+          Admin
+        </a>
       </main>
 
       <footer className={styles.footer}>
