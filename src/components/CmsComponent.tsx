@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import CMS from 'decap-cms-app'
 import 'decap-cms-backend-github'
 
-// Extend Window interface to include CMS_ENV
 declare global {
   interface Window {
     CMS_ENV?: any;
@@ -12,7 +11,6 @@ declare global {
 interface CMSError {
   message: string;
   details?: string;
-  code?: string;
 }
 
 const CmsComponent = () => {
@@ -22,8 +20,6 @@ const CmsComponent = () => {
 
   useEffect(() => {
     const validateConfig = () => {
-      console.log('Validating CMS configuration...');
-
       const repo = process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME;
       const clientId = process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID;
       const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
@@ -37,18 +33,13 @@ const CmsComponent = () => {
         throw new Error(`Missing required configuration: ${missingConfigs.join(', ')}`);
       }
 
-      console.log('Configuration validation successful');
       return { repo, clientId, siteUrl };
     };
 
     const initCMS = async () => {
       try {
-        console.log(`CMS initialization attempt ${initializationAttempts + 1} of ${MAX_RETRY_ATTEMPTS}`);
-
-        // Validate configuration
         const { repo, clientId, siteUrl } = validateConfig();
 
-        // Initialize Decap CMS configuration
         const config = {
           backend: {
             name: 'github' as const,
@@ -56,7 +47,6 @@ const CmsComponent = () => {
             branch: 'main',
             base_url: siteUrl,
             auth_endpoint: 'api/auth',
-            auth_type: 'oauth' as const,
             app_id: clientId
           },
           media_folder: 'public/uploads',
@@ -85,25 +75,19 @@ const CmsComponent = () => {
               ]
             }
           ]
-        };
+        } as const;
 
-        // Initialize CMS with config
-        console.log('Initializing CMS with config:', config);
         await CMS.init({ config });
-        console.log('CMS initialized successfully');
         setError(null);
       } catch (err: any) {
-        console.error('CMS Initialization Error:', err);
         const errorDetails: CMSError = {
           message: 'Failed to initialize CMS',
-          details: err.message,
-          code: err.code || 'INIT_ERROR'
+          details: err.message
         };
 
         setError(errorDetails);
 
         if (initializationAttempts < MAX_RETRY_ATTEMPTS - 1) {
-          console.log(`Retrying CMS initialization in 3 seconds...`);
           setInitializationAttempts(prev => prev + 1);
           setTimeout(() => {
             setError(null);

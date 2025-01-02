@@ -15,16 +15,14 @@ interface GitHubTokenResponse {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  // Validate environment variables
   if (!clientId || !clientSecret) {
     console.error('Missing OAuth credentials');
     return res.status(500).json({ 
       error: 'Server configuration error',
-      details: 'Missing OAuth credentials. Please check environment variables.'
+      details: 'Missing OAuth credentials'
     });
   }
 
-  // Only accept POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ 
       error: 'Method not allowed',
@@ -33,16 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    let code: string;
-    try {
-      const body = JSON.parse(req.body);
-      code = body.code;
-    } catch (e) {
-      return res.status(400).json({ 
-        error: 'Invalid request body',
-        details: 'Request body must be valid JSON with a code parameter'
-      });
-    }
+    const { code } = JSON.parse(req.body);
 
     if (!code) {
       return res.status(400).json({ 
@@ -73,7 +62,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       console.error('GitHub token exchange failed:', tokenResponse.statusText);
       return res.status(tokenResponse.status).json({
         error: 'Token exchange failed',
-        details: `GitHub responded with ${tokenResponse.status}: ${tokenResponse.statusText}`
+        details: `GitHub responded with ${tokenResponse.status}`
       });
     }
 
@@ -84,22 +73,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ 
         error: 'GitHub authentication failed',
         details: tokenData.error_description || tokenData.error
-      });
-    }
-
-    // Validate the token by making a test API call
-    console.log('Validating token...');
-    const userResponse = await fetch('https://api.github.com/user', {
-      headers: {
-        Authorization: `Bearer ${tokenData.access_token}`,
-      },
-    });
-
-    if (!userResponse.ok) {
-      console.error('Token validation failed:', userResponse.statusText);
-      return res.status(401).json({ 
-        error: 'Invalid token',
-        details: 'The token received from GitHub is invalid'
       });
     }
 
