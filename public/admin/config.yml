@@ -1,5 +1,8 @@
 backend:
-  name: test-repo
+  name: github
+  repo: ${process.env.GITHUB_REPO_FULL_NAME}
+  branch: main
+  auth_endpoint: api/auth # Next.js API route for authentication
 
 media_folder: "public/uploads"
 public_folder: "/uploads"
@@ -12,3 +15,12 @@ collections:
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Body", name: "body", widget: "markdown" }
+  - name: "products"
+    label: "Products"
+    folder: "content/products"
+    create: true
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Image", name: "image", widget: "image" }
+      - { label: "Description", name: "description", widget: "markdown" }
+      - { label: "Price", name: "price", widget: "number", value_type: "float" }

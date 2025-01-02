@@ -27,7 +27,7 @@ export default function Home() {
           textDecoration: 'none',
           marginTop: '20px'
         }}>
-          Admin
+          Admin Panel
         </a>
       </main>
 
