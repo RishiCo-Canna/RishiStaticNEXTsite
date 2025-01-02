@@ -8,10 +8,9 @@
 <body>
   <!-- Include the script that builds the page and powers Decap CMS -->
   <script>
-    // Ensure environment variables are properly replaced during build
+    // Set base URL for the CMS
     window.CMS_ENV = {
-      GITHUB_REPO: process.env.GITHUB_REPO_FULL_NAME,
-      SITE_URL: process.env.NEXT_PUBLIC_SITE_URL
+      BASE_URL: 'https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev:3000'
     };
   </script>
   <!-- Load Decap CMS -->

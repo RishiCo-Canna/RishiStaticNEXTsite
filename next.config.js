@@ -57,16 +57,10 @@ const nextConfig = {
     ]
   },
   env: {
-    NEXTAUTH_URL: process.env.REPL_SLUG ? `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co` : 'http://localhost:3000',
+    NEXTAUTH_URL: 'https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev:3000',
     NEXT_PUBLIC_GITHUB_REPO_FULL_NAME: process.env.GITHUB_REPO_FULL_NAME,
     NEXT_PUBLIC_OAUTH_CLIENT_ID: process.env.OAUTH_CLIENT_ID,
-    NEXT_PUBLIC_SITE_URL: process.env.REPL_SLUG ? `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co` : 'http://localhost:3000'
-  },
-  serverRuntimeConfig: {
-    mySecret: 'secret',
-  },
-  publicRuntimeConfig: {
-    staticFolder: '/static',
+    NEXT_PUBLIC_SITE_URL: 'https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev:3000'
   }
 }
 
