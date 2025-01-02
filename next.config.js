@@ -28,10 +28,9 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_GITHUB_REPO_FULL_NAME: process.env.GITHUB_REPO_FULL_NAME,
     NEXT_PUBLIC_OAUTH_CLIENT_ID: process.env.OAUTH_CLIENT_ID,
-    // Ensure we're using HTTPS and remove any port numbers
     NEXT_PUBLIC_SITE_URL: process.env.REPL_SLUG 
       ? `https://${process.env.REPL_SLUG}.worf.replit.dev` 
-      : 'https://localhost'
+      : process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
   },
   async headers() {
     return [
@@ -59,10 +58,6 @@ const nextConfig = {
       {
         source: '/admin',
         destination: '/admin/index.html',
-      },
-      {
-        source: '/config.yml',
-        destination: '/admin/config.yml',
       }
     ]
   }

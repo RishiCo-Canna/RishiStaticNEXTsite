@@ -38,10 +38,6 @@ const CmsComponent = () => {
       }
 
       console.log('Configuration validation successful');
-      console.log('Repository:', repo);
-      console.log('Base URL:', siteUrl);
-      console.log('OAuth Client ID:', clientId?.substring(0, 8) + '...');
-
       return { repo, clientId, siteUrl };
     };
 
@@ -55,15 +51,14 @@ const CmsComponent = () => {
         // Initialize Decap CMS configuration
         const config = {
           backend: {
-            name: 'github',
+            name: 'github' as const,
             repo,
             branch: 'main',
             base_url: siteUrl,
-            auth_endpoint: '/api/auth',
-            auth_type: 'oauth',
-            app_id: clientId,
+            auth_endpoint: 'api/auth',
+            auth_type: 'oauth' as const,
+            app_id: clientId
           },
-          local_backend: process.env.NODE_ENV === 'development',
           media_folder: 'public/uploads',
           public_folder: '/uploads',
           collections: [
@@ -92,14 +87,8 @@ const CmsComponent = () => {
           ]
         };
 
-        // Set development mode if needed
-        if (process.env.NODE_ENV === 'development') {
-          window.CMS_ENV = 'development';
-          console.log('CMS Development Mode Enabled');
-        }
-
         // Initialize CMS with config
-        console.log('Initializing CMS...', config);
+        console.log('Initializing CMS with config:', config);
         await CMS.init({ config });
         console.log('CMS initialized successfully');
         setError(null);
@@ -113,15 +102,12 @@ const CmsComponent = () => {
 
         setError(errorDetails);
 
-        // Attempt retry if under max attempts
         if (initializationAttempts < MAX_RETRY_ATTEMPTS - 1) {
           console.log(`Retrying CMS initialization in 3 seconds...`);
           setInitializationAttempts(prev => prev + 1);
           setTimeout(() => {
             setError(null);
           }, 3000);
-        } else {
-          console.error('Max retry attempts reached. Please check configuration and try again.');
         }
       }
     };
@@ -136,9 +122,6 @@ const CmsComponent = () => {
         <p className="text-red-600">{error.message}</p>
         {error.details && (
           <p className="text-red-500 text-sm mt-2">{error.details}</p>
-        )}
-        {error.code && (
-          <p className="text-red-400 text-xs mt-1">Error Code: {error.code}</p>
         )}
         {initializationAttempts < MAX_RETRY_ATTEMPTS && (
           <button
