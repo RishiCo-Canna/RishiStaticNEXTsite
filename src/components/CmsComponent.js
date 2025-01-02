@@ -1,44 +1,97 @@
+import { useEffect } from 'react'
+import { useSession, signIn } from 'next-auth/react'
 
-import { useEffect } from 'react';
-import { useSession } from 'next-auth/react';
-import CMS from 'decap-cms-app';
-
-const CmsComponent = () => {
-  const { data: session } = useSession();
+export default function CmsComponent() {
+  const { data: session, status } = useSession()
 
   useEffect(() => {
     if (session?.accessToken) {
-      CMS.init({
-        config: {
-          load_config_file: false,
-          backend: {
-            name: 'github',
-            repo: 'your-username/your-repo', // Replace with your GitHub username/repo
-            branch: 'main',
-            auth_type: 'pkce',
-            base_url: window.location.origin,
-            auth_endpoint: 'api/auth'
-          },
-          media_folder: 'public/images',
-          public_folder: '/images',
-          collections: [
-            {
-              name: 'pages',
-              label: 'Pages',
-              folder: 'content/pages',
-              create: true,
-              fields: [
-                { label: 'Title', name: 'title', widget: 'string' },
-                { label: 'Body', name: 'body', widget: 'markdown' }
-              ]
+      (async () => {
+        try {
+          console.log('Loading Decap CMS...')
+          const CMS = (await import('decap-cms-app')).default
+
+          await CMS.init({
+            config: {
+              load_config_file: false,
+              backend: {
+                name: 'github',
+                repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME,
+                branch: 'main',
+                auth_type: 'oauth',
+                base_url: window.location.origin,
+                auth_endpoint: 'api/auth',
+                app_id: process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID,
+                auth_scope: 'repo,user'
+              },
+              media_folder: 'public/uploads',
+              public_folder: '/uploads',
+              collections: [
+                {
+                  name: 'pages',
+                  label: 'Pages',
+                  folder: 'content/pages',
+                  create: true,
+                  fields: [
+                    { label: 'Title', name: 'title', widget: 'string' },
+                    { label: 'Body', name: 'body', widget: 'markdown' }
+                  ]
+                },
+                {
+                  name: 'products',
+                  label: 'Products',
+                  folder: 'content/products',
+                  create: true,
+                  fields: [
+                    { label: 'Title', name: 'title', widget: 'string' },
+                    { label: 'Image', name: 'image', widget: 'image' },
+                    { label: 'Description', name: 'description', widget: 'markdown' },
+                    { label: 'Price', name: 'price', widget: 'number', value_type: 'float' }
+                  ]
+                }
+              ],
+              local_backend: false,
+              publish_mode: 'editorial_workflow'
             }
-          ]
+          })
+          console.log('CMS initialized successfully')
+        } catch (error) {
+          console.error('Error initializing CMS:', error)
         }
-      });
+      })()
     }
-  }, [session]);
+  }, [session])
 
-  return null;
-};
+  if (status === "loading") {
+    return (
+      <div style={{ padding: '20px', textAlign: 'center' }}>
+        <h2>Loading authentication...</h2>
+      </div>
+    )
+  }
 
-export default CmsComponent;
+  if (!session) {
+    return (
+      <div style={{ padding: '20px', textAlign: 'center' }}>
+        <h2>Admin Access Required</h2>
+        <p>Please sign in with GitHub to access the admin panel</p>
+        <button 
+          onClick={() => signIn('github', { callbackUrl: '/admin' })}
+          style={{
+            background: '#24292e',
+            color: 'white',
+            border: 'none',
+            padding: '10px 20px',
+            borderRadius: '5px',
+            cursor: 'pointer',
+            fontSize: '16px'
+          }}
+        >
+          Sign in with GitHub
+        </button>
+      </div>
+    )
+  }
+
+  return <div id="nc-root" />
+}
