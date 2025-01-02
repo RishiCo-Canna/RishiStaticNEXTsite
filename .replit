@@ -27,7 +27,7 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "PORT=3000 NODE_ENV=development npx next dev -H 0.0.0.0"
+args = "NODE_ENV=development npx next dev -H 0.0.0.0 -p 3000"
 waitForPort = 3000
 
 [deployment]
@@ -50,10 +50,6 @@ localPort = 8080
 externalPort = 80
 
 [[ports]]
-localPort = 34501
-externalPort = 6000
-
-[[ports]]
 localPort = 38725
 externalPort = 3003
 
@@ -64,14 +60,6 @@ externalPort = 4200
 [[ports]]
 localPort = 42197
 externalPort = 3001
-
-[[ports]]
-localPort = 43821
-externalPort = 6800
-
-[[ports]]
-localPort = 44485
-externalPort = 8000
 
 [[ports]]
 localPort = 46299

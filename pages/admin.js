@@ -1,30 +1,24 @@
+import dynamic from 'next/dynamic'
 import Head from 'next/head'
-import { useEffect } from 'react'
 
-const AdminPage = () => {
-  useEffect(() => {
-    (async () => {
-      const CMS = (await import('decap-cms-app')).default
-      CMS.init()
-      
-      // Initialize auth
-      const { GitHubBackend } = await import('decap-cms-backend-github')
-      CMS.registerBackend('github', GitHubBackend)
-    })()
-  }, [])
+// Import CMS component with no SSR
+const CMS = dynamic(
+  () => import('decap-cms-app').then((cms) => {
+    cms.default.init()
+    return () => <div id="nc-root" />
+  }),
+  { ssr: false }
+)
 
+export default function AdminPage() {
   return (
     <>
       <Head>
         <title>Content Manager</title>
         <meta name="robots" content="noindex" />
-        {/* Import Decap CMS styles */}
-        <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
+        <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
       </Head>
-      {/* Decap CMS will mount itself here */}
-      <div id="nc-root" />
+      <CMS />
     </>
   )
 }
-
-export default AdminPage

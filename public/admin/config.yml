@@ -2,50 +2,9 @@ backend:
   name: github
   repo: ${GITHUB_REPO_FULL_NAME}
   branch: main
-  base_url: ${window.location.origin}
   auth_endpoint: api/auth
 
-media_folder: "public/images"
-public_folder: "/images"
+media_folder: "public/uploads"
+public_folder: "/uploads"
 
-collections:
-  - name: "pages"
-    label: "Pages"
-    files:
-      - file: "content/pages/index.md"
-        label: "Home Page"
-        name: "home"
-        fields:
-          - { label: "Title", name: "title", widget: "string" }
-          - { label: "Hero Image", name: "hero_image", widget: "image", required: false }
-          - { label: "Body", name: "body", widget: "markdown" }
-          - { label: "SEO Description", name: "description", widget: "text" }
-
-  - name: "products"
-    label: "Products"
-    folder: "content/products"
-    create: true
-    slug: "{{slug}}"
-    fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Publish Date", name: "date", widget: "datetime" }
-      - { label: "Featured Image", name: "thumbnail", widget: "image" }
-      - { label: "Description", name: "description", widget: "text" }
-      - { label: "Body", name: "body", widget: "markdown" }
-      - label: "Category"
-        name: "category"
-        widget: "select"
-        options: ["flowers", "edibles", "concentrates", "accessories"]
-
-  - name: "blog"
-    label: "Blog"
-    folder: "content/blog"
-    create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
-    fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Publish Date", name: "date", widget: "datetime" }
-      - { label: "Author", name: "author", widget: "string" }
-      - { label: "Featured Image", name: "thumbnail", widget: "image" }
-      - { label: "Body", name: "body", widget: "markdown" }
-      - { label: "Tags", name: "tags", widget: "list" }
+collections: []
