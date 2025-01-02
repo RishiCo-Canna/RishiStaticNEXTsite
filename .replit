@@ -13,26 +13,7 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Gatsby Development"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
 args = "Next.js Development"
-
-[[workflows.workflow]]
-name = "Gatsby Development"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd . && npx gatsby clean && npx gatsby develop -H 0.0.0.0 -p 3000"
-waitForPort = 3000
 
 [[workflows.workflow]]
 name = "Next.js Development"
