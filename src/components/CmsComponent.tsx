@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import CMS from 'decap-cms-app'
 import 'decap-cms-backend-github'
 
@@ -9,49 +9,124 @@ declare global {
   }
 }
 
-const CmsComponent = () => {
-  useEffect(() => {
-    // Initialize Decap CMS with proper configuration
-    CMS.init({
-      config: {
-        backend: {
-          name: 'github',
-          repo: process.env.NEXT_PUBLIC_GITHUB_REPO || process.env.GITHUB_REPO_FULL_NAME,
-          branch: 'main',
-          base_url: 'https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev',
-          auth_endpoint: 'api/auth'
-        },
-        media_folder: 'public/uploads',
-        public_folder: '/uploads',
-        collections: [
-          {
-            name: 'pages',
-            label: 'Pages',
-            folder: 'content/pages',
-            create: true,
-            fields: [
-              { label: 'Title', name: 'title', widget: 'string' },
-              { label: 'Body', name: 'body', widget: 'markdown' }
-            ]
-          },
-          {
-            name: 'products',
-            label: 'Products',
-            folder: 'content/products',
-            create: true,
-            fields: [
-              { label: 'Title', name: 'title', widget: 'string' },
-              { label: 'Image', name: 'image', widget: 'image' },
-              { label: 'Description', name: 'description', widget: 'markdown' },
-              { label: 'Price', name: 'price', widget: 'number', value_type: 'float' }
-            ]
-          }
-        ]
-      }
-    })
-  }, [])
-
-  return null
+interface CMSError {
+  message: string;
+  details?: string;
 }
 
-export default CmsComponent
+const CmsComponent = () => {
+  const [error, setError] = useState<CMSError | null>(null);
+
+  useEffect(() => {
+    const validateConfig = () => {
+      const repo = process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME;
+      const clientId = process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID;
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+
+      if (!repo) {
+        throw new Error('Missing GitHub repository configuration (NEXT_PUBLIC_GITHUB_REPO_FULL_NAME)');
+      }
+
+      if (!clientId) {
+        throw new Error('Missing OAuth client ID (NEXT_PUBLIC_OAUTH_CLIENT_ID)');
+      }
+
+      if (!siteUrl) {
+        throw new Error('Missing site URL configuration (NEXT_PUBLIC_SITE_URL)');
+      }
+
+      return { repo, siteUrl };
+    };
+
+    const initCMS = async () => {
+      try {
+        // Validate configuration
+        const { repo, siteUrl } = validateConfig();
+        console.log('CMS Config Validation - OK');
+        console.log('Repository:', repo);
+        console.log('Base URL:', siteUrl);
+
+        // Initialize Decap CMS configuration
+        const config = {
+          backend: {
+            name: 'github',
+            repo,
+            branch: 'main',
+            base_url: siteUrl,
+            auth_endpoint: 'api/auth'
+          },
+          load_config_file: false,
+          media_folder: 'public/uploads',
+          public_folder: '/uploads',
+          collections: [
+            {
+              name: 'pages',
+              label: 'Pages',
+              folder: 'content/pages',
+              create: true,
+              fields: [
+                { label: 'Title', name: 'title', widget: 'string', required: true },
+                { label: 'Body', name: 'body', widget: 'markdown', required: true }
+              ]
+            },
+            {
+              name: 'products',
+              label: 'Products',
+              folder: 'content/products',
+              create: true,
+              fields: [
+                { label: 'Title', name: 'title', widget: 'string', required: true },
+                { label: 'Image', name: 'image', widget: 'image', required: true },
+                { label: 'Description', name: 'description', widget: 'markdown', required: true },
+                { label: 'Price', name: 'price', widget: 'number', value_type: 'float', required: true }
+              ]
+            }
+          ]
+        };
+
+        // Set development mode if needed
+        if (process.env.NODE_ENV === 'development') {
+          window.CMS_ENV = 'development';
+          console.log('CMS Development Mode Enabled');
+        }
+
+        // Initialize CMS with config
+        console.log('Initializing CMS...');
+        await CMS.init({ config });
+        console.log('CMS initialized successfully');
+        setError(null);
+      } catch (err: any) {
+        console.error('CMS Initialization Error:', err);
+        setError({
+          message: 'Failed to initialize CMS',
+          details: err.message
+        });
+
+        // Attempt recovery after delay
+        setTimeout(() => {
+          console.log('Attempting CMS recovery...');
+          setError(null);
+          initCMS();
+        }, 5000);
+      }
+    };
+
+    initCMS();
+  }, []);
+
+  if (error) {
+    return (
+      <div className="p-4 bg-red-50 border border-red-200 rounded-md">
+        <h2 className="text-red-800 font-semibold mb-2">CMS Error</h2>
+        <p className="text-red-600">{error.message}</p>
+        {error.details && (
+          <p className="text-red-500 text-sm mt-2">{error.details}</p>
+        )}
+      </div>
+    );
+  }
+
+  return null;
+};
+
+export default CmsComponent;
