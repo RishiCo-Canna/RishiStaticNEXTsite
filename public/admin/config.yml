@@ -4,6 +4,8 @@ backend:
   branch: main
   base_url: ${NEXT_PUBLIC_SITE_URL}
   auth_endpoint: api/auth
+  auth_type: oauth
+  app_id: ${NEXT_PUBLIC_OAUTH_CLIENT_ID}
 
 media_folder: "public/uploads"
 public_folder: "/uploads"

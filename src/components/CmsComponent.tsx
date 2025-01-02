@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import CMS from 'decap-cms-app'
+import CMS, { type CmsConfig } from 'decap-cms-app'
 import 'decap-cms-backend-github'
 
 // Extend Window interface to include CMS_ENV
@@ -35,27 +35,29 @@ const CmsComponent = () => {
         throw new Error('Missing site URL configuration (NEXT_PUBLIC_SITE_URL)');
       }
 
-      return { repo, siteUrl };
+      return { repo, clientId, siteUrl };
     };
 
     const initCMS = async () => {
       try {
         // Validate configuration
-        const { repo, siteUrl } = validateConfig();
+        const { repo, clientId, siteUrl } = validateConfig();
         console.log('CMS Config Validation - OK');
         console.log('Repository:', repo);
         console.log('Base URL:', siteUrl);
 
         // Initialize Decap CMS configuration
-        const config = {
+        const config: CmsConfig = {
           backend: {
             name: 'github',
             repo,
             branch: 'main',
             base_url: siteUrl,
-            auth_endpoint: 'api/auth'
+            auth_endpoint: '/api/auth', // Ensure leading slash
+            auth_type: 'oauth',
+            app_id: clientId,
           },
-          load_config_file: false,
+          local_backend: process.env.NODE_ENV === 'development',
           media_folder: 'public/uploads',
           public_folder: '/uploads',
           collections: [
@@ -91,7 +93,7 @@ const CmsComponent = () => {
         }
 
         // Initialize CMS with config
-        console.log('Initializing CMS...');
+        console.log('Initializing CMS...', config);
         await CMS.init({ config });
         console.log('CMS initialized successfully');
         setError(null);
@@ -101,13 +103,6 @@ const CmsComponent = () => {
           message: 'Failed to initialize CMS',
           details: err.message
         });
-
-        // Attempt recovery after delay
-        setTimeout(() => {
-          console.log('Attempting CMS recovery...');
-          setError(null);
-          initCMS();
-        }, 5000);
       }
     };
 

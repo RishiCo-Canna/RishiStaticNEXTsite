@@ -25,15 +25,13 @@ const nextConfig = {
       '/**': ['./public/**/*']
     }
   },
-  async rewrites() {
-    return {
-      beforeFiles: [
-        {
-          source: '/admin',
-          destination: '/admin/index.html',
-        },
-      ],
-    }
+  env: {
+    NEXT_PUBLIC_GITHUB_REPO_FULL_NAME: process.env.GITHUB_REPO_FULL_NAME,
+    NEXT_PUBLIC_OAUTH_CLIENT_ID: process.env.OAUTH_CLIENT_ID,
+    // Ensure we're using HTTPS and remove any port numbers
+    NEXT_PUBLIC_SITE_URL: process.env.REPL_SLUG 
+      ? `https://${process.env.REPL_SLUG}.worf.replit.dev` 
+      : 'https://localhost'
   },
   async headers() {
     return [
@@ -44,11 +42,11 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "frame-ancestors 'self' https://*.repl.co https://*.repl.dev https://*.worf.replit.dev;",
-              "default-src 'self' https://api.github.com https://github.com;",
+              "default-src 'self' https://api.github.com https://github.com https://identity.netlify.com https://unpkg.com;",
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://identity.netlify.com https://unpkg.com;",
               "style-src 'self' 'unsafe-inline';",
               "img-src 'self' data: https:;",
-              "connect-src 'self' https://api.github.com https://*.repl.co https://*.repl.dev https://*.worf.replit.dev https://github.com;",
+              "connect-src 'self' https://api.github.com https://*.repl.co https://*.repl.dev https://*.worf.replit.dev https://github.com https://identity.netlify.com;",
               "form-action 'self' https://github.com https://*.repl.co https://*.repl.dev https://*.worf.replit.dev;"
             ].join(' ')
           }
@@ -56,12 +54,17 @@ const nextConfig = {
       }
     ]
   },
-  env: {
-    NEXT_PUBLIC_GITHUB_REPO_FULL_NAME: process.env.GITHUB_REPO_FULL_NAME,
-    NEXT_PUBLIC_OAUTH_CLIENT_ID: process.env.OAUTH_CLIENT_ID,
-    NEXT_PUBLIC_SITE_URL: process.env.REPL_SLUG 
-      ? `https://${process.env.REPL_SLUG}.worf.replit.dev` 
-      : 'http://localhost:3000'
+  async rewrites() {
+    return [
+      {
+        source: '/admin',
+        destination: '/admin/index.html',
+      },
+      {
+        source: '/config.yml',
+        destination: '/admin/config.yml',
+      }
+    ]
   }
 }
 
