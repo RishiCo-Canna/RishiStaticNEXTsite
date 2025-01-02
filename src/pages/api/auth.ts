@@ -3,17 +3,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 const clientId = process.env.OAUTH_CLIENT_ID;
 const clientSecret = process.env.OAUTH_CLIENT_SECRET;
 
-interface GitHubErrorResponse {
-  error: string;
-  error_description?: string;
-}
-
-interface GitHubTokenResponse {
-  access_token: string;
-  token_type: string;
-  scope: string;
-}
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (!clientId || !clientSecret) {
     console.error('Missing OAuth credentials');
@@ -31,7 +20,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const { code } = JSON.parse(req.body);
+    const { code, state } = JSON.parse(req.body);
+    const next = req.query.next || '/admin';
 
     if (!code) {
       return res.status(400).json({ 
@@ -54,6 +44,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           client_id: clientId,
           client_secret: clientSecret,
           code,
+          state,
+          redirect_uri: `${process.env.NEXT_PUBLIC_SITE_URL}/api/auth?next=${encodeURIComponent(next)}`
         }),
       }
     );
@@ -66,7 +58,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
     }
 
-    const tokenData: GitHubTokenResponse | GitHubErrorResponse = await tokenResponse.json();
+    const tokenData = await tokenResponse.json();
 
     if ('error' in tokenData) {
       console.error('GitHub OAuth error:', tokenData.error);
@@ -78,9 +70,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Return the access token in the format expected by Decap CMS
     console.log('Authentication successful');
+    res.setHeader('Set-Cookie', `gh_token=${tokenData.access_token}; Path=/; HttpOnly; SameSite=Lax`);
+
     return res.json({
       token: tokenData.access_token,
       provider: 'github',
+      next: next
     });
   } catch (error: any) {
     console.error('Auth error:', error);

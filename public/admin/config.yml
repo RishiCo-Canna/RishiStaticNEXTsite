@@ -1,14 +1,13 @@
-
 backend:
   name: github
-  repo: your-username/your-repo # Replace with your GitHub username/repo
+  repo: ${GITHUB_REPO_FULL_NAME}
   branch: main
   auth_type: pkce
-  base_url: https://${process.env.REPLIT_DEV_DOMAIN}
-  auth_endpoint: api/auth
+  base_url: ${NEXT_PUBLIC_SITE_URL}
+  auth_endpoint: api/auth?next=/admin
 
-media_folder: public/images
-public_folder: /images
+media_folder: public/uploads
+public_folder: /uploads
 
 collections:
   - name: pages
@@ -18,3 +17,12 @@ collections:
     fields:
       - { label: Title, name: title, widget: string }
       - { label: Body, name: body, widget: markdown }
+  - name: products
+    label: Products
+    folder: content/products
+    create: true
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Image, name: image, widget: image }
+      - { label: Description, name: description, widget: markdown }
+      - { label: Price, name: price, widget: number, value_type: float }
