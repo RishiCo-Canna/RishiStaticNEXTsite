@@ -1,10 +1,14 @@
 backend:
-  name: github
-  repo: ${GITHUB_REPO_FULL_NAME}
-  branch: main
-  auth_endpoint: api/auth
+  name: test-repo
 
 media_folder: "public/uploads"
 public_folder: "/uploads"
 
-collections: []
+collections:
+  - name: "pages"
+    label: "Pages"
+    folder: "content/pages"
+    create: true
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Body", name: "body", widget: "markdown" }

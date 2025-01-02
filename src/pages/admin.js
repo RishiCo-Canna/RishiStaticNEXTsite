@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 
-// Import CMS component with no SSR to avoid window undefined issues
+// Import CMS component with no SSR
 const CmsComponent = dynamic(() => 
   import('../components/CmsComponent').then((mod) => mod.default), 
   { ssr: false }
