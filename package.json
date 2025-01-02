@@ -10,7 +10,11 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@types/node": "^22.10.3",
+    "decap-cms-app": "^3.4.0",
+    "decap-cms-backend-github": "^3.2.2",
     "next": "^13.4.19",
+    "next-auth": "^4.24.11",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }

@@ -1,31 +1,51 @@
 backend:
   name: github
-  repo: ${process.env.GITHUB_REPO_FULL_NAME}
+  repo: ${GITHUB_REPO_FULL_NAME}
   branch: main
-  base_url: https://api.github.com
-  auth_endpoint: auth
+  base_url: ${window.location.origin}
+  auth_endpoint: api/auth
 
-media_folder: static/images
-public_folder: /images
+media_folder: "public/images"
+public_folder: "/images"
 
 collections:
   - name: "pages"
     label: "Pages"
     files:
-      - file: "src/content/index.md"
+      - file: "content/pages/index.md"
         label: "Home Page"
         name: "home"
         fields:
           - { label: "Title", name: "title", widget: "string" }
+          - { label: "Hero Image", name: "hero_image", widget: "image", required: false }
           - { label: "Body", name: "body", widget: "markdown" }
+          - { label: "SEO Description", name: "description", widget: "text" }
+
+  - name: "products"
+    label: "Products"
+    folder: "content/products"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Publish Date", name: "date", widget: "datetime" }
+      - { label: "Featured Image", name: "thumbnail", widget: "image" }
+      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Body", name: "body", widget: "markdown" }
+      - label: "Category"
+        name: "category"
+        widget: "select"
+        options: ["flowers", "edibles", "concentrates", "accessories"]
 
   - name: "blog"
     label: "Blog"
-    folder: "src/content/blog"
+    folder: "content/blog"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Publish Date", name: "date", widget: "datetime" }
-      - { label: "Featured Image", name: "thumbnail", widget: "image", required: false }
+      - { label: "Author", name: "author", widget: "string" }
+      - { label: "Featured Image", name: "thumbnail", widget: "image" }
       - { label: "Body", name: "body", widget: "markdown" }
+      - { label: "Tags", name: "tags", widget: "list" }
