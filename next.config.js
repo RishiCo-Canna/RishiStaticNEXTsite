@@ -47,10 +47,10 @@ const nextConfig = {
     ]
   },
   env: {
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL || `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co`,
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL || `https://workspace.mike516.repl.co`,
     NEXT_PUBLIC_GITHUB_REPO_FULL_NAME: process.env.GITHUB_REPO_FULL_NAME,
     NEXT_PUBLIC_OAUTH_CLIENT_ID: process.env.OAUTH_CLIENT_ID,
-    NEXT_PUBLIC_SITE_URL: process.env.NEXTAUTH_URL || `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co`
+    NEXT_PUBLIC_SITE_URL: process.env.NEXTAUTH_URL || `https://workspace.mike516.repl.co`
   }
 }
 

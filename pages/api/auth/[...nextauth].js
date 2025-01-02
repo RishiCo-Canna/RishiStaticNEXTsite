@@ -9,7 +9,7 @@ export const authOptions = {
       scope: 'repo,user'
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET || 'your-development-secret',
   session: {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 days
@@ -36,10 +36,8 @@ export const authOptions = {
       session.accessToken = token.accessToken
       return session
     },
-    async redirect({ url, baseUrl }) {
-      if (url.startsWith('/')) return `${baseUrl}${url}`
-      else if (new URL(url).origin === baseUrl) return url
-      return baseUrl
+    async signIn({ user, account, profile }) {
+      return true // Add any additional validation here if needed
     }
   },
   pages: {
@@ -47,7 +45,7 @@ export const authOptions = {
     error: '/admin', // Error pages
     signOut: '/admin'
   },
-  debug: true
+  debug: process.env.NODE_ENV === 'development',
 }
 
 export default NextAuth(authOptions)

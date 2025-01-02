@@ -1,8 +1,9 @@
 backend:
   name: github
-  repo: ${process.env.GITHUB_REPO_FULL_NAME}
+  repo: process.env.GITHUB_REPO_FULL_NAME
   branch: main
-  auth_endpoint: api/auth # Next.js API route for authentication
+  base_url: https://workspace.mike516.repl.co
+  auth_endpoint: api/auth/callback/github
 
 media_folder: "public/uploads"
 public_folder: "/uploads"
