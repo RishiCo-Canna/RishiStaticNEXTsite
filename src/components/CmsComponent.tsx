@@ -45,14 +45,7 @@ const CmsComponent: React.FC<Props> = () => {
               branch: 'main',
               base_url: siteUrl,
               auth_endpoint: 'api/auth',
-              app_id: clientId,
-              commit_messages: {
-                create: 'Create {{collection}} "{{slug}}"',
-                update: 'Update {{collection}} "{{slug}}"',
-                delete: 'Delete {{collection}} "{{slug}}"',
-                uploadMedia: 'Upload "{{path}}"',
-                deleteMedia: 'Delete "{{path}}"'
-              }
+              app_id: clientId
             },
             load_config_file: false,
             media_folder: 'public/uploads',

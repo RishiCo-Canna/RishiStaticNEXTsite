@@ -45,7 +45,7 @@ const nextConfig = {
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://identity.netlify.com https://unpkg.com;",
               "style-src 'self' 'unsafe-inline';",
               "img-src 'self' data: https:;",
-              "connect-src 'self' https://api.github.com https://*.repl.co https://*.repl.dev https://*.worf.replit.dev https://github.com https://identity.netlify.com;",
+              "connect-src 'self' https://api.github.com https://*.repl.co https://*.repl.dev https://*.worf.replit.dev https://github.com;",
               "form-action 'self' https://github.com https://*.repl.co https://*.repl.dev https://*.worf.replit.dev;"
             ].join(' ')
           }
@@ -56,12 +56,8 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/admin',
-        destination: '/admin/index.html',
-      },
-      {
         source: '/admin/:path*',
-        destination: '/admin/index.html',
+        destination: '/admin'
       }
     ]
   }
