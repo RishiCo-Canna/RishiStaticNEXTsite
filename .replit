@@ -27,11 +27,15 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "NEXTAUTH_URL=https://${REPL_SLUG}.${REPL_OWNER}.repl.co NODE_ENV=development npx next dev -H 0.0.0.0 -p 3000"
+args = "NEXTAUTH_URL=https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev NODE_ENV=development npx next dev -H 0.0.0.0 -p 3000"
 waitForPort = 3000
 
 [deployment]
-run = ["sh", "-c", "NEXTAUTH_URL=https://${REPL_SLUG}.${REPL_OWNER}.repl.co NODE_ENV=development npx next dev -H 0.0.0.0 -p 3000"]
+run = ["sh", "-c", "NEXTAUTH_URL=https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev NODE_ENV=development npx next dev -H 0.0.0.0 -p 3000"]
+
+[[ports]]
+localPort = 443
+externalPort = 6000
 
 [[ports]]
 localPort = 3000
