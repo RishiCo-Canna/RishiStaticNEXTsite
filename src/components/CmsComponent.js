@@ -11,6 +11,7 @@ export default function CmsComponent() {
           console.log('Loading Decap CMS...')
           const CMS = (await import('decap-cms-app')).default
 
+          // Initialize Decap CMS with GitHub configuration
           await CMS.init({
             config: {
               load_config_file: false,
@@ -23,6 +24,7 @@ export default function CmsComponent() {
                 base_url: window.location.origin,
                 auth_endpoint: 'api/auth',
                 app_id: process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID,
+                auth_scope: 'repo,user',
                 commit_messages: {
                   create: 'Create {{collection}} "{{slug}}"',
                   update: 'Update {{collection}} "{{slug}}"',
@@ -82,7 +84,7 @@ export default function CmsComponent() {
         <h2>Admin Access Required</h2>
         <p>Please sign in with GitHub to access the admin panel</p>
         <button 
-          onClick={() => signIn('github')}
+          onClick={() => signIn('github', { callbackUrl: '/admin' })}
           style={{
             background: '#24292e',
             color: 'white',

@@ -16,12 +16,12 @@ export const authOptions = {
   },
   cookies: {
     sessionToken: {
-      name: `next-auth.session-token`,
+      name: 'next-auth.session-token',
       options: {
         httpOnly: true,
         sameSite: 'lax',
         path: '/',
-        secure: true
+        secure: process.env.NODE_ENV === 'production'
       }
     }
   },
@@ -37,15 +37,17 @@ export const authOptions = {
       return session
     },
     async redirect({ url, baseUrl }) {
-      // Handle redirects properly
-      if (url.startsWith("/")) {
-        return `${baseUrl}${url}`
-      }
-      if (new URL(url).origin === baseUrl) {
-        return url
-      }
-      return baseUrl + "/admin"
+      // Allows relative callback URLs
+      if (url.startsWith("/")) return `${baseUrl}${url}`
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url
+      return baseUrl
     }
+  },
+  pages: {
+    signIn: '/admin',
+    error: '/admin', // Error pages
+    signOut: '/admin'
   },
   debug: process.env.NODE_ENV === 'development'
 }
