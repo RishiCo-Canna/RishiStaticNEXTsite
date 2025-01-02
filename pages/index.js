@@ -1,32 +1,27 @@
-import { Inter } from 'next/font/google'
-
-const inter = Inter({ subsets: ['latin'] })
+import Head from 'next/head'
+import styles from '../styles/Home.module.css'
 
 export default function Home() {
   return (
-    <div className={inter.className}>
-      <main style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh',
-        backgroundColor: '#f5f5f5'
-      }}>
-        <h1 style={{
-          fontSize: '2.5rem',
-          color: '#333',
-          marginBottom: '1rem'
-        }}>
+    <div>
+      <Head>
+        <title>Cannabis Industry Website</title>
+        <meta name="description" content="Cannabis Industry Website powered by Next.js" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <main>
+        <h1 >
           Welcome to Cannabis Industry Website
         </h1>
-        <p style={{
-          fontSize: '1.2rem',
-          color: '#666'
-        }}>
-          Built with Next.js
+        <p>
+          Your trusted source for cannabis industry information
         </p>
       </main>
+
+      <footer>
+        <p>© {new Date().getFullYear()} Cannabis Industry Website</p>
+      </footer>
     </div>
   )
 }

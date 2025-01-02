@@ -1,24 +1,32 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Enable proper host handling for Replit
+  // Ensure proper host handling for Replit
   webpack: (config, { isServer }) => {
-    return config;
+    if (!isServer) {
+      config.resolve.fallback = {
+        fs: false,
+        net: false,
+        tls: false,
+      }
+    }
+    return config
   },
-  // Allow all hostnames in development
+  // Allow images from any domain in development
   images: {
-    domains: ['*'],
-  },
-  // Ensure the application is accessible
-  async headers() {
-    return [
+    remotePatterns: [
       {
-        source: '/:path*',
-        headers: [
-          { key: 'Access-Control-Allow-Origin', value: '*' }
-        ],
+        protocol: 'https',
+        hostname: '**',
       },
-    ]
+    ],
+  },
+  // Required for Replit - ensures proper port binding
+  output: 'standalone',
+  experimental: {
+    outputFileTracingIncludes: {
+      '/**': ['./public/**/*']
+    }
   }
 }
 

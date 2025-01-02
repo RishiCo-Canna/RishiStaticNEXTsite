@@ -1,37 +1,27 @@
-import * as React from "react"
-import { graphql } from "gatsby"
-import Layout from "../components/layout"
+import Head from 'next/head'
+import styles from '../styles/Home.module.css'
 
-const IndexPage = ({ data }) => {
-  const { markdownRemark } = data || {}
-  const { frontmatter, html } = markdownRemark || {}
-
+export default function Home() {
   return (
-    <Layout>
-      <main>
-        <h1>{frontmatter?.title || "Welcome to Cannabis Industry Website"}</h1>
-        <div 
-          dangerouslySetInnerHTML={{ 
-            __html: html || "<p>Your trusted source for cannabis industry information and resources.</p>" 
-          }} 
-        />
+    <div className={styles.container}>
+      <Head>
+        <title>Cannabis Industry Website</title>
+        <meta name="description" content="Cannabis Industry Website powered by Next.js" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <main className={styles.main}>
+        <h1 className={styles.title}>
+          Welcome to Cannabis Industry Website
+        </h1>
+        <p className={styles.description}>
+          Your trusted source for cannabis industry information
+        </p>
       </main>
-    </Layout>
+
+      <footer className={styles.footer}>
+        <p>© {new Date().getFullYear()} Cannabis Industry Website</p>
+      </footer>
+    </div>
   )
 }
-
-export default IndexPage
-
-export const Head = () => <title>Home Page</title>
-
-export const query = graphql`
-  query {
-    markdownRemark(fileAbsolutePath: { regex: "/content/index.md/" }) {
-      html
-      frontmatter {
-        title
-        description
-      }
-    }
-  }
-`

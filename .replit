@@ -32,3 +32,23 @@ waitForPort = 3000
 
 [deployment]
 run = ["sh", "-c", "cd . && npx gatsby clean && npx gatsby develop -H 0.0.0.0 -p 3000"]
+
+[[ports]]
+localPort = 3000
+externalPort = 3000
+
+[[ports]]
+localPort = 3001
+externalPort = 3002
+
+[[ports]]
+localPort = 5000
+externalPort = 5000
+
+[[ports]]
+localPort = 8080
+externalPort = 80
+
+[[ports]]
+localPort = 42197
+externalPort = 3001
