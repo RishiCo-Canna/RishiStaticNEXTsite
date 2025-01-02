@@ -2,29 +2,27 @@ import React from 'react'
 import { graphql } from 'gatsby'
 import Layout from '../components/Layout'
 
+const IndexPage = ({ data }) => {
+  const { markdownRemark } = data || {}
+  const { frontmatter } = markdownRemark || {}
+
+  return (
+    <Layout>
+      <h1>{frontmatter?.title || 'Welcome to Our Cannabis Industry Website'}</h1>
+      <div dangerouslySetInnerHTML={{ __html: markdownRemark?.html || '<p>This is a simple homepage that you can edit through Decap CMS.</p>' }} />
+    </Layout>
+  )
+}
+
 export const query = graphql`
   query HomePageQuery {
-    markdownRemark(fields: { slug: { eq: "/" } }) {
+    markdownRemark(fileAbsolutePath: { regex: "/content/index.md/" }) {
+      html
       frontmatter {
         title
-        content
       }
     }
   }
 `
-
-const IndexPage = ({ data }) => {
-  const { title, content } = data?.markdownRemark?.frontmatter || {
-    title: 'Welcome to Our Cannabis Industry Website',
-    content: 'This is a simple homepage that you can edit through Decap CMS.'
-  }
-
-  return (
-    <Layout>
-      <h1>{title}</h1>
-      <p>{content}</p>
-    </Layout>
-  )
-}
 
 export default IndexPage

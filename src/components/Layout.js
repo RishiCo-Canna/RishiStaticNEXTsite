@@ -6,17 +6,23 @@ const Layout = ({ children }) => {
       <header>
         <h1>Cannabis Industry Website</h1>
         <nav>
-          <a href="/admin/" style={{
-            display: 'inline-block',
-            padding: '0.5rem 1rem',
-            background: '#007acc',
-            color: 'white',
-            textDecoration: 'none',
-            borderRadius: '4px',
-            marginTop: '1rem'
-          }}>
-            Admin Dashboard
-          </a>
+          <ul style={{ listStyle: 'none', padding: 0 }}>
+            <li style={{ display: 'inline-block', marginRight: '1rem' }}>
+              <a href="/" style={{ color: '#007acc', textDecoration: 'none' }}>Home</a>
+            </li>
+            <li style={{ display: 'inline-block' }}>
+              <a href="/admin/" style={{
+                display: 'inline-block',
+                padding: '0.5rem 1rem',
+                background: '#007acc',
+                color: 'white',
+                textDecoration: 'none',
+                borderRadius: '4px',
+              }}>
+                Admin Dashboard
+              </a>
+            </li>
+          </ul>
         </nav>
       </header>
       <main>{children}</main>

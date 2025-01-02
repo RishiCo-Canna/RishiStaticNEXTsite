@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: ${GITHUB_REPO_FULL_NAME}
+  repo: ${process.env.GITHUB_REPO_FULL_NAME}
   branch: main
   base_url: https://api.github.com
   auth_endpoint: auth
@@ -17,4 +17,15 @@ collections:
         name: "home"
         fields:
           - { label: "Title", name: "title", widget: "string" }
-          - { label: "Content", name: "content", widget: "markdown" }
+          - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "blog"
+    label: "Blog"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Publish Date", name: "date", widget: "datetime" }
+      - { label: "Featured Image", name: "thumbnail", widget: "image", required: false }
+      - { label: "Body", name: "body", widget: "markdown" }
