@@ -18,8 +18,18 @@ export default function CmsComponent() {
                 name: 'github',
                 repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME,
                 branch: 'main',
-                auth_type: 'implicit', 
-                token: session.accessToken
+                auth_type: 'github',
+                api_root: 'https://api.github.com',
+                base_url: window.location.origin,
+                auth_endpoint: 'api/auth',
+                app_id: process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID,
+                commit_messages: {
+                  create: 'Create {{collection}} "{{slug}}"',
+                  update: 'Update {{collection}} "{{slug}}"',
+                  delete: 'Delete {{collection}} "{{slug}}"',
+                  uploadMedia: 'Upload "{{path}}"',
+                  deleteMedia: 'Delete "{{path}}"'
+                }
               },
               media_folder: 'public/uploads',
               public_folder: '/uploads',
@@ -47,7 +57,7 @@ export default function CmsComponent() {
                   ]
                 }
               ],
-              local_backend: false 
+              local_backend: false
             }
           })
           console.log('CMS initialized successfully')
@@ -55,10 +65,8 @@ export default function CmsComponent() {
           console.error('Error initializing CMS:', error)
         }
       })()
-    } else if (status === "unauthenticated") {
-      signIn('github', { callbackUrl: window.location.origin + '/admin' })
     }
-  }, [session, status])
+  }, [session])
 
   if (status === "loading") {
     return (
@@ -74,14 +82,15 @@ export default function CmsComponent() {
         <h2>Admin Access Required</h2>
         <p>Please sign in with GitHub to access the admin panel</p>
         <button 
-          onClick={() => signIn('github', { callbackUrl: window.location.origin + '/admin' })}
+          onClick={() => signIn('github')}
           style={{
             background: '#24292e',
             color: 'white',
             border: 'none',
             padding: '10px 20px',
             borderRadius: '5px',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            fontSize: '16px'
           }}
         >
           Sign in with GitHub

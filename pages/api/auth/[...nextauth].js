@@ -9,29 +9,17 @@ export const authOptions = {
       scope: 'repo,user'
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    strategy: 'jwt',
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
   cookies: {
     sessionToken: {
-      name: 'next-auth.session-token',
+      name: `next-auth.session-token`,
       options: {
         httpOnly: true,
-        sameSite: 'none',
-        path: '/',
-        secure: true
-      }
-    },
-    callbackUrl: {
-      name: 'next-auth.callback-url',
-      options: {
-        sameSite: 'none',
-        path: '/',
-        secure: true
-      }
-    },
-    csrfToken: {
-      name: 'next-auth.csrf-token',
-      options: {
-        httpOnly: true,
-        sameSite: 'none',
+        sameSite: 'lax',
         path: '/',
         secure: true
       }
@@ -47,9 +35,19 @@ export const authOptions = {
     async session({ session, token }) {
       session.accessToken = token.accessToken
       return session
+    },
+    async redirect({ url, baseUrl }) {
+      // Handle redirects properly
+      if (url.startsWith("/")) {
+        return `${baseUrl}${url}`
+      }
+      if (new URL(url).origin === baseUrl) {
+        return url
+      }
+      return baseUrl + "/admin"
     }
   },
-  secret: process.env.NEXTAUTH_SECRET
+  debug: process.env.NODE_ENV === 'development'
 }
 
 export default NextAuth(authOptions)
