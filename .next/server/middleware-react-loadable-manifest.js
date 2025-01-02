@@ -1,1 +1,1 @@
-self.__REACT_LOADABLE_MANIFEST="{}"
+self.__REACT_LOADABLE_MANIFEST="{\"admin.js -> ../src/components/CmsComponent\":{\"id\":\"admin.js -> ../src/components/CmsComponent\",\"files\":[\"static/chunks/src_components_CmsComponent_js.js\"]}}"

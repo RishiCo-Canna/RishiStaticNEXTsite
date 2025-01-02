@@ -21,13 +21,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const { code, state } = JSON.parse(req.body);
-    const next = req.query.next || '/admin';
-
     if (!code) {
       return res.status(400).json({ 
         error: 'Missing code',
         details: 'Authorization code is required'
       });
+    }
+
+    // Extract the next parameter from the state if available
+    let next = '/admin';
+    try {
+      const stateData = JSON.parse(decodeURIComponent(state));
+      if (stateData && stateData.next) {
+        next = stateData.next;
+      }
+    } catch (e) {
+      console.warn('Could not parse state parameter:', e);
     }
 
     // Exchange code for access token with GitHub
@@ -45,7 +54,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           client_secret: clientSecret,
           code,
           state,
-          redirect_uri: `${process.env.NEXT_PUBLIC_SITE_URL}/api/auth?next=${encodeURIComponent(next)}`
+          redirect_uri: `${process.env.NEXT_PUBLIC_SITE_URL}/api/auth`
         }),
       }
     );
@@ -69,7 +78,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Return the access token in the format expected by Decap CMS
-    console.log('Authentication successful');
+    console.log('Authentication successful, redirecting to:', next);
     res.setHeader('Set-Cookie', `gh_token=${tokenData.access_token}; Path=/; HttpOnly; SameSite=Lax`);
 
     return res.json({

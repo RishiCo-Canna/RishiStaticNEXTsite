@@ -50,8 +50,17 @@ const CmsComponent = () => {
               base_url: siteUrl,
               auth_endpoint: 'api/auth',
               auth_type: 'pkce',
-              app_id: clientId
+              app_id: clientId,
+              auth_scope: 'repo,user',
+              commit_messages: {
+                create: 'Create {{collection}} "{{slug}}"',
+                update: 'Update {{collection}} "{{slug}}"',
+                delete: 'Delete {{collection}} "{{slug}}"',
+                uploadMedia: 'Upload "{{path}}"',
+                deleteMedia: 'Delete "{{path}}"'
+              }
             },
+            local_backend: false,
             load_config_file: false,
             media_folder: 'public/uploads',
             public_folder: '/uploads',
