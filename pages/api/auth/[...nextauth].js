@@ -16,12 +16,12 @@ export const authOptions = {
   },
   cookies: {
     sessionToken: {
-      name: 'next-auth.session-token',
+      name: `__Secure-next-auth.session-token`,
       options: {
         httpOnly: true,
         sameSite: 'lax',
         path: '/',
-        secure: process.env.NODE_ENV === 'production'
+        secure: true
       }
     }
   },
@@ -37,9 +37,7 @@ export const authOptions = {
       return session
     },
     async redirect({ url, baseUrl }) {
-      // Allows relative callback URLs
-      if (url.startsWith("/")) return `${baseUrl}${url}`
-      // Allows callback URLs on the same origin
+      if (url.startsWith('/')) return `${baseUrl}${url}`
       else if (new URL(url).origin === baseUrl) return url
       return baseUrl
     }
@@ -49,7 +47,7 @@ export const authOptions = {
     error: '/admin', // Error pages
     signOut: '/admin'
   },
-  debug: process.env.NODE_ENV === 'development'
+  debug: true
 }
 
 export default NextAuth(authOptions)

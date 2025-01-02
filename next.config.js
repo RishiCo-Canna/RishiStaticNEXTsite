@@ -25,7 +25,7 @@ const nextConfig = {
       '/**': ['./public/**/*']
     }
   },
-  headers: async () => {
+  async headers() {
     return [
       {
         source: '/:path*',
@@ -38,7 +38,8 @@ const nextConfig = {
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://identity.netlify.com https://unpkg.com;",
               "style-src 'self' 'unsafe-inline';",
               "img-src 'self' data: https:;",
-              "connect-src 'self' https://api.github.com https://*.repl.co https://*.repl.dev https://github.com;"
+              "connect-src 'self' https://api.github.com https://*.repl.co https://*.repl.dev https://github.com;",
+              "form-action 'self' https://github.com https://*.repl.co https://*.repl.dev;"
             ].join(' ')
           }
         ]
@@ -48,7 +49,8 @@ const nextConfig = {
   env: {
     NEXTAUTH_URL: process.env.NEXTAUTH_URL || `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co`,
     NEXT_PUBLIC_GITHUB_REPO_FULL_NAME: process.env.GITHUB_REPO_FULL_NAME,
-    NEXT_PUBLIC_OAUTH_CLIENT_ID: process.env.OAUTH_CLIENT_ID
+    NEXT_PUBLIC_OAUTH_CLIENT_ID: process.env.OAUTH_CLIENT_ID,
+    NEXT_PUBLIC_SITE_URL: process.env.NEXTAUTH_URL || `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co`
   }
 }
 

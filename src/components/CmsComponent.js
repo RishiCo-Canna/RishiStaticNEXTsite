@@ -11,7 +11,6 @@ export default function CmsComponent() {
           console.log('Loading Decap CMS...')
           const CMS = (await import('decap-cms-app')).default
 
-          // Initialize Decap CMS with GitHub configuration
           await CMS.init({
             config: {
               load_config_file: false,
@@ -19,19 +18,11 @@ export default function CmsComponent() {
                 name: 'github',
                 repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME,
                 branch: 'main',
-                auth_type: 'github',
-                api_root: 'https://api.github.com',
+                auth_type: 'oauth',
                 base_url: window.location.origin,
                 auth_endpoint: 'api/auth',
                 app_id: process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID,
-                auth_scope: 'repo,user',
-                commit_messages: {
-                  create: 'Create {{collection}} "{{slug}}"',
-                  update: 'Update {{collection}} "{{slug}}"',
-                  delete: 'Delete {{collection}} "{{slug}}"',
-                  uploadMedia: 'Upload "{{path}}"',
-                  deleteMedia: 'Delete "{{path}}"'
-                }
+                auth_scope: 'repo,user'
               },
               media_folder: 'public/uploads',
               public_folder: '/uploads',
@@ -59,7 +50,8 @@ export default function CmsComponent() {
                   ]
                 }
               ],
-              local_backend: false
+              local_backend: false,
+              publish_mode: 'editorial_workflow'
             }
           })
           console.log('CMS initialized successfully')
