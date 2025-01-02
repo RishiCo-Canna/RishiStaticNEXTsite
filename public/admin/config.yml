@@ -1,8 +1,8 @@
 backend:
   name: github
-  repo: process.env.GITHUB_REPO_FULL_NAME
+  repo: ${process.env.GITHUB_REPO_FULL_NAME}
   branch: main
-  base_url: https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev
+  base_url: ${process.env.NEXT_PUBLIC_SITE_URL}
   auth_endpoint: api/auth
 
 media_folder: "public/uploads"
@@ -16,6 +16,7 @@ collections:
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Body", name: "body", widget: "markdown" }
+
   - name: "products"
     label: "Products"
     folder: "content/products"
