@@ -18,7 +18,7 @@ const CmsComponent = () => {
           name: 'github',
           repo: process.env.NEXT_PUBLIC_GITHUB_REPO || process.env.GITHUB_REPO_FULL_NAME,
           branch: 'main',
-          base_url: 'https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev:3000',
+          base_url: 'https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev',
           auth_endpoint: 'api/auth'
         },
         media_folder: 'public/uploads',
