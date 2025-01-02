@@ -1,70 +1,16 @@
+
 modules = ["nodejs-20", "python-3.11"]
 
 [nix]
 channel = "stable-24_05"
 
-[workflows]
-runButton = "Project"
-
-[[workflows.workflow]]
-name = "Project"
-mode = "parallel"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Next.js Development"
-
-[[workflows.workflow]]
-name = "Next.js Development"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "NODE_ENV=development npx next dev -p 80 -H 0.0.0.0"
-waitForPort = 80
-
 [deployment]
 run = ["sh", "-c", "NODE_ENV=development npx next dev -p 3000 -H 0.0.0.0"]
 
 [[ports]]
-localPort = 443
-externalPort = 6000
-
-[[ports]]
 localPort = 3000
-externalPort = 3000
-
-[[ports]]
-localPort = 3001
-externalPort = 3002
+externalPort = 80
 
 [[ports]]
 localPort = 5000
 externalPort = 5000
-
-[[ports]]
-localPort = 8080
-externalPort = 80
-
-[[ports]]
-localPort = 38725
-externalPort = 3003
-
-[[ports]]
-localPort = 41177
-externalPort = 4200
-
-[[ports]]
-localPort = 42197
-externalPort = 3001
-
-[[ports]]
-localPort = 46299
-externalPort = 5173
