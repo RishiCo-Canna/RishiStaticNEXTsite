@@ -40,52 +40,46 @@ const CmsComponent = () => {
       try {
         const { repo, clientId, siteUrl } = validateConfig();
 
-        // Initialize CMS with minimal required configuration
-        await CMS.init({
-          config: {
-            backend: {
-              name: 'github',
-              repo,
-              branch: 'main',
-              base_url: siteUrl,
-              auth_endpoint: 'api/auth',
-              auth_type: 'pkce',
-              app_id: clientId
+        const config = {
+          backend: {
+            name: 'github' as const,
+            repo,
+            branch: 'main',
+            base_url: siteUrl,
+            auth_endpoint: 'api/auth',
+            app_id: clientId
+          },
+          media_folder: 'public/uploads',
+          public_folder: '/uploads',
+          collections: [
+            {
+              name: 'pages',
+              label: 'Pages',
+              folder: 'content/pages',
+              create: true,
+              fields: [
+                { label: 'Title', name: 'title', widget: 'string', required: true },
+                { label: 'Body', name: 'body', widget: 'markdown', required: true }
+              ]
             },
-            load_config_file: false,
-            media_folder: 'public/uploads',
-            public_folder: '/uploads',
-            collections: [
-              {
-                name: 'pages',
-                label: 'Pages',
-                folder: 'content/pages',
-                create: true,
-                fields: [
-                  { label: 'Title', name: 'title', widget: 'string' },
-                  { label: 'Body', name: 'body', widget: 'markdown' }
-                ]
-              },
-              {
-                name: 'products',
-                label: 'Products',
-                folder: 'content/products',
-                create: true,
-                fields: [
-                  { label: 'Title', name: 'title', widget: 'string' },
-                  { label: 'Image', name: 'image', widget: 'image' },
-                  { label: 'Description', name: 'description', widget: 'markdown' },
-                  { label: 'Price', name: 'price', widget: 'number', value_type: 'float' }
-                ]
-              }
-            ]
-          }
-        });
+            {
+              name: 'products',
+              label: 'Products',
+              folder: 'content/products',
+              create: true,
+              fields: [
+                { label: 'Title', name: 'title', widget: 'string', required: true },
+                { label: 'Image', name: 'image', widget: 'image', required: true },
+                { label: 'Description', name: 'description', widget: 'markdown', required: true },
+                { label: 'Price', name: 'price', widget: 'number', value_type: 'float', required: true }
+              ]
+            }
+          ]
+        } as const;
 
-        console.log('CMS initialized successfully');
+        await CMS.init({ config });
         setError(null);
       } catch (err: any) {
-        console.error('CMS initialization error:', err);
         const errorDetails: CMSError = {
           message: 'Failed to initialize CMS',
           details: err.message
