@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import CMS, { type CmsConfig } from 'decap-cms-app'
+import CMS from 'decap-cms-app'
 import 'decap-cms-backend-github'
 
 // Extend Window interface to include CMS_ENV
@@ -12,48 +12,54 @@ declare global {
 interface CMSError {
   message: string;
   details?: string;
+  code?: string;
 }
 
 const CmsComponent = () => {
   const [error, setError] = useState<CMSError | null>(null);
+  const [initializationAttempts, setInitializationAttempts] = useState(0);
+  const MAX_RETRY_ATTEMPTS = 3;
 
   useEffect(() => {
     const validateConfig = () => {
+      console.log('Validating CMS configuration...');
+
       const repo = process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME;
       const clientId = process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID;
       const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
-      if (!repo) {
-        throw new Error('Missing GitHub repository configuration (NEXT_PUBLIC_GITHUB_REPO_FULL_NAME)');
+      const missingConfigs = [];
+      if (!repo) missingConfigs.push('NEXT_PUBLIC_GITHUB_REPO_FULL_NAME');
+      if (!clientId) missingConfigs.push('NEXT_PUBLIC_OAUTH_CLIENT_ID');
+      if (!siteUrl) missingConfigs.push('NEXT_PUBLIC_SITE_URL');
+
+      if (missingConfigs.length > 0) {
+        throw new Error(`Missing required configuration: ${missingConfigs.join(', ')}`);
       }
 
-      if (!clientId) {
-        throw new Error('Missing OAuth client ID (NEXT_PUBLIC_OAUTH_CLIENT_ID)');
-      }
-
-      if (!siteUrl) {
-        throw new Error('Missing site URL configuration (NEXT_PUBLIC_SITE_URL)');
-      }
+      console.log('Configuration validation successful');
+      console.log('Repository:', repo);
+      console.log('Base URL:', siteUrl);
+      console.log('OAuth Client ID:', clientId?.substring(0, 8) + '...');
 
       return { repo, clientId, siteUrl };
     };
 
     const initCMS = async () => {
       try {
+        console.log(`CMS initialization attempt ${initializationAttempts + 1} of ${MAX_RETRY_ATTEMPTS}`);
+
         // Validate configuration
         const { repo, clientId, siteUrl } = validateConfig();
-        console.log('CMS Config Validation - OK');
-        console.log('Repository:', repo);
-        console.log('Base URL:', siteUrl);
 
         // Initialize Decap CMS configuration
-        const config: CmsConfig = {
+        const config = {
           backend: {
             name: 'github',
             repo,
             branch: 'main',
             base_url: siteUrl,
-            auth_endpoint: '/api/auth', // Ensure leading slash
+            auth_endpoint: '/api/auth',
             auth_type: 'oauth',
             app_id: clientId,
           },
@@ -99,15 +105,29 @@ const CmsComponent = () => {
         setError(null);
       } catch (err: any) {
         console.error('CMS Initialization Error:', err);
-        setError({
+        const errorDetails: CMSError = {
           message: 'Failed to initialize CMS',
-          details: err.message
-        });
+          details: err.message,
+          code: err.code || 'INIT_ERROR'
+        };
+
+        setError(errorDetails);
+
+        // Attempt retry if under max attempts
+        if (initializationAttempts < MAX_RETRY_ATTEMPTS - 1) {
+          console.log(`Retrying CMS initialization in 3 seconds...`);
+          setInitializationAttempts(prev => prev + 1);
+          setTimeout(() => {
+            setError(null);
+          }, 3000);
+        } else {
+          console.error('Max retry attempts reached. Please check configuration and try again.');
+        }
       }
     };
 
     initCMS();
-  }, []);
+  }, [initializationAttempts]);
 
   if (error) {
     return (
@@ -116,6 +136,17 @@ const CmsComponent = () => {
         <p className="text-red-600">{error.message}</p>
         {error.details && (
           <p className="text-red-500 text-sm mt-2">{error.details}</p>
+        )}
+        {error.code && (
+          <p className="text-red-400 text-xs mt-1">Error Code: {error.code}</p>
+        )}
+        {initializationAttempts < MAX_RETRY_ATTEMPTS && (
+          <button
+            className="mt-4 px-4 py-2 bg-red-100 text-red-800 rounded hover:bg-red-200"
+            onClick={() => setInitializationAttempts(prev => prev + 1)}
+          >
+            Retry
+          </button>
         )}
       </div>
     );

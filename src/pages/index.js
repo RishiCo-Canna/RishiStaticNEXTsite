@@ -18,16 +18,23 @@ export default function Home() {
           Your trusted source for cannabis industry information
         </p>
 
-        <a href="/admin" style={{
-          display: 'inline-block',
-          background: '#0070f3',
-          color: 'white',
-          padding: '10px 20px',
-          borderRadius: '5px',
-          textDecoration: 'none',
-          marginTop: '20px'
-        }}>
-          Admin
+        <a 
+          href="/admin" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          title="Opens admin interface in a new tab"
+          style={{
+            display: 'inline-block',
+            background: '#0070f3',
+            color: 'white',
+            padding: '10px 20px',
+            borderRadius: '5px',
+            textDecoration: 'none',
+            marginTop: '20px'
+          }}
+        >
+          Open Admin Interface
+          <span style={{ marginLeft: '5px', fontSize: '0.8em' }}>↗</span>
         </a>
       </main>
 
