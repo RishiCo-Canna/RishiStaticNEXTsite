@@ -23,9 +23,17 @@ export const authOptions = {
       return session
     }
   },
-  pages: {
-    signIn: '/',
-    error: '/' 
+  useSecureCookies: false,
+  cookies: {
+    sessionToken: {
+      name: `next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: false
+      }
+    }
   }
 }
 
