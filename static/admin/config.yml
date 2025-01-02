@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: ${process.env.GITHUB_REPO_FULL_NAME}
+  repo: ${GITHUB_REPO_FULL_NAME}
   branch: main
   base_url: https://api.github.com
   auth_endpoint: auth

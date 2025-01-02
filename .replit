@@ -27,8 +27,8 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "npx gatsby develop -H 0.0.0.0 -p 3000"
+args = "cd . && npx gatsby develop -H 0.0.0.0 -p 3000"
 waitForPort = 3000
 
 [deployment]
-run = ["sh", "-c", "npx gatsby develop -H 0.0.0.0 -p 3000"]
+run = ["sh", "-c", "cd . && npx gatsby develop -H 0.0.0.0 -p 3000"]

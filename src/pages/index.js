@@ -4,7 +4,7 @@ import Layout from '../components/Layout'
 
 export const query = graphql`
   query HomePageQuery {
-    markdownRemark(fileAbsolutePath: {regex: "/index.md/"}) {
+    markdownRemark(fields: { slug: { eq: "/" } }) {
       frontmatter {
         title
         content
@@ -14,24 +14,15 @@ export const query = graphql`
 `
 
 const IndexPage = ({ data }) => {
-  const { frontmatter } = data.markdownRemark || { frontmatter: { title: 'Welcome', content: 'Loading...' } }
+  const { title, content } = data?.markdownRemark?.frontmatter || {
+    title: 'Welcome to Our Cannabis Industry Website',
+    content: 'This is a simple homepage that you can edit through Decap CMS.'
+  }
 
   return (
     <Layout>
-      <h1>{frontmatter.title}</h1>
-      <p>{frontmatter.content}</p>
-      <div>
-        <a href="/admin/" style={{ 
-          display: 'inline-block',
-          padding: '0.5rem 1rem',
-          background: '#007acc',
-          color: 'white',
-          textDecoration: 'none',
-          borderRadius: '4px'
-        }}>
-          Edit Content
-        </a>
-      </div>
+      <h1>{title}</h1>
+      <p>{content}</p>
     </Layout>
   )
 }
