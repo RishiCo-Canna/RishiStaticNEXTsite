@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: ${GITHUB_REPO_FULL_NAME}
+  repo: ${NEXT_PUBLIC_GITHUB_REPO_FULL_NAME}
   branch: main
   base_url: ${NEXT_PUBLIC_SITE_URL}
   auth_endpoint: api/auth
@@ -8,6 +8,7 @@ backend:
 
 media_folder: "public/uploads"
 public_folder: "/uploads"
+publish_mode: editorial_workflow
 
 collections:
   - name: "pages"

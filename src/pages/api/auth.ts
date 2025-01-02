@@ -77,11 +77,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Return the access token in the format expected by Decap CMS
-    console.log('Authentication successful');
     return res.json({
       token: tokenData.access_token,
-      provider: 'github',
+      provider: 'github'
     });
+
   } catch (error: any) {
     console.error('Auth error:', error);
     return res.status(500).json({ 

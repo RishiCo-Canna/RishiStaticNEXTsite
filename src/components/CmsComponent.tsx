@@ -2,18 +2,14 @@ import { useEffect, useState } from 'react'
 import CMS from 'decap-cms-app'
 import 'decap-cms-backend-github'
 
-declare global {
-  interface Window {
-    CMS_ENV?: any;
-  }
-}
+interface Props {}
 
 interface CMSError {
   message: string;
   details?: string;
 }
 
-const CmsComponent = () => {
+const CmsComponent: React.FC<Props> = () => {
   const [error, setError] = useState<CMSError | null>(null);
   const [initializationAttempts, setInitializationAttempts] = useState(0);
   const MAX_RETRY_ATTEMPTS = 3;
@@ -40,51 +36,71 @@ const CmsComponent = () => {
       try {
         const { repo, clientId, siteUrl } = validateConfig();
 
-        const config = {
-          backend: {
-            name: 'github' as const,
-            repo,
-            branch: 'main',
-            base_url: siteUrl,
-            auth_endpoint: 'api/auth',
-            app_id: clientId
-          },
-          media_folder: 'public/uploads',
-          public_folder: '/uploads',
-          collections: [
-            {
-              name: 'pages',
-              label: 'Pages',
-              folder: 'content/pages',
-              create: true,
-              fields: [
-                { label: 'Title', name: 'title', widget: 'string', required: true },
-                { label: 'Body', name: 'body', widget: 'markdown', required: true }
-              ]
+        // Initialize CMS with config
+        CMS.init({
+          config: {
+            backend: {
+              name: 'github',
+              repo,
+              branch: 'main',
+              base_url: siteUrl,
+              auth_endpoint: 'api/auth',
+              app_id: clientId,
+              commit_messages: {
+                create: 'Create {{collection}} "{{slug}}"',
+                update: 'Update {{collection}} "{{slug}}"',
+                delete: 'Delete {{collection}} "{{slug}}"',
+                uploadMedia: 'Upload "{{path}}"',
+                deleteMedia: 'Delete "{{path}}"'
+              }
             },
-            {
-              name: 'products',
-              label: 'Products',
-              folder: 'content/products',
-              create: true,
-              fields: [
-                { label: 'Title', name: 'title', widget: 'string', required: true },
-                { label: 'Image', name: 'image', widget: 'image', required: true },
-                { label: 'Description', name: 'description', widget: 'markdown', required: true },
-                { label: 'Price', name: 'price', widget: 'number', value_type: 'float', required: true }
-              ]
-            }
-          ]
-        } as const;
+            load_config_file: false,
+            media_folder: 'public/uploads',
+            public_folder: '/uploads',
+            collections: [
+              {
+                name: 'pages',
+                label: 'Pages',
+                folder: 'content/pages',
+                create: true,
+                fields: [
+                  { label: 'Title', name: 'title', widget: 'string', required: true },
+                  { label: 'Body', name: 'body', widget: 'markdown', required: true }
+                ]
+              },
+              {
+                name: 'products',
+                label: 'Products',
+                folder: 'content/products',
+                create: true,
+                fields: [
+                  { label: 'Title', name: 'title', widget: 'string', required: true },
+                  { label: 'Image', name: 'image', widget: 'image', required: true },
+                  { label: 'Description', name: 'description', widget: 'markdown', required: true },
+                  { label: 'Price', name: 'price', widget: 'number', value_type: 'float', required: true }
+                ]
+              }
+            ]
+          }
+        });
 
-        await CMS.init({ config });
+        // Handle authentication callback
+        if (typeof window !== 'undefined') {
+          const hash = window.location.hash;
+          if (hash && hash.startsWith('#access_token=')) {
+            const token = hash.replace('#access_token=', '');
+            sessionStorage.setItem('cms.token', token);
+            window.location.hash = '';
+          }
+        }
+
         setError(null);
       } catch (err: any) {
+        console.error('CMS initialization error:', err);
         const errorDetails: CMSError = {
           message: 'Failed to initialize CMS',
           details: err.message
         };
-
         setError(errorDetails);
 
         if (initializationAttempts < MAX_RETRY_ATTEMPTS - 1) {

@@ -30,15 +30,7 @@ const nextConfig = {
     NEXT_PUBLIC_OAUTH_CLIENT_ID: process.env.OAUTH_CLIENT_ID,
     NEXT_PUBLIC_SITE_URL: process.env.REPL_SLUG 
       ? `https://${process.env.REPL_SLUG}.worf.replit.dev` 
-      : process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
-  },
-  async rewrites() {
-    return [
-      {
-        source: '/admin',
-        destination: '/admin/index.html',
-      }
-    ]
+      : process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'
   },
   async headers() {
     return [
@@ -65,6 +57,10 @@ const nextConfig = {
     return [
       {
         source: '/admin',
+        destination: '/admin/index.html',
+      },
+      {
+        source: '/admin/:path*',
         destination: '/admin/index.html',
       }
     ]
