@@ -6,8 +6,7 @@ export const authOptions = {
     GithubProvider({
       clientId: process.env.OAUTH_CLIENT_ID,
       clientSecret: process.env.OAUTH_CLIENT_SECRET,
-      scope: 'repo,user',
-      callbackUrl: `https://${process.env.REPL_SLUG}.worf.replit.dev/api/auth/callback/github`
+      scope: 'repo,user'
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET || 'your-development-secret',
