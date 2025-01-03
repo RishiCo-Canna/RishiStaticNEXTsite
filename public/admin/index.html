@@ -4,8 +4,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Content Manager</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body>
+    <div id="nc-root"></div>
+    <div id="oauth-wizard"></div>
+
     <!-- Include the script that builds the page and powers Decap CMS -->
     <script src="https://unpkg.com/decap-cms@3.1.0-beta.0/dist/decap-cms.js"></script>
     <script>
@@ -93,6 +99,13 @@
               ]
             }
           });
+
+          // Mount OAuth Wizard after CMS initialization
+          const OAuthWizard = window.OAuthWizard;
+          if (OAuthWizard) {
+            const wizardContainer = document.getElementById('oauth-wizard');
+            ReactDOM.render(React.createElement(OAuthWizard), wizardContainer);
+          }
         } catch (error) {
           console.error('Failed to initialize CMS:', error);
           document.body.innerHTML += `<div style="color: red; padding: 20px;">Failed to initialize CMS: ${error.message}</div>`;
