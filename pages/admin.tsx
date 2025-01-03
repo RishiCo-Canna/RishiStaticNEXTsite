@@ -5,8 +5,10 @@ import Head from 'next/head';
 import ErrorBoundary from '../src/components/ErrorBoundary';
 
 // Dynamically import CMS component with no SSR
-const CmsComponent = dynamic(
-  () => import('../src/components/CmsComponent').then(mod => mod.default),
+const CmsComponent = dynamic(() => 
+  import('../src/components/CmsComponent').then((mod) => {
+    return mod.default || mod.CmsComponent;
+  }),
   { 
     ssr: false,
     loading: () => (
@@ -21,11 +23,10 @@ const AdminPage = () => {
   const { data: session, status } = useSession();
 
   useEffect(() => {
-    // Ensure we're in the browser
     if (typeof window !== 'undefined') {
-      // Add any required initialization here
+      console.log('Admin page mounted, session status:', status);
     }
-  }, []);
+  }, [status]);
 
   if (status === 'loading') {
     return (

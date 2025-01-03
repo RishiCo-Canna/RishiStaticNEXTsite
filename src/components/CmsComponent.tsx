@@ -7,11 +7,10 @@ declare global {
   }
 }
 
-const CmsComponent: React.FC = () => {
+export const CmsComponent: React.FC = () => {
   useEffect(() => {
     const loadCms = async () => {
       try {
-        // Import CMS dynamically
         const CMS = (await import('decap-cms-app')).default;
 
         // CMS Configuration
@@ -54,9 +53,10 @@ const CmsComponent: React.FC = () => {
 
         // Initialize CMS with config
         await CMS.init({ config });
+        console.log('CMS initialized successfully');
       } catch (error) {
         console.error('Failed to initialize CMS:', error);
-        throw error; // Propagate error to ErrorBoundary
+        throw error;
       }
     };
 
@@ -66,4 +66,5 @@ const CmsComponent: React.FC = () => {
   return <div id="nc-root" />;
 };
 
+// Ensure we have both named and default exports
 export default CmsComponent;
