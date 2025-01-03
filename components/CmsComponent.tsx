@@ -7,8 +7,9 @@ const CmsComponent = () => {
   const { data: session } = useSession()
 
   useEffect(() => {
-    if (session) {
-      const CMS = (await import('decap-cms-app')).default
+    const initCMS = async () => {
+      if (session) {
+        const CMS = (await import('decap-cms-app')).default
       
       CMS.init({
         config: {
@@ -42,6 +43,7 @@ const CmsComponent = () => {
         }
       })
     }
+    initCMS()
   }, [session])
 
   if (!session) {
