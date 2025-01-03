@@ -9,31 +9,40 @@
   <body>
     <div id="nc-root"></div>
     <script>
-      window.CMS.init({
-        config: {
-          backend: {
-            name: 'github',
-            repo: 'RishiCo-Canna/RishiStaticNEXTsite',
-            branch: 'main',
-            auth_scope: 'repo',
-            base_url: '',
-            auth_endpoint: 'api/auth'
-          },
-          local_backend: false,
-          media_folder: 'public/images',
-          public_folder: '/images',
-          collections: [
-            {
-              name: 'pages',
-              label: 'Pages',
-              folder: 'content/pages',
-              create: true,
-              fields: [
-                { label: 'Title', name: 'title', widget: 'string' },
-                { label: 'Body', name: 'body', widget: 'markdown' }
+      // Wait for DOM to be ready
+      document.addEventListener('DOMContentLoaded', function() {
+        try {
+          // Initialize CMS with configuration
+          window.CMS.init({
+            config: {
+              backend: {
+                name: 'github',
+                repo: 'RishiCo-Canna/RishiStaticNEXTsite',
+                branch: 'main',
+                auth_scope: 'repo',
+                base_url: window.location.origin,
+                auth_endpoint: 'api/auth'
+              },
+              local_backend: false,
+              media_folder: 'public/images',
+              public_folder: '/images',
+              collections: [
+                {
+                  name: 'pages',
+                  label: 'Pages',
+                  folder: 'content/pages',
+                  create: true,
+                  fields: [
+                    { label: 'Title', name: 'title', widget: 'string' },
+                    { label: 'Body', name: 'body', widget: 'markdown' }
+                  ]
+                }
               ]
             }
-          ]
+          });
+        } catch (error) {
+          console.error('Failed to initialize CMS:', error);
+          document.getElementById('nc-root').innerHTML = '<div style="padding: 20px; color: red;">Failed to initialize CMS. Please check console for details.</div>';
         }
       });
     </script>
