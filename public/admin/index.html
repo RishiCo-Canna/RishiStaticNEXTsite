@@ -20,6 +20,11 @@
         const config = await response.json();
         console.log('Config loaded:', config);
 
+        // Ensure we're using HTTPS URL
+        const baseUrl = config.NEXT_PUBLIC_SITE_URL.startsWith('https') 
+          ? config.NEXT_PUBLIC_SITE_URL 
+          : config.NEXT_PUBLIC_SITE_URL.replace('http://', 'https://');
+
         window.CMS.init({
           config: {
             load_config_file: false,
@@ -28,9 +33,10 @@
               repo: config.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME,
               branch: 'main',
               auth_type: 'pkce',
-              base_url: config.NEXT_PUBLIC_SITE_URL,
+              base_url: baseUrl,
               auth_endpoint: 'api/auth',
-              site_domain: config.NEXT_PUBLIC_SITE_URL.replace(/^https?:\/\//, '')
+              site_domain: baseUrl.replace(/^https?:\/\//, ''),
+              app_id: config.NEXT_PUBLIC_OAUTH_CLIENT_ID
             },
             local_backend: false,
             publish_mode: 'editorial_workflow',
