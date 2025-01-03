@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { signIn, useSession } from 'next-auth/react';
 import Head from 'next/head';
+import type { NextPage } from 'next';
 
-const AdminPage = () => {
+const AdminPage: NextPage = () => {
   const { data: session } = useSession();
 
   useEffect(() => {
-    // Redirect to static admin page if authenticated
     if (session) {
       window.location.href = '/admin/index.html';
     }
@@ -37,7 +37,6 @@ const AdminPage = () => {
     );
   }
 
-  // Show loading state while redirecting
   return (
     <div className="min-h-screen flex items-center justify-center">
       <Head>
@@ -45,6 +44,7 @@ const AdminPage = () => {
       </Head>
       <div className="text-center">
         <h2 className="text-xl font-semibold">Loading CMS...</h2>
+        <p className="mt-2 text-gray-600">Redirecting to content management system...</p>
       </div>
     </div>
   );
