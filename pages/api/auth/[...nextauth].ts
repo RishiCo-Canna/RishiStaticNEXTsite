@@ -6,11 +6,6 @@ export const authOptions: NextAuthOptions = {
     GithubProvider({
       clientId: process.env.OAUTH_CLIENT_ID || '',
       clientSecret: process.env.OAUTH_CLIENT_SECRET || '',
-      authorization: {
-        params: {
-          scope: 'repo,user'
-        },
-      },
     }),
   ],
   debug: true,
@@ -25,27 +20,6 @@ export const authOptions: NextAuthOptions = {
     debug(code, ...message) {
       console.debug('NextAuth Debug:', code, message)
     },
-  },
-  callbacks: {
-    async signIn({ user, account, profile }) {
-      console.log('SignIn Callback:', { 
-        user: user?.email,
-        accountType: account?.provider,
-        profileExists: !!profile 
-      })
-      return true
-    },
-    async session({ session, token }) {
-      console.log('Session Callback:', { sessionExists: !!session, tokenExists: !!token })
-      if (session) {
-        session.accessToken = token.accessToken
-      }
-      return session
-    },
-  },
-  pages: {
-    error: '/admin',
-    signIn: '/admin'
   }
 }
 
