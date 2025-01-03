@@ -3,18 +3,28 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.unpkg.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://*.unpkg.com https://unpkg.com">
     <title>Content Manager</title>
-    <!-- Remove identity widget as we're using custom auth -->
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <!-- Load CMS with defer to ensure DOM is ready -->
+    <script defer src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js" 
+      onload="console.log('CMS script loaded successfully');"
+      onerror="console.error('Failed to load CMS script');">
+    </script>
   </head>
   <body>
     <div id="nc-root"></div>
     <script>
-      if (window.CMS) {
-        window.CMS.init();
-      } else {
-        console.error('Decap CMS failed to load');
-      }
+      // Initialize CMS only after DOM is fully loaded
+      document.addEventListener('DOMContentLoaded', function() {
+        if (window.CMS) {
+          console.log('Initializing CMS...');
+          window.CMS.init()
+            .then(() => console.log('CMS initialized successfully'))
+            .catch(err => console.error('CMS initialization failed:', err));
+        } else {
+          console.error('Decap CMS failed to load');
+        }
+      });
     </script>
   </body>
 </html>

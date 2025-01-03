@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { CmsConfig } from 'decap-cms-core';
+import ErrorBoundary from './ErrorBoundary';
 
 const CmsComponent: React.FC = () => {
   const [cmsLoaded, setCmsLoaded] = useState(false);
@@ -13,8 +14,11 @@ const CmsComponent: React.FC = () => {
 
     const loadCms = async () => {
       try {
+        console.log('Starting CMS initialization...');
+
         // Import CMS dynamically
         const CMS = (await import('decap-cms-app')).default;
+        console.log('CMS module imported successfully');
 
         if (!mounted) return;
 
@@ -25,12 +29,21 @@ const CmsComponent: React.FC = () => {
         const config: CmsConfig = {
           backend: {
             name: 'github',
-            repo: 'RishiCo-Canna/RishiStaticNEXTsite',
+            repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME || 'RishiCo-Canna/RishiStaticNEXTsite',
             branch: 'main',
             base_url: window.location.origin,
-            auth_endpoint: 'api/auth'
+            auth_endpoint: 'api/auth',
+            commit_messages: {
+              create: 'Create {{collection}} "{{slug}}"',
+              update: 'Update {{collection}} "{{slug}}"',
+              delete: 'Delete {{collection}} "{{slug}}"',
+              uploadMedia: 'Upload "{{path}}"',
+              deleteMedia: 'Delete "{{path}}"'
+            }
           },
+          load_config_file: false,
           local_backend: process.env.NODE_ENV === 'development',
+          publish_mode: 'editorial_workflow',
           media_folder: 'public/images',
           public_folder: '/images',
           collections: [
@@ -39,17 +52,21 @@ const CmsComponent: React.FC = () => {
               label: 'Pages',
               folder: 'content/pages',
               create: true,
+              slug: '{{slug}}',
               fields: [
                 { label: 'Title', name: 'title', widget: 'string' },
+                { label: 'Description', name: 'description', widget: 'text' },
                 { label: 'Body', name: 'body', widget: 'markdown' }
               ]
             }
           ]
         };
 
-        // Initialize CMS with config
+        console.log('Initializing CMS with config...');
         await CMS.init({ config });
+
         if (mounted) {
+          console.log('CMS initialized successfully');
           setCmsLoaded(true);
         }
       } catch (error) {
@@ -60,7 +77,8 @@ const CmsComponent: React.FC = () => {
       }
     };
 
-    loadCms();
+    // Add a small delay to ensure the DOM is ready in webview context
+    setTimeout(loadCms, 100);
 
     return () => {
       mounted = false;
@@ -78,14 +96,18 @@ const CmsComponent: React.FC = () => {
 
   if (error) {
     return (
-      <div className="cms-error">
-        <h2>Error Loading CMS</h2>
-        <pre>{error.message}</pre>
+      <div className="p-4 bg-red-50 border border-red-200 rounded-md">
+        <h2 className="text-red-800 font-semibold mb-2">CMS Error</h2>
+        <pre className="text-red-600 whitespace-pre-wrap">{error.message}</pre>
       </div>
     );
   }
 
-  return <div id="nc-root" />;
+  return (
+    <ErrorBoundary>
+      <div id="nc-root" className="min-h-screen" />
+    </ErrorBoundary>
+  );
 };
 
 export default CmsComponent;
