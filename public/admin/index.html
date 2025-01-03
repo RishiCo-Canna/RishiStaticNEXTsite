@@ -4,12 +4,41 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Content Manager</title>
-    <!-- Load Decap CMS from unpkg -->
     <script src="https://unpkg.com/decap-cms-app@latest/dist/decap-cms.js"></script>
   </head>
   <body>
     <script>
-      window.CMS.init();
+      // Fetch dynamic configuration
+      fetch('/api/config')
+        .then(response => response.json())
+        .then(config => {
+          window.CMS.init({
+            config: {
+              backend: {
+                name: 'github',
+                repo: config.repo,
+                branch: 'main',
+                auth_scope: 'public_repo',
+                base_url: config.siteUrl,
+                auth_endpoint: '/api/auth'
+              },
+              media_folder: 'public/images',
+              public_folder: '/images',
+              collections: [
+                {
+                  name: 'pages',
+                  label: 'Pages',
+                  folder: 'content/pages',
+                  create: true,
+                  fields: [
+                    { label: 'Title', name: 'title', widget: 'string' },
+                    { label: 'Body', name: 'body', widget: 'markdown' }
+                  ]
+                }
+              ]
+            }
+          });
+        });
     </script>
   </body>
 </html>
