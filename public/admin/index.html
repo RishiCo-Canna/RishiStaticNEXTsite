@@ -4,78 +4,77 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Content Manager</title>
-    <script>
-      // Debug logging
-      console.log('Admin page loading...');
-      // Expose environment variables to the window
-      window.ENV = {
-        NEXT_PUBLIC_GITHUB_REPO_FULL_NAME: '${NEXT_PUBLIC_GITHUB_REPO_FULL_NAME}',
-        NEXT_PUBLIC_SITE_URL: '${NEXT_PUBLIC_SITE_URL}',
-        NEXT_PUBLIC_OAUTH_CLIENT_ID: '${NEXT_PUBLIC_OAUTH_CLIENT_ID}'
-      };
-    </script>
   </head>
   <body>
     <!-- Include the script that builds the page and powers Decap CMS -->
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <script src="https://unpkg.com/decap-cms-app@latest/dist/decap-cms.js"></script>
     <script>
-      window.addEventListener('DOMContentLoaded', function() {
-        console.log('DOM loaded, initializing CMS...');
+      console.log('Admin page loading...');
+
+      // Get the actual environment variables from Next.js public runtime config
+      const getConfig = async () => {
         try {
-          window.CMS.init({
-            config: {
-              backend: {
-                name: 'github',
-                repo: window.ENV.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME,
-                branch: 'main',
-                base_url: window.ENV.NEXT_PUBLIC_SITE_URL,
-                auth_endpoint: 'api/auth',
-                auth_type: 'implicit',
-                app_id: window.ENV.NEXT_PUBLIC_OAUTH_CLIENT_ID
-              },
-              media_folder: '/public/uploads',
-              public_folder: '/uploads',
-              collections: [
-                {
-                  name: 'pages',
-                  label: 'Pages',
-                  files: [
-                    {
-                      name: 'home',
-                      label: 'Home Page',
-                      file: 'content/pages/home.md',
-                      fields: [
-                        { label: 'Title', name: 'title', widget: 'string' },
-                        { label: 'Content', name: 'content', widget: 'markdown' }
-                      ]
-                    },
-                    {
-                      name: 'hello',
-                      label: 'Hello World Page',
-                      file: 'content/pages/hello.md',
-                      fields: [
-                        { label: 'Title', name: 'title', widget: 'string' },
-                        { label: 'Content', name: 'content', widget: 'markdown' }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          });
-          console.log('CMS initialized successfully');
+          const response = await fetch('/api/config');
+          const config = await response.json();
+          return config;
         } catch (error) {
-          console.error('Failed to initialize CMS:', error);
-          document.body.innerHTML = `
-            <div style="padding: 20px; color: red;">
-              <h2>Error Initializing CMS</h2>
-              <pre>${error.message}</pre>
-              <p>Please check your configuration and try again.</p>
-              <button onclick="window.location.reload()">Retry</button>
-            </div>
-          `;
+          console.error('Failed to load config:', error);
+          return {};
         }
-      });
+      };
+
+      // Initialize CMS after loading config
+      const initCMS = async () => {
+        const config = await getConfig();
+        console.log('Initializing CMS...');
+
+        CMS.init({
+          config: {
+            backend: {
+              name: 'github',
+              repo: config.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME,
+              branch: 'main',
+              base_url: config.NEXT_PUBLIC_SITE_URL,
+              auth_endpoint: '/api/auth',
+            },
+            media_folder: '/public/uploads',
+            public_folder: '/uploads',
+            collections: [
+              {
+                name: 'pages',
+                label: 'Pages',
+                files: [
+                  {
+                    name: 'home',
+                    label: 'Home Page',
+                    file: 'content/pages/home.md',
+                    fields: [
+                      { label: 'Title', name: 'title', widget: 'string' },
+                      { label: 'Content', name: 'content', widget: 'markdown' }
+                    ]
+                  },
+                  {
+                    name: 'hello',
+                    label: 'Hello World Page',
+                    file: 'content/pages/hello.md',
+                    fields: [
+                      { label: 'Title', name: 'title', widget: 'string' },
+                      { label: 'Content', name: 'content', widget: 'markdown' }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        });
+      };
+
+      // Start initialization when DOM is loaded
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCMS);
+      } else {
+        initCMS();
+      }
     </script>
   </body>
 </html>

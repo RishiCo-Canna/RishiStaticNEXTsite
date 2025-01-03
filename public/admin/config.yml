@@ -4,9 +4,13 @@ backend:
   repo: ${NEXT_PUBLIC_GITHUB_REPO_FULL_NAME}
   branch: main
   base_url: ${NEXT_PUBLIC_SITE_URL}
-  auth_endpoint: api/auth # This will be relative to base_url
-  auth_type: implicit
-  app_id: ${NEXT_PUBLIC_OAUTH_CLIENT_ID}
+  auth_endpoint: '/api/auth'
+  commit_messages:
+    create: 'Create {{collection}} "{{slug}}"'
+    update: 'Update {{collection}} "{{slug}}"'
+    delete: 'Delete {{collection}} "{{slug}}"'
+    uploadMedia: 'Upload "{{path}}"'
+    deleteMedia: 'Delete "{{path}}"'
 
 # Media and public folders
 media_folder: /public/uploads

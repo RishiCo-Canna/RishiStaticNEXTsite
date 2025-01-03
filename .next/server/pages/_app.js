@@ -23,16 +23,6 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
-/***/ "decap-cms-app":
-/*!********************************!*\
-  !*** external "decap-cms-app" ***!
-  \********************************/
-/***/ ((module) => {
-
-module.exports = require("decap-cms-app");
-
-/***/ }),
-
 /***/ "next-auth/react":
 /*!**********************************!*\
   !*** external "next-auth/react" ***!
