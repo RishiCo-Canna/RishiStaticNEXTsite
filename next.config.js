@@ -3,12 +3,12 @@ const nextConfig = {
   reactStrictMode: true,
   env: {
     NEXT_PUBLIC_SITE_URL: process.env.REPL_SLUG 
-      ? `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co`
+      ? `https://${process.env.REPL_ID}-${process.env.REPL_OWNER}.repl.dev`
       : 'http://localhost:3000',
     NEXT_PUBLIC_GITHUB_REPO_FULL_NAME: process.env.GITHUB_REPO_FULL_NAME || 'RishiCo-Canna/RishiStaticNEXTsite',
     NEXT_PUBLIC_OAUTH_CLIENT_ID: process.env.OAUTH_CLIENT_ID,
     NEXTAUTH_URL: process.env.REPL_SLUG
-      ? `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co`
+      ? `https://${process.env.REPL_ID}-${process.env.REPL_OWNER}.repl.dev`
       : 'http://localhost:3000',
   },
   async headers() {

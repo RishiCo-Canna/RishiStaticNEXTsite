@@ -2,7 +2,7 @@ backend:
   name: github
   repo: RishiCo-Canna/RishiStaticNEXTsite
   branch: main
-  base_url: process.env.NEXT_PUBLIC_SITE_URL
+  base_url: ${process.env.NEXT_PUBLIC_SITE_URL}
   auth_endpoint: api/auth
 
 media_folder: public/images
