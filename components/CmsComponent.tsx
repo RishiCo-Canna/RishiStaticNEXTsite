@@ -10,6 +10,8 @@ const CmsComponent = () => {
       if (session) {
         const CMS = (await import('decap-cms-app')).default
         CMS.init({
+          load_config_file: true,
+          config_file: '/admin/config.yml',
           config: {
             backend: {
               name: 'github',
