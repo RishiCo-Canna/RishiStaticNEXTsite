@@ -6,6 +6,18 @@ const nextConfig = {
     NEXT_PUBLIC_OAUTH_CLIENT_ID: process.env.OAUTH_CLIENT_ID,
     NEXT_PUBLIC_SITE_URL: 'https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev',
   },
+  async rewrites() {
+    return [
+      {
+        source: '/admin',
+        destination: '/admin/index.html',
+      },
+      {
+        source: '/admin/',
+        destination: '/admin/index.html',
+      }
+    ];
+  },
   async headers() {
     return [
       {
@@ -25,7 +37,6 @@ const nextConfig = {
     ];
   },
   webpack: (config, { dev, isServer }) => {
-    // Only process files during client-side builds
     if (!isServer && !dev) {
       config.module.rules.push({
         test: /\.(yml|yaml)$/,
