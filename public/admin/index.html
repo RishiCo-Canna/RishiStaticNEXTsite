@@ -5,19 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Content Manager</title>
     <script>
-      // Inject env variables
-      window.CMS_ENV = {
-        NEXT_PUBLIC_GITHUB_REPO_FULL_NAME: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME,
-        NEXT_PUBLIC_SITE_URL: window.location.origin
+      // Debug logging
+      console.log('Admin page loading...');
+
+      // Get environment variables from Next.js runtime config
+      const GITHUB_REPO = '%NEXT_PUBLIC_GITHUB_REPO_FULL_NAME%';
+      const SITE_URL = window.location.origin;
+
+      console.log('Environment variables:', {
+        GITHUB_REPO,
+        SITE_URL
+      });
+
+      window.CMS_CONFIG = {
+        backend: {
+          name: 'github',
+          repo: GITHUB_REPO,
+          branch: 'main',
+          base_url: SITE_URL,
+          auth_endpoint: 'api/auth'
+        },
+        media_folder: 'public/uploads',
+        public_folder: '/uploads',
+        local_backend: true,
+        collections: [
+          {
+            name: 'pages',
+            label: 'Pages',
+            files: [
+              {
+                name: 'home',
+                label: 'Home Page',
+                file: 'content/pages/home.md',
+                fields: [
+                  { label: 'Title', name: 'title', widget: 'string' },
+                  { label: 'Content', name: 'content', widget: 'markdown' }
+                ]
+              }
+            ]
+          }
+        ]
       };
     </script>
   </head>
   <body>
+    <script>
+      console.log('Loading CMS config:', window.CMS_CONFIG);
+    </script>
     <!-- Include the script that builds the page and powers Decap CMS -->
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
     <script>
-      if (window.location.hostname === 'localhost' || window.location.hostname === '0.0.0.0') {
-        window.CMS_ENV = 'development';
+      // Initialize CMS with debug logging
+      console.log('Initializing CMS...');
+      try {
+        window.CMS.init({
+          config: window.CMS_CONFIG
+        });
+        console.log('CMS initialized successfully');
+      } catch (error) {
+        console.error('Failed to initialize CMS:', error);
       }
     </script>
   </body>
