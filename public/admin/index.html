@@ -21,29 +21,22 @@
         margin: 20px;
       }
     </style>
-    <!-- Load Decap CMS with defer to ensure DOM is ready -->
-    <script defer src="https://unpkg.com/decap-cms@3.4.0/dist/decap-cms.js"></script>
   </head>
   <body>
-    <div id="loader">Loading Content Management System...</div>
-    <div id="nc-root"></div>
+    <!-- Create a dedicated mount point for CMS -->
+    <div id="cms-root">
+      <div id="loader">Loading Content Management System...</div>
+    </div>
 
     <script>
-      // Show loader until CMS is initialized
-      const loader = document.getElementById('loader');
-      const root = document.getElementById('nc-root');
-
+      // Initialize CMS after DOM is fully loaded
       function initCMS() {
-        if (!window.CMS) {
-          console.error('CMS not loaded yet, retrying in 100ms');
-          setTimeout(initCMS, 100);
-          return;
-        }
+        const loader = document.getElementById('loader');
 
         try {
-          console.log('Initializing CMS...');
           window.CMS.init({
             config: {
+              load_config_file: false,
               backend: {
                 name: 'github',
                 repo: 'RishiCo-Canna/RishiStaticNEXTsite',
@@ -68,12 +61,22 @@
                 }
               ]
             }
+          }).then(() => {
+            if (loader) {
+              loader.style.display = 'none';
+            }
+          }).catch(error => {
+            console.error('CMS initialization error:', error);
+            if (loader) {
+              loader.innerHTML = `
+                <div class="error-message">
+                  <h2>Failed to initialize CMS</h2>
+                  <p>${error.message}</p>
+                  <p>Please check the console for more details.</p>
+                </div>
+              `;
+            }
           });
-
-          // Hide loader once CMS is initialized
-          if (loader) {
-            loader.style.display = 'none';
-          }
         } catch (error) {
           console.error('Failed to initialize CMS:', error);
           if (loader) {
@@ -88,11 +91,30 @@
         }
       }
 
-      // Wait for DOM to be ready before initializing
+      // Load CMS script and initialize
+      function loadCMS() {
+        const script = document.createElement('script');
+        script.src = 'https://unpkg.com/decap-cms@3.4.0/dist/decap-cms.js';
+        script.onload = () => {
+          // Wait for CMS to be available
+          const checkCMS = setInterval(() => {
+            if (window.CMS) {
+              clearInterval(checkCMS);
+              initCMS();
+            }
+          }, 100);
+        };
+        script.onerror = () => {
+          document.getElementById('loader').innerHTML = '<div class="error-message">Failed to load CMS script</div>';
+        };
+        document.body.appendChild(script);
+      }
+
+      // Start loading when DOM is ready
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initCMS);
+        document.addEventListener('DOMContentLoaded', loadCMS);
       } else {
-        initCMS();
+        loadCMS();
       }
     </script>
   </body>
