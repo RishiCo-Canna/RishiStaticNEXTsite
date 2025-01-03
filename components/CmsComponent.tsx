@@ -11,9 +11,10 @@ const CmsComponent = () => {
         const CMS = (await import('decap-cms-app')).default
         CMS.init({
           config: {
+            load_config_file: false,
             backend: {
               name: 'github',
-              repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME,
+              repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME || '',
               branch: 'main',
               auth_type: 'oauth',
               base_url: window.location.origin,
