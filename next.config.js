@@ -31,7 +31,7 @@ const nextConfig = {
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.unpkg.com https://unpkg.com https://identity.netlify.com",
               "style-src 'self' 'unsafe-inline' https://*.unpkg.com https://unpkg.com",
               "img-src 'self' data: blob: https: *",
-              "connect-src 'self' https: wss:",
+              "connect-src 'self' https: wss: https://api.github.com",
               "form-action 'self' https://github.com",
               "frame-ancestors 'self'",
               "base-uri 'self'"
