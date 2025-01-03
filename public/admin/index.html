@@ -4,12 +4,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Content Manager</title>
-    <script src="https://unpkg.com/decap-cms@3.0.12/dist/decap-cms.js"></script>
+    <!-- Import Decap CMS app and GitHub backend -->
+    <script src="https://unpkg.com/decap-cms-app@3.4.0/dist/decap-cms-app.js"></script>
+    <script src="https://unpkg.com/decap-cms-backend-github@3.2.2/dist/decap-cms-backend-github.js"></script>
   </head>
   <body>
+    <div id="nc-root"></div>
     <script>
-      window.CMS.init({
-        config: {
+      // Add error handling for CMS initialization
+      try {
+        const config = {
           backend: {
             name: 'github',
             repo: 'RishiCo-Canna/RishiStaticNEXTsite',
@@ -18,6 +22,7 @@
             base_url: window.location.origin,
             auth_endpoint: '/api/auth'
           },
+          load_config_file: false,
           media_folder: 'public/images',
           public_folder: '/images',
           collections: [
@@ -32,8 +37,20 @@
               ]
             }
           ]
-        }
-      });
+        };
+
+        console.log('Initializing CMS with config:', config);
+        window.CMS.init({ config });
+        console.log('CMS initialization completed');
+      } catch (error) {
+        console.error('Failed to initialize CMS:', error);
+        document.body.innerHTML = `
+          <div style="color: red; padding: 20px;">
+            <h2>CMS Initialization Error</h2>
+            <pre>${error.message}</pre>
+          </div>
+        `;
+      }
     </script>
   </body>
 </html>
