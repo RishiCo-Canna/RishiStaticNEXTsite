@@ -7,9 +7,13 @@ const CmsComponent = () => {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
+    let mounted = true;
+    
     const loadCms = async () => {
       try {
         const CMS = await import('decap-cms-app');
+        
+        if (!mounted) return;
         
         if (!CMS || !CMS.default) {
           throw new Error('Failed to load CMS module');
@@ -51,9 +55,15 @@ const CmsComponent = () => {
     loadCms();
 
     return () => {
-      // Cleanup if needed
+      mounted = false;
       if (window.CMS) {
-        window.CMS = undefined;
+        try {
+          // Cleanup CMS instance
+          window.CMS = undefined;
+          setCmsLoaded(false);
+        } catch (error) {
+          console.error('Error during CMS cleanup:', error);
+        }
       }
     };
   }, []);
