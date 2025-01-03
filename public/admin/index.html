@@ -21,6 +21,8 @@
         margin: 20px;
       }
     </style>
+    <!-- Load Decap CMS with defer to ensure DOM is ready -->
+    <script defer src="https://unpkg.com/decap-cms@3.4.0/dist/decap-cms.js"></script>
   </head>
   <body>
     <div id="loader">Loading Content Management System...</div>
@@ -39,6 +41,7 @@
         }
 
         try {
+          console.log('Initializing CMS...');
           window.CMS.init({
             config: {
               backend: {
@@ -84,13 +87,13 @@
           }
         }
       }
-    </script>
 
-    <!-- Load Decap CMS -->
-    <script 
-      src="https://unpkg.com/decap-cms@3.4.0/dist/decap-cms.js"
-      onload="initCMS()"
-      onerror="console.error('Failed to load CMS script'); document.getElementById('loader').innerHTML = '<div class=\'error-message\'>Failed to load CMS script</div>';"
-    ></script>
+      // Wait for DOM to be ready before initializing
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCMS);
+      } else {
+        initCMS();
+      }
+    </script>
   </body>
 </html>
