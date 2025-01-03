@@ -2,38 +2,51 @@ import { useEffect, useState } from 'react'
 import { useSession, signIn } from 'next-auth/react'
 
 const CmsComponent = () => {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const [error, setError] = useState<string | null>(null)
+  const [initializationStage, setInitializationStage] = useState<string>('not-started')
 
   useEffect(() => {
     const initCMS = async () => {
+      console.log('CMS Initialization Starting:', {
+        sessionStatus: status,
+        sessionExists: !!session,
+        accessToken: session?.accessToken,
+      })
+
       if (session?.accessToken) {
         try {
-          console.log('Initializing CMS with session:', {
+          setInitializationStage('loading-cms')
+          console.log('Loading CMS with config:', {
             sessionExists: !!session,
             hasAccessToken: !!session.accessToken,
             repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME,
-            baseUrl: window.location.origin
-          });
+            baseUrl: window.location.origin,
+            oauth: {
+              clientId: process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID,
+              authScope: 'repo,user'
+            }
+          })
 
           const CMS = (await import('decap-cms-app')).default
 
           // Add event listeners for debugging
           window.addEventListener('error', (event) => {
-            console.error('CMS error:', event.error);
-            setError(event.error?.message || 'Unknown error occurred');
-          });
+            console.error('CMS error:', event.error)
+            setError(event.error?.message || 'Unknown error occurred')
+          })
 
+          setInitializationStage('configuring-cms')
           CMS.init({
             config: {
               backend: {
                 name: 'github',
                 repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME || '',
                 branch: 'main',
-                auth_type: 'pkce', // Use PKCE flow for better security
+                auth_type: 'pkce',
                 base_url: window.location.origin,
                 auth_endpoint: 'api/auth',
-                app_id: process.env.OAUTH_CLIENT_ID,
+                app_id: process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID,
                 auth_scope: 'repo,user',
               },
               local_backend: process.env.NODE_ENV === 'development',
@@ -58,23 +71,43 @@ const CmsComponent = () => {
               ]
             }
           })
-          console.log('CMS initialized successfully');
+          setInitializationStage('cms-initialized')
+          console.log('CMS initialized successfully')
         } catch (err) {
-          console.error('Failed to initialize CMS:', err);
-          setError(err instanceof Error ? err.message : 'Failed to initialize CMS');
+          console.error('Failed to initialize CMS:', err)
+          setError(err instanceof Error ? err.message : 'Failed to initialize CMS')
+          setInitializationStage('error')
         }
+      } else {
+        console.log('No session or access token available:', {
+          status,
+          sessionExists: !!session,
+          accessTokenExists: !!session?.accessToken
+        })
       }
     }
 
     initCMS()
-  }, [session])
+  }, [session, status])
+
+  if (status === 'loading') {
+    return (
+      <div style={{ padding: '20px', textAlign: 'center' }}>
+        <h2>Loading...</h2>
+      </div>
+    )
+  }
 
   if (!session) {
     return (
       <div style={{ padding: '20px', textAlign: 'center' }}>
         <h2>Please Sign In</h2>
+        <p>Authentication status: {status}</p>
         <button 
-          onClick={() => signIn('github', { callbackUrl: '/admin' })} 
+          onClick={() => {
+            console.log('Initiating GitHub sign in')
+            signIn('github', { callbackUrl: '/admin' })
+          }} 
           style={{ 
             padding: '10px 20px',
             fontSize: '16px',
@@ -95,6 +128,7 @@ const CmsComponent = () => {
     return (
       <div style={{ padding: '20px', color: 'red' }}>
         <h2>Error Loading CMS</h2>
+        <p>Current stage: {initializationStage}</p>
         <pre>{error}</pre>
         <button onClick={() => window.location.reload()} style={{ marginTop: '10px' }}>
           Retry
