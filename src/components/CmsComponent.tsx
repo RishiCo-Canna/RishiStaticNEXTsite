@@ -1,39 +1,45 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ErrorBoundary from './ErrorBoundary';
 
 const CmsComponent: React.FC = () => {
-  const mounted = useRef(false);
-  const initialized = useRef(false);
-  const cleanupRef = useRef<(() => void) | null>(null);
+  const [error, setError] = useState<Error | null>(null);
+  const mountedRef = useRef(false);
+  const cmsRef = useRef<any>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    mounted.current = true;
+    mountedRef.current = true;
 
     const initializeCms = async () => {
-      if (initialized.current) return;
-
       try {
-        console.log('[CMS] Starting initialization...');
+        // Clear any previous error state
+        setError(null);
+
+        // Safety check for root element
+        if (!rootRef.current) {
+          console.warn('[CMS] Root element not found');
+          return;
+        }
 
         // Clean up any existing CMS instance
-        if (cleanupRef.current) {
-          cleanupRef.current();
-          cleanupRef.current = null;
+        if (cmsRef.current) {
+          console.log('[CMS] Cleaning up previous instance');
+          // Clear the root element safely
+          if (rootRef.current) {
+            rootRef.current.innerHTML = '';
+          }
+          cmsRef.current = null;
         }
 
-        // Clear any existing CMS root elements
-        const existingRoot = document.getElementById('nc-root');
-        if (existingRoot) {
-          while (existingRoot.firstChild) {
-            existingRoot.removeChild(existingRoot.firstChild);
-          }
-        }
+        console.log('[CMS] Starting initialization...');
 
         // Import CMS dynamically
         const CMS = (await import('decap-cms-app')).default;
-        console.log('[CMS] Module imported successfully');
 
-        if (!mounted.current) return;
+        if (!mountedRef.current) {
+          console.log('[CMS] Component unmounted during initialization');
+          return;
+        }
 
         // Configure CMS
         const config = {
@@ -63,51 +69,76 @@ const CmsComponent: React.FC = () => {
 
         // Initialize CMS with config
         console.log('[CMS] Initializing with config...');
-        await CMS.init({ config });
+        cmsRef.current = await CMS.init({ config });
 
-        if (!mounted.current) return;
+        if (!mountedRef.current) {
+          console.log('[CMS] Component unmounted after initialization');
+          return;
+        }
 
-        initialized.current = true;
         console.log('[CMS] Initialization complete');
-
-        // Store cleanup function
-        cleanupRef.current = () => {
-          console.log('[CMS] Cleaning up...');
-          initialized.current = false;
-          const root = document.getElementById('nc-root');
-          if (root) {
-            root.innerHTML = '';
-          }
-          // Add any additional cleanup needed by CMS
-        };
-      } catch (error) {
-        console.error('[CMS] Initialization failed:', error);
-        if (mounted.current) {
-          // Reset initialization flag on error
-          initialized.current = false;
+      } catch (err) {
+        console.error('[CMS] Initialization failed:', err);
+        if (mountedRef.current) {
+          setError(err instanceof Error ? err : new Error('Failed to initialize CMS'));
         }
       }
     };
 
-    // Ensure DOM is ready before initialization
+    // Initialize only when the DOM is ready
     if (document.readyState === 'complete') {
       initializeCms();
     } else {
-      window.addEventListener('load', initializeCms);
-      return () => window.removeEventListener('load', initializeCms);
+      const handleLoad = () => {
+        if (mountedRef.current) {
+          initializeCms();
+        }
+      };
+      window.addEventListener('load', handleLoad);
+      return () => window.removeEventListener('load', handleLoad);
     }
 
+    // Cleanup function
     return () => {
-      mounted.current = false;
-      if (cleanupRef.current) {
-        cleanupRef.current();
+      mountedRef.current = false;
+      if (cmsRef.current && rootRef.current) {
+        console.log('[CMS] Cleaning up on unmount');
+        try {
+          // Safely clear the root element
+          if (rootRef.current.firstChild) {
+            rootRef.current.innerHTML = '';
+          }
+        } catch (err) {
+          console.warn('[CMS] Cleanup error:', err);
+        }
+        cmsRef.current = null;
       }
     };
   }, []);
 
+  if (error) {
+    return (
+      <div className="p-4 bg-red-50 border border-red-200 rounded-md">
+        <h2 className="text-red-800 font-semibold mb-2">CMS Error</h2>
+        <p className="text-red-600">{error.message}</p>
+        <button
+          className="mt-4 px-4 py-2 bg-red-100 text-red-800 rounded hover:bg-red-200"
+          onClick={() => {
+            setError(null);
+            if (mountedRef.current) {
+              window.location.reload();
+            }
+          }}
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
   return (
     <ErrorBoundary>
-      <div id="nc-root" className="min-h-screen" />
+      <div ref={rootRef} id="nc-root" className="min-h-screen" />
     </ErrorBoundary>
   );
 };
