@@ -19,12 +19,12 @@ const nextConfig = {
           {
             key: 'Content-Security-Policy',
             value: [
-              "default-src 'self' https://*.repl.co https://*.unpkg.com https://unpkg.com",
+              "default-src 'self' https://*.github.com https://*.githubusercontent.com https://*.repl.co https://*.unpkg.com https://unpkg.com",
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.unpkg.com https://unpkg.com",
               "style-src 'self' 'unsafe-inline' https://*.unpkg.com https://unpkg.com",
               "img-src 'self' data: blob: https:",
               "connect-src 'self' https: wss:",
-              "frame-ancestors 'none'",
+              "form-action 'self' https://github.com",
             ].join('; ')
           }
         ]
