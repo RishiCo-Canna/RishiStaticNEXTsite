@@ -1,0 +1,67 @@
+Warning: You are importing createRoot from &quot;react-dom&quot; which is not supported. You should instead import it from &quot;react-dom/client&quot;.
+    at CmsComponent (webpack-internal:///./src/components/CmsComponent.js:18:90)
+    at LoadableComponent (webpack-internal:///./node_modules/next/dist/shared/lib/loadable.shared-runtime.js:113:9)
+    at SessionProvider (webpack-internal:///./node_modules/next-auth/react/index.js:365:24)
+    at AdminPage
+    at SessionProvider (webpack-internal:///./node_modules/next-auth/react/index.js:365:24)
+    at App (webpack-internal:///./pages/_app.tsx:15:11)
+    at PathnameContextProviderAdapter (webpack-internal:///./node_modules/next/dist/shared/lib/router/adapters.js:79:11)
+    at ErrorBoundary (webpack-internal:///./node_modules/next/dist/compiled/@next/react-dev-overlay/dist/client.js:2:5389)
+    at ReactDevOverlay (webpack-internal:///./node_modules/next/dist/compiled/@next/react-dev-overlay/dist/client.js:2:7785)
+    at Container (webpack-internal:///./node_modules/next/dist/client/index.js:78:1)
+    at AppContainer (webpack-internal:///./node_modules/next/dist/client/index.js:182:11)
+    at Root (webpack-internal:///./node_modules/next/dist/client/index.js:396:11)
+at CmsComponent (webpack-internal:///./src/components/CmsComponent.js:18:90)
+at LoadableComponent (webpack-internal:///./node_modules/next/dist/shared/lib/loadable.shared-runtime.js:113:9)
+at SessionProvider (webpack-internal:///./node_modules/next-auth/react/index.js:365:24)
+at AdminPage
+at SessionProvider (webpack-internal:///./node_modules/next-auth/react/index.js:365:24)
+at App (webpack-internal:///./pages/_app.tsx:15:11)
+at PathnameContextProviderAdapter (webpack-internal:///./node_modules/next/dist/shared/lib/router/adapters.js:79:11)
+at ErrorBoundary (webpack-internal:///./node_modules/next/dist/compiled/@next/react-dev-overlay/dist/client.js:2:5389)
+at ReactDevOverlay (webpack-internal:///./node_modules/next/dist/compiled/@next/react-dev-overlay/dist/client.js:2:7785)
+at Container (webpack-internal:///./node_modules/next/dist/client/index.js:78:1)
+at AppContainer (webpack-internal:///./node_modules/next/dist/client/index.js:182:11)
+at Root (webpack-internal:///./node_modules/next/dist/client/index.js:396:11)
+at t.value (https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+Warning: You are importing createRoot from "react-dom" which is not supported. You should instead import it from "react-dom/client".
+Warning: You are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
+Warning: l: Support for defaultProps will be removed from function components in a future major release. Use JavaScript default parameters instead.
+    at l (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:487:2108476)
+    at eval (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:395:85159)
+    at v (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:487:2113893)
+    at d (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:487:2111941)
+Warning: Failed prop type: invariant is not defined
+    at I (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:395:87769)
+    at v (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:487:2113893)
+    at t (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:487:2127389)
+    at t (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:487:2123804)
+    at x (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:416:70662)
+    at l (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:487:2108476)
+    at eval (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:395:85159)
+    at v (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:487:2113893)
+    at d (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:487:2111941)
+Warning: B: Support for defaultProps will be removed from function components in a future major release. Use JavaScript default parameters instead.
+    at B
+    at span
+    at eval (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:4:65817)
+    at d (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:433:402289)
+    at eval (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:4:65817)
+    at section
+    at eval (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:4:65817)
+    at y (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:433:394895)
+    at m (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:29:11315)
+    at AuthenticationPage
+    at div
+    at I (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:395:87769)
+    at v (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:487:2113893)
+    at t (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:487:2127389)
+    at t (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:487:2123804)
+    at x (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:416:70662)
+    at l (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:487:2108476)
+    at eval (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:395:85159)
+    at v (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:487:2113893)
+    at d (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:487:2111941)
