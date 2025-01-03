@@ -2,7 +2,6 @@
 const nextConfig = {
   reactStrictMode: true,
   env: {
-    // Expose environment variables to the browser
     NEXT_PUBLIC_GITHUB_REPO_FULL_NAME: process.env.GITHUB_REPO_FULL_NAME,
     NEXT_PUBLIC_OAUTH_CLIENT_ID: process.env.OAUTH_CLIENT_ID,
     NEXT_PUBLIC_SITE_URL: process.env.SITE_URL || process.env.REPL_SLUG 
@@ -14,10 +13,6 @@ const nextConfig = {
       {
         source: '/admin',
         destination: '/admin/index.html',
-      },
-      {
-        source: '/admin/config.yml',
-        destination: '/admin/config.yml',
       }
     ]
   },
