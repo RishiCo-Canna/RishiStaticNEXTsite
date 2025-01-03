@@ -1,17 +1,26 @@
+
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/react';
 
 const clientId = process.env.OAUTH_CLIENT_ID;
 const clientSecret = process.env.OAUTH_CLIENT_SECRET;
 
+interface GitHubErrorResponse {
+  error: string;
+  error_description?: string;
+}
+
+interface GitHubTokenResponse {
+  access_token: string;
+  token_type: string;
+  scope: string;
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  // Check for required credentials
   if (!clientId || !clientSecret) {
     console.error('Missing OAuth credentials');
     return res.status(500).json({ error: 'Server configuration error' });
   }
 
-  // Handle POST request from Decap CMS
   if (req.method === 'POST') {
     try {
       const { code } = JSON.parse(req.body);
@@ -20,7 +29,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(400).json({ error: 'Missing code' });
       }
 
-      console.log('Exchanging code for token...');
       const tokenResponse = await fetch(
         'https://github.com/login/oauth/access_token',
         {
@@ -38,17 +46,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       );
 
       if (!tokenResponse.ok) {
-        console.error('GitHub token exchange failed:', tokenResponse.statusText);
         return res.status(tokenResponse.status).json({
           error: 'Token exchange failed',
-          details: `GitHub responded with ${tokenResponse.status}`
         });
       }
 
       const data = await tokenResponse.json();
 
       if (data.error) {
-        console.error('GitHub OAuth error:', data.error);
         return res.status(400).json({ error: data.error });
       }
 
@@ -60,8 +65,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       console.error('Auth error:', error);
       return res.status(500).json({ error: 'Internal server error' });
     }
+  } else if (req.method === 'GET') {
+    // Handle the initial auth request
+    res.redirect(307, `https://github.com/login/oauth/authorize?client_id=${clientId}&scope=repo`);
   }
 
-  // Return 405 for other methods
   return res.status(405).json({ error: 'Method not allowed' });
 }
