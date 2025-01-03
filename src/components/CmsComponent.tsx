@@ -10,6 +10,7 @@ const CmsComponent = () => {
   useEffect(() => {
     if (mountRef.current) return;
     mountRef.current = true;
+    let mounted = true;
     
     const loadCms = async () => {
       try {
