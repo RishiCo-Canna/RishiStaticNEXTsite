@@ -15,7 +15,11 @@
       const getConfig = async () => {
         try {
           const response = await fetch('/api/config');
+          if (!response.ok) {
+            throw new Error(`Config API returned ${response.status}`);
+          }
           const config = await response.json();
+          console.log('Loaded config:', config);
           return config;
         } catch (error) {
           console.error('Failed to load config:', error);
@@ -26,7 +30,7 @@
       // Initialize CMS after loading config
       const initCMS = async () => {
         const config = await getConfig();
-        console.log('CMS config:', config);
+        console.log('Initializing CMS with config...');
 
         CMS.init({
           config: {
