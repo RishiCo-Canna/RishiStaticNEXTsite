@@ -1,26 +1,25 @@
+
 import { useEffect } from 'react'
-import CMS from 'decap-cms-app'
+import { useSession, signIn } from 'next-auth/react'
+import dynamic from 'next/dynamic'
 
 const CmsComponent = () => {
+  const { data: session } = useSession()
+
   useEffect(() => {
-    // Add console log to debug initialization
-    console.log('Initializing CMS...')
-
-    if (window) {
-      // Check if we have the required environment variables
-      console.log('GitHub Repo:', process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME)
-      console.log('Base URL:', window.location.origin)
-
+    if (session) {
+      const CMS = (await import('decap-cms-app')).default
+      
       CMS.init({
         config: {
           backend: {
             name: 'github',
             repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME || '',
             branch: 'main',
+            auth_type: 'oauth',
             base_url: window.location.origin,
-            auth_endpoint: 'api/auth',
+            auth_endpoint: 'api/auth'
           },
-          local_backend: process.env.NODE_ENV === 'development',
           media_folder: 'public/uploads',
           public_folder: '/uploads',
           collections: [
@@ -33,16 +32,8 @@ const CmsComponent = () => {
                   label: 'Home Page',
                   file: 'content/pages/home.md',
                   fields: [
-                    {
-                      label: 'Title',
-                      name: 'title',
-                      widget: 'string'
-                    },
-                    {
-                      label: 'Content',
-                      name: 'content',
-                      widget: 'markdown'
-                    }
+                    { label: 'Title', name: 'title', widget: 'string' },
+                    { label: 'Content', name: 'content', widget: 'markdown' }
                   ]
                 }
               ]
@@ -51,7 +42,18 @@ const CmsComponent = () => {
         }
       })
     }
-  }, [])
+  }, [session])
+
+  if (!session) {
+    return (
+      <div style={{ padding: '20px', textAlign: 'center' }}>
+        <h2>Please Sign In</h2>
+        <button onClick={() => signIn('github')} style={{ padding: '10px 20px' }}>
+          Sign in with GitHub
+        </button>
+      </div>
+    )
+  }
 
   return <div id="nc-root" />
 }
