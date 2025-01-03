@@ -40,7 +40,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
   \************************/
 /***/ (() => {
 
-eval("// This file is deprecated in favor of admin.tsx\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly93b3Jrc3BhY2UvLi9wYWdlcy9hZG1pbi5qcz84NWMxIl0sInNvdXJjZXNDb250ZW50IjpbIlxuLy8gVGhpcyBmaWxlIGlzIGRlcHJlY2F0ZWQgaW4gZmF2b3Igb2YgYWRtaW4udHN4XG4iXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQ0EsZ0RBQWdEIiwiZmlsZSI6Ii4vcGFnZXMvYWRtaW4uanMiLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./pages/admin.js\n");
+eval("// This file is deprecated and should be removed\n// Use pages/admin.tsx instead\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly93b3Jrc3BhY2UvLi9wYWdlcy9hZG1pbi5qcz84NWMxIl0sInNvdXJjZXNDb250ZW50IjpbIi8vIFRoaXMgZmlsZSBpcyBkZXByZWNhdGVkIGFuZCBzaG91bGQgYmUgcmVtb3ZlZFxuLy8gVXNlIHBhZ2VzL2FkbWluLnRzeCBpbnN0ZWFkIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLGdEQUFnRDtBQUNoRCw4QkFBOEIiLCJmaWxlIjoiLi9wYWdlcy9hZG1pbi5qcyIsInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./pages/admin.js\n");
 
 /***/ }),
 
