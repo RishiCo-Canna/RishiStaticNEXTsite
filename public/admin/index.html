@@ -4,14 +4,19 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Content Manager</title>
-    <script src="https://unpkg.com/@decap/cms@3.5.0/dist/decap-cms.js"></script>
+    <!-- Include Decap CMS -->
+    <script src="https://unpkg.com/decap-cms@3.4.0/dist/decap-cms.js"></script>
   </head>
   <body>
+    <!-- This element is where the CMS will be mounted -->
+    <div id="nc-root"></div>
+
     <script>
+      // Initialize Decap CMS
       if (window.CMS) {
         window.CMS.init();
       } else {
-        console.error("Decap CMS failed to load");
+        console.error('Decap CMS failed to load');
       }
     </script>
   </body>
