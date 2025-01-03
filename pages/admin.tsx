@@ -1,16 +1,30 @@
-import { useEffect } from 'react';
-import { signIn, useSession } from 'next-auth/react';
-import Head from 'next/head';
-import type { NextPage } from 'next';
+import { useEffect } from 'react'
+import { signIn, useSession } from 'next-auth/react'
+import Head from 'next/head'
+import type { NextPage } from 'next'
 
 const AdminPage: NextPage = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession()
 
   useEffect(() => {
     if (session) {
-      window.location.href = '/admin/index.html';
+      window.location.href = '/admin/index.html'
     }
-  }, [session]);
+  }, [session])
+
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Head>
+          <title>Admin | Loading...</title>
+        </Head>
+        <div className="text-center">
+          <h2 className="text-xl font-semibold">Loading...</h2>
+          <p className="mt-2 text-gray-600">Please wait while we verify your session...</p>
+        </div>
+      </div>
+    )
+  }
 
   if (!session) {
     return (
@@ -34,7 +48,7 @@ const AdminPage: NextPage = () => {
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -47,7 +61,7 @@ const AdminPage: NextPage = () => {
         <p className="mt-2 text-gray-600">Redirecting to content management system...</p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AdminPage;
+export default AdminPage
