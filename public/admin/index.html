@@ -4,68 +4,38 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Content Manager</title>
-    <script>
-      console.log('Page started loading');
-    </script>
-    <!-- Include the Decap CMS library -->
     <script src="https://unpkg.com/decap-cms@3.4.0/dist/decap-cms.js"></script>
   </head>
   <body>
     <div id="nc-root"></div>
     <script>
-      console.log('DOM loaded, preparing to initialize CMS');
-
-      // Error handling elements
-      const errorDiv = document.createElement('div');
-      errorDiv.style.padding = '20px';
-      errorDiv.style.color = 'red';
-      document.body.appendChild(errorDiv);
-
-      function showError(message) {
-        console.error(message);
-        errorDiv.innerHTML = `<h2>CMS Error</h2><pre>${message}</pre>`;
-      }
-
-      try {
-        if (!window.CMS) {
-          throw new Error('CMS object not found. Script may not have loaded correctly.');
+      window.CMS.init({
+        config: {
+          backend: {
+            name: 'github',
+            repo: 'RishiCo-Canna/RishiStaticNEXTsite',
+            branch: 'main',
+            auth_scope: 'repo',
+            base_url: '',
+            auth_endpoint: 'api/auth'
+          },
+          local_backend: false,
+          media_folder: 'public/images',
+          public_folder: '/images',
+          collections: [
+            {
+              name: 'pages',
+              label: 'Pages',
+              folder: 'content/pages',
+              create: true,
+              fields: [
+                { label: 'Title', name: 'title', widget: 'string' },
+                { label: 'Body', name: 'body', widget: 'markdown' }
+              ]
+            }
+          ]
         }
-
-        console.log('CMS object found, initializing...');
-
-        // Initialize the CMS with explicit configuration
-        window.CMS.init({
-          config: {
-            backend: {
-              name: 'github',
-              repo: 'RishiCo-Canna/RishiStaticNEXTsite',
-              branch: 'main',
-              auth_scope: 'repo',
-              base_url: '/api',
-              auth_endpoint: '/auth'
-            },
-            local_backend: false,
-            media_folder: 'public/images',
-            public_folder: '/images',
-            collections: [
-              {
-                name: 'pages',
-                label: 'Pages',
-                folder: 'content/pages',
-                create: true,
-                fields: [
-                  { label: 'Title', name: 'title', widget: 'string' },
-                  { label: 'Body', name: 'body', widget: 'markdown' }
-                ]
-              }
-            ]
-          }
-        });
-
-        console.log('CMS initialization completed');
-      } catch (error) {
-        showError(`Failed to initialize CMS: ${error.message}`);
-      }
+      });
     </script>
   </body>
 </html>

@@ -22,9 +22,20 @@ export default NextAuth({
       }
       return token
     },
-    async session({ session, token }: { session: any; token: any }) {
+    async session({ session, token }) {
       session.accessToken = token.accessToken
       return session
+    }
+  },
+  cookies: {
+    sessionToken: {
+      name: `next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: process.env.NODE_ENV === 'production'
+      }
     }
   },
   pages: {
