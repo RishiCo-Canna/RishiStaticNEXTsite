@@ -1,14 +1,19 @@
-
+# Decap CMS Configuration
 backend:
   name: github
-  repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME
+  repo: {{NEXT_PUBLIC_GITHUB_REPO_FULL_NAME}}
   branch: main
-  base_url: process.env.NEXT_PUBLIC_SITE_URL
+  base_url: {{NEXT_PUBLIC_SITE_URL}}
   auth_endpoint: api/auth
+  auth_type: implicit
+  app_id: {{NEXT_PUBLIC_OAUTH_CLIENT_ID}}
 
-media_folder: public/uploads
+# Media and public folders
+media_folder: /public/uploads
 public_folder: /uploads
+publish_mode: editorial_workflow
 
+# Collections
 collections:
   - name: pages
     label: Pages
@@ -20,7 +25,7 @@ collections:
           - { label: Title, name: title, widget: string }
           - { label: Content, name: content, widget: markdown }
       - name: hello
-        label: Hello Page
+        label: Hello World Page
         file: content/pages/hello.md
         fields:
           - { label: Title, name: title, widget: string }

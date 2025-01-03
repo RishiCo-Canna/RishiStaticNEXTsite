@@ -14,9 +14,8 @@ const nextConfig = {
         source: '/admin',
         destination: '/admin/index.html',
       }
-    ]
+    ];
   },
-  // Add proper CORS headers for CMS API calls
   async headers() {
     return [
       {
@@ -27,33 +26,33 @@ const nextConfig = {
           { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization' },
         ],
       },
-    ]
+      {
+        source: '/admin/:path*',
+        headers: [
+          { key: 'Access-Control-Allow-Origin', value: '*' },
+        ],
+      },
+    ];
   },
-  // Process HTML files to inject environment variables
   webpack: (config, { dev, isServer }) => {
+    // Only process files during client-side builds
     if (!isServer && !dev) {
       config.module.rules.push({
-        test: /\.html$/,
+        test: /\.(yml|yaml)$/,
         use: [
+          'yaml-loader',
           {
             loader: 'string-replace-loader',
             options: {
-              multiple: [
-                { 
-                  search: '{{NEXT_PUBLIC_GITHUB_REPO_FULL_NAME}}', 
-                  replace: process.env.GITHUB_REPO_FULL_NAME || '' 
-                },
-                { 
-                  search: '{{NEXT_PUBLIC_OAUTH_CLIENT_ID}}', 
-                  replace: process.env.OAUTH_CLIENT_ID || '' 
-                },
-                {
-                  search: '{{NEXT_PUBLIC_SITE_URL}}',
-                  replace: process.env.SITE_URL || process.env.REPL_SLUG 
-                    ? `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co`
-                    : 'http://localhost:3000'
+              search: /\{\{([^}]+)\}\}/g,
+              replace: (match, p1) => {
+                const envVar = process.env[p1];
+                if (!envVar) {
+                  console.warn(`Warning: Environment variable ${p1} not found`);
                 }
-              ]
+                return envVar || '';
+              },
+              flags: 'g'
             }
           }
         ]
@@ -61,6 +60,6 @@ const nextConfig = {
     }
     return config;
   }
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

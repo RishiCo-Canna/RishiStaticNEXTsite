@@ -1,13 +1,33 @@
-
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Content Manager</title>
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   </head>
   <body>
-    <script src="https://unpkg.com/decap-cms@3.4.0/dist/decap-cms.js"></script>
+    <!-- Include the script that builds the page and powers Decap CMS -->
+    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <script>
+      // Debug logging
+      console.log('Admin page loading...');
+      window.addEventListener('DOMContentLoaded', function() {
+        try {
+          console.log('Initializing CMS...');
+          window.CMS.init();
+          console.log('CMS initialized successfully');
+        } catch (error) {
+          console.error('Failed to initialize CMS:', error);
+          document.body.innerHTML = `
+            <div style="padding: 20px; color: red;">
+              <h2>Error Initializing CMS</h2>
+              <pre>${error.message}</pre>
+              <p>Please check your environment variables and configuration.</p>
+              <button onclick="window.location.reload()">Retry</button>
+            </div>
+          `;
+        }
+      });
+    </script>
   </body>
 </html>
