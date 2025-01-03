@@ -1,1 +1,1 @@
-self.__REACT_LOADABLE_MANIFEST="{\"admin.tsx -> ../src/components/CmsComponent\":{\"id\":\"admin.tsx -> ../src/components/CmsComponent\",\"files\":[\"static/chunks/src_components_CmsComponent_js.js\"]}}"
+self.__REACT_LOADABLE_MANIFEST="{\"admin.tsx -> ../src/components/CmsComponent\":{\"id\":\"admin.tsx -> ../src/components/CmsComponent\",\"files\":[\"static/chunks/src_components_CmsComponent_js.js\"]},\"admin.tsx -> ../src/components/ErrorBoundary\":{\"id\":\"admin.tsx -> ../src/components/ErrorBoundary\",\"files\":[\"static/chunks/src_components_ErrorBoundary_tsx.js\"]}}"
