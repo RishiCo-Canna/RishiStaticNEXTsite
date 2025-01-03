@@ -11,8 +11,12 @@ module.exports = {
         'brand-teal': '#40C9B5',
       },
       backgroundImage: {
-        'gradient-custom': 'linear-gradient(135deg, #6C42CE 0%, #40C9B5 100%)',
-      }
+        'gradient-custom': 'linear-gradient(135deg, var(--tw-gradient-from) 0%, var(--tw-gradient-to) 100%)',
+      },
+      spacing: {
+        '18': '4.5rem',
+        '22': '5.5rem',
+      },
     },
   },
   plugins: [],
