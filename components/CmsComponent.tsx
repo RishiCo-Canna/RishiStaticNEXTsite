@@ -7,10 +7,11 @@ const CmsComponent = () => {
 
   useEffect(() => {
     const initCMS = async () => {
-      if (session) {
+      if (session?.accessToken) {
         try {
           console.log('Initializing CMS with session:', {
             sessionExists: !!session,
+            hasAccessToken: !!session.accessToken,
             repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME,
             baseUrl: window.location.origin
           });
@@ -29,8 +30,11 @@ const CmsComponent = () => {
                 name: 'github',
                 repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME || '',
                 branch: 'main',
+                auth_type: 'pkce', // Use PKCE flow for better security
                 base_url: window.location.origin,
-                auth_endpoint: 'api/auth'
+                auth_endpoint: 'api/auth',
+                app_id: process.env.OAUTH_CLIENT_ID,
+                auth_scope: 'repo,user',
               },
               local_backend: process.env.NODE_ENV === 'development',
               media_folder: 'public/uploads',
@@ -69,7 +73,18 @@ const CmsComponent = () => {
     return (
       <div style={{ padding: '20px', textAlign: 'center' }}>
         <h2>Please Sign In</h2>
-        <button onClick={() => signIn('github')} style={{ padding: '10px 20px' }}>
+        <button 
+          onClick={() => signIn('github', { callbackUrl: '/admin' })} 
+          style={{ 
+            padding: '10px 20px',
+            fontSize: '16px',
+            cursor: 'pointer',
+            backgroundColor: '#24292e',
+            color: 'white',
+            border: 'none',
+            borderRadius: '6px'
+          }}
+        >
           Sign in with GitHub
         </button>
       </div>
