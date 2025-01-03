@@ -1,5 +1,6 @@
 
 modules = ["nodejs-20", "python-3.11"]
+devTools = false
 
 [nix]
 channel = "stable-24_05"
