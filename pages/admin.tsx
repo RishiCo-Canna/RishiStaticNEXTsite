@@ -1,11 +1,11 @@
 
 import { useEffect } from 'react';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import Head from 'next/head';
 import dynamic from 'next/dynamic';
 
-const CmsComponent = dynamic(() => import('../src/components/CmsComponent'), { 
-  ssr: false 
+const CmsComponent = dynamic(() => import('../src/components/CmsComponent'), {
+  ssr: false,
 });
 
 export default function AdminPage() {
