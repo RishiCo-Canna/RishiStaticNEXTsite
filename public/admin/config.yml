@@ -1,3 +1,4 @@
+
 backend:
   name: github
   repo: RishiCo-Canna/RishiStaticNEXTsite
@@ -12,8 +13,8 @@ media_folder: "public/images"
 public_folder: "/images"
 
 collections:
-  - name: "content_pages"
-    label: "Content Pages"
+  - name: "pages"
+    label: "Pages"
     folder: "content/pages"
     create: true
     fields:
