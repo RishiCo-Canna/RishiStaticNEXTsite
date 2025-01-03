@@ -9,37 +9,7 @@
   </head>
   <body>
     <script>
-      CMS.init({
-        config: {
-          backend: {
-            name: 'github',
-            repo: 'RishiCo-Canna/RishiStaticNEXTsite',
-            branch: 'main',
-            auth_scope: 'public_repo',
-            base_url: window.location.origin,
-            auth_endpoint: '/api/auth'
-          },
-          media_folder: 'public/uploads',
-          public_folder: '/uploads',
-          collections: [
-            {
-              name: 'pages',
-              label: 'Pages',
-              files: [
-                {
-                  file: 'content/hello.md',
-                  name: 'hello',
-                  label: 'Hello Page',
-                  fields: [
-                    { label: 'Title', name: 'title', widget: 'string' },
-                    { label: 'Body', name: 'body', widget: 'markdown' }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      })
+      window.CMS.init();
     </script>
   </body>
 </html>

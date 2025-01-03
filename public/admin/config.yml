@@ -2,9 +2,9 @@ backend:
   name: github
   repo: RishiCo-Canna/RishiStaticNEXTsite
   branch: main
-  auth_type: pkce
-  auth_endpoint: api/auth
+  auth_scope: public_repo
   base_url: https://${process.env.REPLIT_DEV_DOMAIN}
+  auth_endpoint: /api/auth
 
 media_folder: public/images
 public_folder: /images
