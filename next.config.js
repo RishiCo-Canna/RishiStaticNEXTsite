@@ -15,6 +15,10 @@ const nextConfig = {
         source: '/admin',
         destination: '/admin/index.html',
       },
+      {
+        source: '/admin/config.yml',
+        destination: '/admin/config.yml',
+      }
     ]
   },
   // Add proper CORS headers for CMS API calls
