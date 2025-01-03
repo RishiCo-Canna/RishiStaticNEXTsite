@@ -11,6 +11,14 @@ const nextConfig = {
       ? `https://${process.env.REPL_SLUG}-${process.env.REPL_OWNER}.repl.co`
       : 'http://localhost:3000',
   },
+  async rewrites() {
+    return [
+      {
+        source: '/admin/:path*',
+        destination: '/admin/:path*', // Serve static files from public/admin
+      },
+    ];
+  },
   async headers() {
     return [
       {
