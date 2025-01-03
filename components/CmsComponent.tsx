@@ -9,49 +9,7 @@ const CmsComponent = () => {
     const initCMS = async () => {
       if (session) {
         const CMS = (await import('decap-cms-app')).default
-        CMS.init({
-          load_config_file: true,
-          config_file: '/admin/config.yml',
-          config: {
-            backend: {
-              name: 'github',
-              repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME || '',
-              branch: 'main',
-              auth_type: 'oauth',
-              base_url: window.location.origin,
-              auth_endpoint: 'api/auth'
-            },
-            local_backend: process.env.NODE_ENV === 'development',
-            media_folder: 'public/uploads',
-            public_folder: '/uploads',
-            collections: [
-              {
-                name: 'pages',
-                label: 'Pages',
-                files: [
-                  {
-                    name: 'home',
-                    label: 'Home Page',
-                    file: 'content/pages/home.md',
-                    fields: [
-                      { label: 'Title', name: 'title', widget: 'string' },
-                      { label: 'Content', name: 'content', widget: 'markdown' }
-                    ]
-                  },
-                  {
-                    name: 'hello',
-                    label: 'Hello Page',
-                    file: 'content/pages/hello.md',
-                    fields: [
-                      { label: 'Title', name: 'title', widget: 'string' },
-                      { label: 'Content', name: 'content', widget: 'markdown' }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        })
+        CMS.init()
       }
     }
     initCMS()

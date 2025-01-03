@@ -4,7 +4,7 @@ backend:
   repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME
   branch: main
   auth_type: oauth
-  base_url: 'https://api.github.com'
+  base_url: window.location.origin
   auth_endpoint: 'api/auth'
 
 media_folder: public/uploads
