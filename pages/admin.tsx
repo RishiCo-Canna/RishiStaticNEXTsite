@@ -5,7 +5,15 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 
 const CmsComponent = dynamic(
-  () => import('../src/components/CmsComponent'),
+  () => import('../src/components/CmsComponent').then(mod => mod.default),
+  { 
+    ssr: false,
+    loading: () => <div>Loading CMS...</div>
+  }
+);
+
+const ErrorBoundaryComponent = dynamic(
+  () => import('../src/components/ErrorBoundary'),
   { ssr: false }
 );
 
@@ -44,7 +52,9 @@ const AdminPage = () => {
       <Head>
         <title>Admin | CMS</title>
       </Head>
-      <CmsComponent />
+      <ErrorBoundaryComponent>
+        <CmsComponent />
+      </ErrorBoundaryComponent>
     </>
   );
 };
