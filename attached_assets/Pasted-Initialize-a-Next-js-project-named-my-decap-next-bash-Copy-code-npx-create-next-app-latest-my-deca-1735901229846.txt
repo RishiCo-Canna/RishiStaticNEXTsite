@@ -1,0 +1,86 @@
+Initialize a Next.js project named my-decap-next:
+
+bash
+Copy code
+npx create-next-app@latest my-decap-next --use-npm
+cd my-decap-next
+Create a static admin folder for Decap in public/admin:
+
+Make a file at public/admin/index.html with the following contents:
+html
+Copy code
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Load Decap CMS from unpkg -->
+    <script src="https://unpkg.com/decap-cms-app@latest/dist/decap-cms.js"></script>
+  </head>
+  <body>
+    <script>
+      CMS.init({
+        config: {
+          backend: {
+            name: 'github',
+            repo: 'your-username/your-repo',
+            branch: 'main',
+            auth_scope: 'public_repo',
+            base_url: 'https://your-decap-next-url.vercel.app',  // Or wherever you're deploying
+            auth_endpoint: '/api/auth'
+          },
+          media_folder: 'public/uploads',
+          public_folder: '/uploads',
+          collections: [
+            {
+              name: 'pages',
+              label: 'Pages',
+              files: [
+                {
+                  file: 'content/hello.md',
+                  name: 'hello',
+                  label: 'Hello Page',
+                  fields: [
+                    { label: 'Title', name: 'title', widget: 'string' },
+                    { label: 'Body', name: 'body', widget: 'markdown' }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      })
+    </script>
+  </body>
+</html>
+Add a Markdown file to edit:
+
+Create a directory named content at the project root (same level as pages, public, etc.).
+Inside content, create a file called hello.md:
+md
+Copy code
+---
+title: My Hello Page
+---
+Hello from Decap CMS!
+Adjust package.json to ensure we have these scripts:
+
+jsonc
+Copy code
+// package.json
+{
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  // ...
+}
+Test locally:
+
+Run npm run dev.
+Visit http://localhost:3000/ for your Next.js site.
+Visit http://localhost:3000/admin/ to see Decap CMS. If you haven’t set up OAuth, you may see login or config errors, but the basic structure is in place.
+(Optional) Configure GitHub OAuth:
+
+Create a GitHub OAuth app and set the callback to your domain + /api/auth.
+Adjust backend.base_url and backend.auth_endpoint in public/admin/index.html accordingly.
+After completing these steps, you have a working Next.js + Decap CMS starter, with a basic Markdown file you can edit in /admin.
