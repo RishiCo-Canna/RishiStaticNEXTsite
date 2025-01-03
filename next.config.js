@@ -18,7 +18,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Content-Security-Policy',
-            value: "default-src *; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://identity.netlify.com https://github.com; style-src 'self' 'unsafe-inline' https://unpkg.com; img-src * data: blob:; connect-src *; frame-ancestors *"
+            value: "default-src * 'unsafe-inline' 'unsafe-eval'; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src *; img-src * data: blob:; style-src * 'unsafe-inline';"
           }
         ]
       }
