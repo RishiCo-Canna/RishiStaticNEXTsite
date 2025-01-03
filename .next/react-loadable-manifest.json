@@ -1,8 +1,8 @@
 {
-  "admin.tsx -> decap-cms-app": {
-    "id": "admin.tsx -> decap-cms-app",
+  "admin.js -> ../src/components/CmsComponent": {
+    "id": "admin.js -> ../src/components/CmsComponent",
     "files": [
-      "static/chunks/node_modules_decap-cms-app_dist_decap-cms-app_js.js"
+      "static/chunks/src_components_CmsComponent_js.js"
     ]
   }
 }
