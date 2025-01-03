@@ -33,8 +33,34 @@
 
         console.log('CMS object found, initializing...');
 
-        // Initialize the CMS
-        window.CMS.init();
+        // Initialize the CMS with explicit configuration
+        window.CMS.init({
+          config: {
+            backend: {
+              name: 'github',
+              repo: 'RishiCo-Canna/RishiStaticNEXTsite',
+              branch: 'main',
+              auth_scope: 'repo',
+              base_url: window.location.origin,
+              auth_endpoint: '/api/auth'
+            },
+            load_config_file: false,
+            media_folder: 'public/images',
+            public_folder: '/images',
+            collections: [
+              {
+                name: 'pages',
+                label: 'Pages',
+                folder: 'content/pages',
+                create: true,
+                fields: [
+                  { label: 'Title', name: 'title', widget: 'string' },
+                  { label: 'Body', name: 'body', widget: 'markdown' }
+                ]
+              }
+            ]
+          }
+        });
 
         console.log('CMS initialization completed');
       } catch (error) {
