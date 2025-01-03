@@ -1,26 +1,20 @@
+
 import React, { useEffect, useState } from 'react';
 import type { CmsConfig } from 'decap-cms-core';
 
-declare global {
-  interface Window {
-    CMS: any;
-  }
-}
-
 const CmsComponent = () => {
+  const [cmsLoaded, setCmsLoaded] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     const loadCms = async () => {
       try {
-        // Dynamic import of the CMS
         const CMS = await import('decap-cms-app');
-
+        
         if (!CMS || !CMS.default) {
           throw new Error('Failed to load CMS module');
         }
 
-        // CMS Configuration
         const config: CmsConfig = {
           backend: {
             name: 'github',
@@ -42,25 +36,12 @@ const CmsComponent = () => {
                 { label: 'Title', name: 'title', widget: 'string' },
                 { label: 'Body', name: 'body', widget: 'markdown' }
               ]
-            },
-            {
-              name: 'blog',
-              label: 'Blog Posts',
-              folder: 'content/blog',
-              create: true,
-              fields: [
-                { label: 'Title', name: 'title', widget: 'string' },
-                { label: 'Publish Date', name: 'date', widget: 'datetime' },
-                { label: 'Featured Image', name: 'thumbnail', widget: 'image', required: false },
-                { label: 'Body', name: 'body', widget: 'markdown' }
-              ]
             }
           ]
         };
 
-        // Initialize CMS with config
         await CMS.default.init({ config });
-        console.log('CMS initialized successfully');
+        setCmsLoaded(true);
       } catch (error) {
         console.error('Failed to initialize CMS:', error);
         setError(error as Error);
@@ -68,6 +49,13 @@ const CmsComponent = () => {
     };
 
     loadCms();
+
+    return () => {
+      // Cleanup if needed
+      if (window.CMS) {
+        window.CMS = undefined;
+      }
+    };
   }, []);
 
   if (error) {
