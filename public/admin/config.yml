@@ -13,6 +13,12 @@ collections:
   - name: pages
     label: Pages
     files:
+      - name: hello
+        label: Hello World Page
+        file: content/pages/hello.md
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Content, name: content, widget: markdown }
       - name: home
         label: Home Page
         file: content/pages/home.md
