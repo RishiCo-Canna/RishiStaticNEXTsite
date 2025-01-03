@@ -18,7 +18,14 @@ const nextConfig = {
         headers: [
           {
             key: 'Content-Security-Policy',
-            value: "default-src * 'unsafe-inline' 'unsafe-eval'; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src *; img-src * data: blob:; style-src * 'unsafe-inline';"
+            value: [
+              "default-src 'self' https://*.repl.co https://*.unpkg.com https://unpkg.com",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.unpkg.com https://unpkg.com",
+              "style-src 'self' 'unsafe-inline' https://*.unpkg.com https://unpkg.com",
+              "img-src 'self' data: blob: https:",
+              "connect-src 'self' https: wss:",
+              "frame-ancestors 'none'",
+            ].join('; ')
           }
         ]
       }
