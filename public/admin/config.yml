@@ -4,7 +4,7 @@ backend:
   branch: main
   auth_scope: public_repo
   base_url: https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev
-  auth_endpoint: /api/auth
+  auth_endpoint: api/auth
 
 media_folder: public/images
 public_folder: /images
