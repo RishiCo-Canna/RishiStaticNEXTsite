@@ -11,8 +11,9 @@ declare global {
 
 const CmsComponent = () => {
   useEffect(() => {
-    if (window && !window.CMS_MANUAL_INIT) {
+    if (typeof window !== 'undefined' && !window.CMS_MANUAL_INIT) {
       window.CMS_MANUAL_INIT = true;
+
       const config = {
         backend: {
           name: 'github',
@@ -21,6 +22,7 @@ const CmsComponent = () => {
           base_url: window.location.origin,
           auth_endpoint: 'api/auth',
         },
+        load_config_file: false,
         media_folder: 'public/images',
         public_folder: '/images',
         collections: [
@@ -42,9 +44,7 @@ const CmsComponent = () => {
   }, []);
 
   return (
-    <ErrorBoundary>
-      <div id="nc-root" />
-    </ErrorBoundary>
+    <div id="nc-root" />
   );
 };
 
