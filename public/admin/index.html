@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -5,85 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Content Manager</title>
     <script>
-      // Create a global environment object
-      window.__ENV = {
-        GITHUB_REPO: '{{NEXT_PUBLIC_GITHUB_REPO_FULL_NAME}}',
-        CLIENT_ID: '{{NEXT_PUBLIC_OAUTH_CLIENT_ID}}',
-        SITE_URL: '{{NEXT_PUBLIC_SITE_URL}}'
+      // Define process.env for the CMS
+      window.process = {
+        env: {
+          NEXT_PUBLIC_GITHUB_REPO_FULL_NAME: '{{NEXT_PUBLIC_GITHUB_REPO_FULL_NAME}}',
+          NEXT_PUBLIC_SITE_URL: '{{NEXT_PUBLIC_SITE_URL}}',
+          NEXT_PUBLIC_OAUTH_CLIENT_ID: '{{NEXT_PUBLIC_OAUTH_CLIENT_ID}}'
+        }
       };
-
-      // Debug logging for environment variables
-      console.log('Environment variables loaded:', {
-        hasRepo: !!window.__ENV.GITHUB_REPO,
-        hasClientId: !!window.__ENV.CLIENT_ID,
-        siteUrl: window.__ENV.SITE_URL
-      });
     </script>
   </head>
   <body>
-    <!-- Include the script that builds the page and powers Decap CMS -->
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-    <script>
-      // Wait for DOM to be ready
-      window.addEventListener('DOMContentLoaded', function() {
-        try {
-          // Validate required environment variables
-          if (!window.__ENV.GITHUB_REPO || !window.__ENV.CLIENT_ID) {
-            throw new Error('Missing required environment variables. Please check your configuration.');
-          }
-
-          window.CMS.init({
-            config: {
-              backend: {
-                name: 'github',
-                repo: window.__ENV.GITHUB_REPO,
-                branch: 'main',
-                auth_type: 'implicit',
-                app_id: window.__ENV.CLIENT_ID,
-                base_url: window.__ENV.SITE_URL,
-              },
-              media_folder: 'public/uploads',
-              public_folder: '/uploads',
-              collections: [
-                {
-                  name: 'pages',
-                  label: 'Pages',
-                  files: [
-                    {
-                      name: 'home',
-                      label: 'Home Page',
-                      file: 'content/pages/home.md',
-                      fields: [
-                        { label: 'Title', name: 'title', widget: 'string' },
-                        { label: 'Content', name: 'content', widget: 'markdown' }
-                      ]
-                    },
-                    {
-                      name: 'hello',
-                      label: 'Hello World Page',
-                      file: 'content/pages/hello.md',
-                      fields: [
-                        { label: 'Title', name: 'title', widget: 'string' },
-                        { label: 'Content', name: 'content', widget: 'markdown' }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          });
-        } catch (error) {
-          console.error('CMS initialization failed:', error);
-          document.body.innerHTML = `
-            <div style="padding: 20px; color: red;">
-              <h2>Error Initializing CMS</h2>
-              <pre>${error.message}</pre>
-              <p>Please check your environment variables and configuration.</p>
-              <button onclick="window.location.reload()">Retry</button>
-            </div>
-          `;
-        }
-      });
-    </script>
   </body>
 </html>
