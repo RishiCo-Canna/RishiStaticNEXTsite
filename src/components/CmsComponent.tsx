@@ -11,8 +11,11 @@ interface CMSError {
 
 const CmsComponent: React.FC<Props> = () => {
   const [error, setError] = useState<CMSError | null>(null);
+  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
+    if (initialized) return;
+
     const initCMS = async () => {
       try {
         // Validate required environment variables
@@ -21,25 +24,34 @@ const CmsComponent: React.FC<Props> = () => {
         const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
         if (!repo || !clientId || !siteUrl) {
-          throw new Error('Missing required environment variables');
+          throw new Error(`Missing required environment variables: ${[
+            !repo && 'NEXT_PUBLIC_GITHUB_REPO_FULL_NAME',
+            !clientId && 'NEXT_PUBLIC_OAUTH_CLIENT_ID',
+            !siteUrl && 'NEXT_PUBLIC_SITE_URL',
+          ].filter(Boolean).join(', ')}`);
         }
 
-        console.log('Initializing CMS with:', { repo, siteUrl });
+        console.log('Initializing CMS with config:', {
+          repo,
+          siteUrl,
+          clientId: clientId.substring(0, 8) + '...'
+        });
 
-        // Initialize CMS with minimal required config
-        CMS.init({
+        // Initialize CMS with exact required configuration
+        await CMS.init({
           config: {
             backend: {
               name: 'github',
               repo,
               branch: 'main',
               base_url: siteUrl,
-              auth_endpoint: 'api/auth',
-              app_id: clientId,
-              auth_scope: 'repo'
+              auth_endpoint: '/api/auth',
+              auth_type: 'pkce',
+              app_id: clientId
             },
             media_folder: 'public/uploads',
             public_folder: '/uploads',
+            publish_mode: 'editorial_workflow',
             collections: [
               {
                 name: 'pages',
@@ -67,6 +79,8 @@ const CmsComponent: React.FC<Props> = () => {
           }
         });
 
+        console.log('CMS initialization completed successfully');
+        setInitialized(true);
         setError(null);
       } catch (err: any) {
         console.error('CMS initialization error:', err);
@@ -74,11 +88,12 @@ const CmsComponent: React.FC<Props> = () => {
           message: 'Failed to initialize CMS',
           details: err.message
         });
+        setInitialized(false);
       }
     };
 
     initCMS();
-  }, []);
+  }, [initialized]);
 
   if (error) {
     return (
@@ -88,6 +103,15 @@ const CmsComponent: React.FC<Props> = () => {
         {error.details && (
           <p className="text-red-500 text-sm mt-2">{error.details}</p>
         )}
+        <button
+          className="mt-4 px-4 py-2 bg-red-100 text-red-800 rounded hover:bg-red-200"
+          onClick={() => {
+            setError(null);
+            setInitialized(false);
+          }}
+        >
+          Try Again
+        </button>
       </div>
     );
   }

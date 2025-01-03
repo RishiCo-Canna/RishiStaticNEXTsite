@@ -15,6 +15,9 @@ interface GitHubTokenResponse {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  console.log('Auth endpoint called with method:', req.method);
+  console.log('Request body:', req.body);
+
   if (!clientId || !clientSecret) {
     console.error('Missing OAuth credentials');
     return res.status(500).json({ 
@@ -24,6 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   if (req.method !== 'POST') {
+    console.log('Invalid method:', req.method);
     return res.status(405).json({ 
       error: 'Method not allowed',
       details: 'Only POST requests are accepted'
@@ -32,8 +36,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const { code } = JSON.parse(req.body);
+    console.log('Received auth code:', code?.substring(0, 8) + '...');
 
     if (!code) {
+      console.error('Missing authorization code');
       return res.status(400).json({ 
         error: 'Missing code',
         details: 'Authorization code is required'
@@ -67,6 +73,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const tokenData: GitHubTokenResponse | GitHubErrorResponse = await tokenResponse.json();
+    console.log('Token exchange response received');
 
     if ('error' in tokenData) {
       console.error('GitHub OAuth error:', tokenData.error);
@@ -76,6 +83,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
     }
 
+    console.log('Authentication successful, returning token');
     // Return the access token in the format expected by Decap CMS
     return res.json({
       token: tokenData.access_token,

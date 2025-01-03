@@ -1,1 +1,8 @@
-{}
+{
+  "admin.js -> ../src/components/CmsComponent": {
+    "id": "admin.js -> ../src/components/CmsComponent",
+    "files": [
+      "static/chunks/src_components_CmsComponent_js.js"
+    ]
+  }
+}
