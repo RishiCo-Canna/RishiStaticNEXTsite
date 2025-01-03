@@ -8,14 +8,6 @@ const nextConfig = {
       ? `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co`
       : 'http://localhost:3000',
   },
-  async rewrites() {
-    return [
-      {
-        source: '/admin',
-        destination: '/admin/index.html',
-      }
-    ];
-  },
   async headers() {
     return [
       {

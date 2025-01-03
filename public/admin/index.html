@@ -26,7 +26,7 @@
       // Initialize CMS after loading config
       const initCMS = async () => {
         const config = await getConfig();
-        console.log('Initializing CMS...');
+        console.log('CMS config:', config);
 
         CMS.init({
           config: {
