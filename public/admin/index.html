@@ -40,6 +40,8 @@
               branch: 'main',
               base_url: config.NEXT_PUBLIC_SITE_URL,
               auth_endpoint: '/api/auth',
+              auth_type: 'pkce', // Use PKCE flow for better security
+              auth_scope: 'repo,user', // Required scopes for private repos
             },
             media_folder: '/public/uploads',
             public_folder: '/uploads',
