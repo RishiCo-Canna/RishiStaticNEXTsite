@@ -1,4 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { randomBytes } from 'crypto';
+
+// Generate a secure random state
+const generateState = () => {
+  return randomBytes(32).toString('base64').replace(/[^a-zA-Z0-9]/g, '');
+};
 
 export default async function handler(
   req: NextApiRequest,
@@ -23,11 +29,34 @@ export default async function handler(
 
     // If no code, initiate OAuth flow
     if (!params.get('code')) {
-      const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&scope=repo,user`;
+      // Generate and store state
+      const state = generateState();
+      const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&scope=repo,user&state=${state}`;
+
+      // Set state cookie with same-site attribute
+      res.setHeader('Set-Cookie', `github_oauth_state=${state}; Path=/; HttpOnly; SameSite=Lax; Secure`);
+
       console.log('Redirecting to GitHub OAuth:', authUrl);
       res.redirect(302, authUrl);
       return;
     }
+
+    // Verify state parameter
+    const stateCookie = req.cookies['github_oauth_state'];
+    const stateParam = params.get('state');
+
+    if (!stateCookie || !stateParam || stateCookie !== stateParam) {
+      console.error('State verification failed:', {
+        hasCookie: !!stateCookie,
+        hasParam: !!stateParam,
+        matches: stateCookie === stateParam
+      });
+      res.redirect(302, `/admin/#error=invalid-state`);
+      return;
+    }
+
+    // Clear state cookie
+    res.setHeader('Set-Cookie', 'github_oauth_state=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT');
 
     // Exchange code for token
     console.log('Exchanging code for token...');
@@ -43,6 +72,7 @@ export default async function handler(
           client_id: clientId,
           client_secret: clientSecret,
           code: params.get('code'),
+          state: stateParam
         }),
       }
     );
