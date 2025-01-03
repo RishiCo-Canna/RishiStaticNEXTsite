@@ -19,17 +19,17 @@ const nextConfig = {
           {
             key: 'Content-Security-Policy',
             value: [
-              "default-src 'self' https://*.repl.co",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.unpkg.com https://unpkg.com https://*.repl.co",
-              "style-src 'self' 'unsafe-inline' https://*.unpkg.com https://unpkg.com https://*.repl.co",
+              "default-src 'self' https://*.repl.co https://*.replit.dev",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.unpkg.com https://unpkg.com https://*.repl.co https://*.replit.dev",
+              "style-src 'self' 'unsafe-inline' https://*.unpkg.com https://unpkg.com https://*.repl.co https://*.replit.dev",
               "img-src 'self' data: blob: https: *",
               "media-src 'self' https:",
-              "connect-src 'self' https: wss: https://*.repl.co",
-              "font-src 'self' data: https://*.repl.co",
-              "frame-src 'self' https://*.repl.co",
+              "connect-src 'self' https: wss: https://*.repl.co https://*.replit.dev",
+              "font-src 'self' data: https://*.repl.co https://*.replit.dev",
+              "frame-src 'self' https://*.repl.co https://*.replit.dev",
               "worker-src 'self' blob:",
               "child-src 'self' blob:",
-              "form-action 'self' https://*.repl.co",
+              "form-action 'self' https://*.repl.co https://*.replit.dev",
               "base-uri 'self'",
               "frame-ancestors 'self'"
             ].join('; ')
