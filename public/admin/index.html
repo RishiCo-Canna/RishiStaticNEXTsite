@@ -4,57 +4,65 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Content Manager</title>
+    <script>
+      console.log('Page started loading');
+    </script>
     <!-- Load Decap CMS from unpkg -->
     <script src="https://unpkg.com/decap-cms@3.4.0/dist/decap-cms.js"></script>
   </head>
   <body>
     <div id="nc-root"></div>
     <script>
-      // Ensure the DOM is loaded before initializing
-      window.addEventListener('DOMContentLoaded', (event) => {
-        try {
-          console.log('Initializing Decap CMS...');
+      console.log('DOM loaded, preparing to initialize CMS');
 
-          // Initialize the CMS with GitHub backend
-          CMS.init({
-            config: {
-              backend: {
-                name: 'github',
-                repo: 'RishiCo-Canna/RishiStaticNEXTsite',
-                branch: 'main',
-                auth_scope: 'repo',
-                base_url: window.location.origin,
-                auth_endpoint: '/api/auth'
-              },
-              load_config_file: false,
-              media_folder: 'public/uploads',
-              public_folder: '/uploads',
-              collections: [
-                {
-                  name: 'pages',
-                  label: 'Pages',
-                  folder: 'content/pages',
-                  create: true,
-                  fields: [
-                    { label: 'Title', name: 'title', widget: 'string' },
-                    { label: 'Body', name: 'body', widget: 'markdown' }
-                  ]
-                }
-              ]
-            }
-          });
+      // Basic error indicator
+      const errorDiv = document.createElement('div');
+      errorDiv.style.padding = '20px';
+      errorDiv.style.color = 'red';
+      document.body.appendChild(errorDiv);
 
-          console.log('CMS initialization completed');
-        } catch (error) {
-          console.error('Failed to initialize CMS:', error);
-          document.body.innerHTML = `
-            <div style="color: red; padding: 20px;">
-              <h2>CMS Initialization Error</h2>
-              <pre>${error.message}</pre>
-            </div>
-          `;
+      function showError(message) {
+        console.error(message);
+        errorDiv.innerHTML = `<h2>CMS Error</h2><pre>${message}</pre>`;
+      }
+
+      try {
+        if (!window.CMS) {
+          throw new Error('CMS object not found. Script may not have loaded correctly.');
         }
-      });
+
+        console.log('CMS object found, initializing...');
+
+        window.CMS.init({
+          config: {
+            backend: {
+              name: 'github',
+              repo: 'RishiCo-Canna/RishiStaticNEXTsite',
+              branch: 'main',
+              base_url: window.location.origin,
+              auth_endpoint: '/api/auth'
+            },
+            media_folder: 'public/uploads',
+            public_folder: '/uploads',
+            collections: [
+              {
+                name: 'pages',
+                label: 'Pages',
+                folder: 'content/pages',
+                create: true,
+                fields: [
+                  { label: 'Title', name: 'title', widget: 'string' },
+                  { label: 'Body', name: 'body', widget: 'markdown' }
+                ]
+              }
+            ]
+          }
+        });
+
+        console.log('CMS initialization completed');
+      } catch (error) {
+        showError(`Failed to initialize CMS: ${error.message}`);
+      }
     </script>
   </body>
 </html>

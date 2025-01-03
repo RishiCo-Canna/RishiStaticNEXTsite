@@ -16,14 +16,12 @@ const nextConfig = {
           {
             key: 'Content-Security-Policy',
             value: [
-              "frame-ancestors 'self' https://*.repl.co https://*.repl.dev https://*.replit.dev;",
-              "default-src 'self' https://api.github.com https://github.com https://unpkg.com;",
+              "default-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.repl.co https://*.repl.dev https://*.replit.dev https://unpkg.com https://api.github.com https://github.com;",
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com;",
               "style-src 'self' 'unsafe-inline' https://unpkg.com;",
-              "img-src 'self' data: https: blob:;",
-              "connect-src 'self' https://api.github.com https://*.repl.co https://*.repl.dev https://github.com https://unpkg.com;",
-              "form-action 'self' https://github.com https://*.repl.co https://*.repl.dev;",
-              "frame-src 'self' https://*.repl.co https://*.repl.dev https://*.replit.dev;"
+              "img-src 'self' data: blob: https:;",
+              "connect-src 'self' https://*.repl.co https://*.repl.dev https://*.replit.dev https://api.github.com https://github.com https://unpkg.com;",
+              "frame-ancestors 'self' https://*.repl.co https://*.repl.dev https://*.replit.dev;"
             ].join(' ')
           }
         ]
