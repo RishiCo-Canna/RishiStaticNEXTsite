@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.gradient-bg {
+  background: linear-gradient(135deg, #6C42CE 0%, #40C9B5 100%);
+}
+
+.service-card {
+  @apply bg-white rounded-lg p-8 text-center hover:shadow-lg transition-shadow duration-300;
+}
+
+.service-icon {
+  @apply w-16 h-16 mx-auto mb-4 bg-purple-100 rounded-full flex items-center justify-center;
+}
+
+.service-title {
+  @apply text-xl font-bold mb-4;
+}
+
+.service-description {
+  @apply text-gray-600 mb-4;
+}
+
+.service-button {
+  @apply text-purple-600 font-semibold hover:text-purple-700;
+}

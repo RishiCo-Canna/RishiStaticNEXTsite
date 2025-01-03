@@ -1,6 +1,7 @@
 import type { AppProps } from 'next/app'
 import dynamic from 'next/dynamic'
 import { SessionProvider } from 'next-auth/react'
+import '../styles/globals.css'
 
 // Load CmsComponent dynamically with SSR disabled
 const AdminPage = dynamic(
