@@ -3,28 +3,30 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.unpkg.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://*.unpkg.com https://unpkg.com">
     <title>Content Manager</title>
-    <!-- Load CMS with defer to ensure DOM is ready -->
-    <script defer src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js" 
-      onload="console.log('CMS script loaded successfully');"
-      onerror="console.error('Failed to load CMS script');">
+    <!-- Prevent double initialization in Next.js context -->
+    <script>
+      if (window.parent !== window) {
+        console.log('[CMS] Detected iframe context, skipping standalone initialization');
+        document.write('CMS is managed by Next.js application');
+      } else {
+        // Load CMS only in standalone mode
+        const script = document.createElement('script');
+        script.src = 'https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js';
+        script.defer = true;
+        script.onload = () => {
+          console.log('[CMS] Script loaded in standalone mode');
+          if (window.CMS) {
+            window.CMS.init()
+              .then(() => console.log('[CMS] Initialized in standalone mode'))
+              .catch(err => console.error('[CMS] Standalone initialization failed:', err));
+          }
+        };
+        document.head.appendChild(script);
+      }
     </script>
   </head>
   <body>
     <div id="nc-root"></div>
-    <script>
-      // Initialize CMS only after DOM is fully loaded
-      document.addEventListener('DOMContentLoaded', function() {
-        if (window.CMS) {
-          console.log('Initializing CMS...');
-          window.CMS.init()
-            .then(() => console.log('CMS initialized successfully'))
-            .catch(err => console.error('CMS initialization failed:', err));
-        } else {
-          console.error('Decap CMS failed to load');
-        }
-      });
-    </script>
   </body>
 </html>
