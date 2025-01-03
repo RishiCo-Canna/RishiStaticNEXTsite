@@ -4,68 +4,71 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Content Manager</title>
+  </head>
+  <body>
+    <!-- Include the script that builds the page and powers Decap CMS -->
+    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
     <script>
       // Debug logging
       console.log('Admin page loading...');
 
-      // Get environment variables from Next.js runtime config
-      const GITHUB_REPO = process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME;
-      const SITE_URL = window.location.origin;
-      const CLIENT_ID = process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID;
-
-      console.log('Environment variables:', {
-        GITHUB_REPO,
-        SITE_URL,
-        hasClientId: !!CLIENT_ID
-      });
-
-      window.CMS_CONFIG = {
-        backend: {
-          name: 'github',
-          repo: GITHUB_REPO,
-          branch: 'main',
-          base_url: SITE_URL,
-          auth_type: 'implicit',
-          app_id: CLIENT_ID,
-        },
-        media_folder: 'public/uploads',
-        public_folder: '/uploads',
-        collections: [
-          {
-            name: 'pages',
-            label: 'Pages',
-            files: [
-              {
-                name: 'home',
-                label: 'Home Page',
-                file: 'content/pages/home.md',
-                fields: [
-                  { label: 'Title', name: 'title', widget: 'string' },
-                  { label: 'Content', name: 'content', widget: 'markdown' }
-                ]
-              }
-            ]
-          }
-        ]
-      };
-    </script>
-  </head>
-  <body>
-    <script>
-      console.log('Loading CMS config:', window.CMS_CONFIG);
-    </script>
-    <!-- Include the script that builds the page and powers Decap CMS -->
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-    <script>
       // Initialize CMS with debug logging
       console.log('Initializing CMS...');
       try {
-        window.CMS.init({
-          config: window.CMS_CONFIG
-        });
+        const config = {
+          backend: {
+            name: 'github',
+            repo: window.location.hostname.includes('replit.dev') 
+              ? process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME 
+              : 'your-username/your-repo',
+            branch: 'main',
+            auth_type: 'implicit',
+            app_id: window.location.hostname.includes('replit.dev')
+              ? process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID
+              : 'your-client-id',
+          },
+          media_folder: 'public/uploads',
+          public_folder: '/uploads',
+          collections: [
+            {
+              name: 'pages',
+              label: 'Pages',
+              files: [
+                {
+                  name: 'home',
+                  label: 'Home Page',
+                  file: 'content/pages/home.md',
+                  fields: [
+                    { label: 'Title', name: 'title', widget: 'string' },
+                    { label: 'Content', name: 'content', widget: 'markdown' }
+                  ]
+                },
+                {
+                  name: 'hello',
+                  label: 'Hello World Page',
+                  file: 'content/pages/hello.md',
+                  fields: [
+                    { label: 'Title', name: 'title', widget: 'string' },
+                    { label: 'Content', name: 'content', widget: 'markdown' }
+                  ]
+                }
+              ]
+            }
+          ]
+        };
+
+        console.log('CMS config:', config);
+        window.CMS.init({ config });
         console.log('CMS initialized successfully');
       } catch (error) {
         console.error('Failed to initialize CMS:', error);
+        // Display error in UI
+        document.body.innerHTML = `
+          <div style="padding: 20px; color: red;">
+            <h2>Error Initializing CMS</h2>
+            <pre>${error.message}</pre>
+          </div>
+        `;
       }
     </script>
   </body>
