@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import type { CmsConfig } from 'decap-cms-core';
 
 declare global {
   interface Window {
@@ -10,14 +11,18 @@ const CmsComponent = () => {
   useEffect(() => {
     const loadCms = async () => {
       try {
+        // Import CMS dynamically
         const CMS = (await import('decap-cms-app')).default;
-        const config = {
+
+        // CMS Configuration
+        const config: CmsConfig = {
           backend: {
             name: 'github',
-            repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME,
+            repo: 'RishiCo-Canna/RishiStaticNEXTsite',
             branch: 'main',
+            auth_scope: 'repo',
             base_url: window.location.origin,
-            auth_endpoint: '/api/auth',
+            auth_endpoint: '/api/auth'
           },
           media_folder: 'public/images',
           public_folder: '/images',
@@ -44,20 +49,20 @@ const CmsComponent = () => {
                 { label: 'Body', name: 'body', widget: 'markdown' }
               ]
             }
-          ],
-          local_backend: process.env.NODE_ENV === 'development'
+          ]
         };
 
+        // Initialize CMS with config
         await CMS.init({ config });
       } catch (error) {
-        console.error('CMS initialization error:', error);
+        console.error('Failed to initialize CMS:', error);
       }
     };
 
     loadCms();
   }, []);
 
-  return <div id="nc-root" style={{ height: '100vh' }} />;
+  return <div id="nc-root" />;
 };
 
 export default CmsComponent;

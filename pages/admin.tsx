@@ -4,11 +4,16 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import ErrorBoundary from '../src/components/ErrorBoundary';
 
+// Dynamically import CMS component with no SSR
 const CmsComponent = dynamic(
   () => import('../src/components/CmsComponent'),
   { 
     ssr: false,
-    loading: () => <div>Loading CMS...</div>
+    loading: () => (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-lg">Loading CMS...</div>
+      </div>
+    )
   }
 );
 
@@ -34,7 +39,7 @@ const AdminPage = () => {
         </Head>
         <button
           onClick={() => signIn('github')}
-          className="px-4 py-2 bg-blue-500 text-white rounded"
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
         >
           Sign in with GitHub
         </button>
