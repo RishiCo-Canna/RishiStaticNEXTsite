@@ -10,7 +10,7 @@ const CmsComponent = () => {
       if (session) {
         const CMS = (await import('decap-cms-app')).default
         CMS.init({
-          config: await fetch('/admin/config.yml').then(res => res.text()),
+          config: {
             backend: {
               name: 'github',
               repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME || '',
@@ -49,21 +49,21 @@ const CmsComponent = () => {
               }
             ]
           }
-        });
+        })
       }
-    };
-    initCMS();
-  }, [session]);
+    }
+    initCMS()
+  }, [session])
 
   if (!session) {
     return (
       <div>
         <button onClick={() => signIn('github')}>Sign in with GitHub</button>
       </div>
-    );
+    )
   }
 
-  return <div id="nc-root" />;
-};
+  return <div id="nc-root" />
+}
 
-export default CmsComponent;
+export default CmsComponent
