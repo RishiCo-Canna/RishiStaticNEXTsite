@@ -3,7 +3,7 @@ backend:
   repo: RishiCo-Canna/RishiStaticNEXTsite
   branch: main
   auth_scope: public_repo
-  base_url: https://${process.env.REPLIT_DEV_DOMAIN}
+  base_url: ${NEXT_PUBLIC_SITE_URL}
   auth_endpoint: /api/auth
 
 media_folder: public/images
