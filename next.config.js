@@ -1,4 +1,3 @@
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -20,17 +19,17 @@ const nextConfig = {
           {
             key: 'Content-Security-Policy',
             value: [
-              "default-src 'self' https://*.replit.dev https://api.github.com",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com",
-              "style-src 'self' 'unsafe-inline' https://unpkg.com",
-              "img-src 'self' data: blob: https://* *",
+              "default-src 'self' https://*.replit.dev https://github.com",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.unpkg.com https://unpkg.com https://*.replit.dev",
+              "style-src 'self' 'unsafe-inline' https://*.unpkg.com https://unpkg.com https://*.replit.dev",
+              "img-src 'self' data: blob: https: *",
               "media-src 'self' https:",
-              "connect-src 'self' https: wss:",
-              "font-src 'self' data:",
-              "frame-src 'self' https:",
+              "connect-src 'self' https: wss: https://*.replit.dev https://api.github.com",
+              "font-src 'self' data: https://*.replit.dev",
+              "frame-src 'self' https://*.replit.dev https://github.com",
               "worker-src 'self' blob:",
               "child-src 'self' blob:",
-              "form-action 'self'",
+              "form-action 'self' https://*.replit.dev https://github.com",
               "base-uri 'self'",
               "frame-ancestors 'self'"
             ].join('; ')
