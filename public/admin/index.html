@@ -7,7 +7,7 @@
     <script>
       console.log('Page started loading');
     </script>
-    <!-- Load Decap CMS from unpkg -->
+    <!-- Include the Decap CMS library -->
     <script src="https://unpkg.com/decap-cms@3.4.0/dist/decap-cms.js"></script>
   </head>
   <body>
@@ -15,7 +15,7 @@
     <script>
       console.log('DOM loaded, preparing to initialize CMS');
 
-      // Basic error indicator
+      // Error handling elements
       const errorDiv = document.createElement('div');
       errorDiv.style.padding = '20px';
       errorDiv.style.color = 'red';
@@ -33,31 +33,8 @@
 
         console.log('CMS object found, initializing...');
 
-        window.CMS.init({
-          config: {
-            backend: {
-              name: 'github',
-              repo: 'RishiCo-Canna/RishiStaticNEXTsite',
-              branch: 'main',
-              base_url: window.location.origin,
-              auth_endpoint: '/api/auth'
-            },
-            media_folder: 'public/uploads',
-            public_folder: '/uploads',
-            collections: [
-              {
-                name: 'pages',
-                label: 'Pages',
-                folder: 'content/pages',
-                create: true,
-                fields: [
-                  { label: 'Title', name: 'title', widget: 'string' },
-                  { label: 'Body', name: 'body', widget: 'markdown' }
-                ]
-              }
-            ]
-          }
-        });
+        // Initialize the CMS
+        window.CMS.init();
 
         console.log('CMS initialization completed');
       } catch (error) {
