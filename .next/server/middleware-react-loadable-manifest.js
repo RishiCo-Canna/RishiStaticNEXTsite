@@ -1,1 +1,1 @@
-self.__REACT_LOADABLE_MANIFEST="{\"_app.tsx -> ../components/CmsComponent\":{\"id\":\"_app.tsx -> ../components/CmsComponent\",\"files\":[\"static/chunks/components_CmsComponent_tsx.js\"]}}"
+self.__REACT_LOADABLE_MANIFEST="{\"../components/CmsComponent.tsx -> decap-cms-app\":{\"id\":\"../components/CmsComponent.tsx -> decap-cms-app\",\"files\":[\"static/chunks/node_modules_decap-cms-app_dist_decap-cms-app_js.js\"]},\"_app.tsx -> ../components/CmsComponent\":{\"id\":\"_app.tsx -> ../components/CmsComponent\",\"files\":[\"static/chunks/components_CmsComponent_tsx.js\"]}}"

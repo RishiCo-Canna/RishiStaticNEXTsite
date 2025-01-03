@@ -53,6 +53,16 @@ module.exports = require("decap-cms-app");
 
 /***/ }),
 
+/***/ "next-auth/react":
+/*!**********************************!*\
+  !*** external "next-auth/react" ***!
+  \**********************************/
+/***/ ((module) => {
+
+module.exports = require("next-auth/react");
+
+/***/ }),
+
 /***/ "next/dist/compiled/next-server/pages.runtime.dev.js":
 /*!**********************************************************************!*\
   !*** external "next/dist/compiled/next-server/pages.runtime.dev.js" ***!
