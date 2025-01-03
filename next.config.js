@@ -1,3 +1,4 @@
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -11,14 +12,6 @@ const nextConfig = {
       ? `https://${process.env.REPL_SLUG}-${process.env.REPL_OWNER}.repl.co`
       : 'http://localhost:3000',
   },
-  async rewrites() {
-    return [
-      {
-        source: '/admin/:path*',
-        destination: '/admin/:path*', // Serve static files from public/admin
-      },
-    ];
-  },
   async headers() {
     return [
       {
@@ -27,12 +20,16 @@ const nextConfig = {
           {
             key: 'Content-Security-Policy',
             value: [
-              "default-src 'self' https://*.github.com https://*.githubusercontent.com https://*.repl.co https://*.unpkg.com https://unpkg.com",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.unpkg.com https://unpkg.com",
-              "style-src 'self' 'unsafe-inline' https://*.unpkg.com https://unpkg.com",
-              "img-src 'self' data: blob: https:",
+              "default-src 'self' https: 'unsafe-inline' 'unsafe-eval' data: blob:",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https: blob:",
+              "style-src 'self' 'unsafe-inline' https:",
+              "img-src 'self' https: data: blob:",
+              "font-src 'self' https: data:",
               "connect-src 'self' https: wss:",
-              "form-action 'self' https://github.com",
+              "media-src 'self' https: data:",
+              "worker-src 'self' blob:",
+              "frame-src 'self' https:",
+              "child-src 'self' blob:"
             ].join('; ')
           }
         ]
