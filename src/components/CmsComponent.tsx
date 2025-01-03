@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 
 declare global {
@@ -32,6 +31,18 @@ const CmsComponent = () => {
                 { label: 'Title', name: 'title', widget: 'string' },
                 { label: 'Body', name: 'body', widget: 'markdown' }
               ]
+            },
+            {
+              name: 'blog',
+              label: 'Blog Posts',
+              folder: 'content/blog',
+              create: true,
+              fields: [
+                { label: 'Title', name: 'title', widget: 'string' },
+                { label: 'Publish Date', name: 'date', widget: 'datetime' },
+                { label: 'Featured Image', name: 'thumbnail', widget: 'image', required: false },
+                { label: 'Body', name: 'body', widget: 'markdown' }
+              ]
             }
           ],
           local_backend: process.env.NODE_ENV === 'development'
@@ -43,11 +54,7 @@ const CmsComponent = () => {
       }
     };
 
-    if (window.CMS) {
-      window.CMS.init();
-    } else {
-      loadCms();
-    }
+    loadCms();
   }, []);
 
   return <div id="nc-root" style={{ height: '100vh' }} />;

@@ -1,20 +1,15 @@
-
 import { useEffect } from 'react';
 import { signIn, useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
+import ErrorBoundary from '../src/components/ErrorBoundary';
 
 const CmsComponent = dynamic(
-  () => import('../src/components/CmsComponent').then(mod => mod.default),
+  () => import('../src/components/CmsComponent'),
   { 
     ssr: false,
     loading: () => <div>Loading CMS...</div>
   }
-);
-
-const ErrorBoundaryComponent = dynamic(
-  () => import('../src/components/ErrorBoundary'),
-  { ssr: false }
 );
 
 const AdminPage = () => {
@@ -52,9 +47,9 @@ const AdminPage = () => {
       <Head>
         <title>Admin | CMS</title>
       </Head>
-      <ErrorBoundaryComponent>
+      <ErrorBoundary>
         <CmsComponent />
-      </ErrorBoundaryComponent>
+      </ErrorBoundary>
     </>
   );
 };
