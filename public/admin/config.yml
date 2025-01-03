@@ -1,10 +1,11 @@
 backend:
   name: github
-  repo: process.env.GITHUB_REPO_FULL_NAME
+  repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME
   branch: main
-  base_url: ''
+  base_url: '' # This will be set by the CMS component
   auth_endpoint: api/auth
 
+local_backend: true
 media_folder: public/uploads
 public_folder: /uploads
 
