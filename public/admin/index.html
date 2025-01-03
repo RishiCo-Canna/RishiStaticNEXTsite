@@ -9,8 +9,15 @@
       window.__ENV = {
         GITHUB_REPO: '{{NEXT_PUBLIC_GITHUB_REPO_FULL_NAME}}',
         CLIENT_ID: '{{NEXT_PUBLIC_OAUTH_CLIENT_ID}}',
-        SITE_URL: window.location.origin
+        SITE_URL: '{{NEXT_PUBLIC_SITE_URL}}'
       };
+
+      // Debug logging for environment variables
+      console.log('Environment variables loaded:', {
+        hasRepo: !!window.__ENV.GITHUB_REPO,
+        hasClientId: !!window.__ENV.CLIENT_ID,
+        siteUrl: window.__ENV.SITE_URL
+      });
     </script>
   </head>
   <body>
@@ -20,11 +27,10 @@
       // Wait for DOM to be ready
       window.addEventListener('DOMContentLoaded', function() {
         try {
-          console.log('CMS initializing with env:', {
-            repo: window.__ENV.GITHUB_REPO,
-            clientId: !!window.__ENV.CLIENT_ID,
-            siteUrl: window.__ENV.SITE_URL
-          });
+          // Validate required environment variables
+          if (!window.__ENV.GITHUB_REPO || !window.__ENV.CLIENT_ID) {
+            throw new Error('Missing required environment variables. Please check your configuration.');
+          }
 
           window.CMS.init({
             config: {
@@ -34,6 +40,7 @@
                 branch: 'main',
                 auth_type: 'implicit',
                 app_id: window.__ENV.CLIENT_ID,
+                base_url: window.__ENV.SITE_URL,
               },
               media_folder: 'public/uploads',
               public_folder: '/uploads',
@@ -71,6 +78,7 @@
             <div style="padding: 20px; color: red;">
               <h2>Error Initializing CMS</h2>
               <pre>${error.message}</pre>
+              <p>Please check your environment variables and configuration.</p>
               <button onclick="window.location.reload()">Retry</button>
             </div>
           `;
