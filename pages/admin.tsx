@@ -1,19 +1,23 @@
-
 import { useEffect } from 'react';
 import { signIn, useSession } from 'next-auth/react';
 import Head from 'next/head';
-import dynamic from 'next/dynamic';
 
-const CmsComponent = dynamic(() => import('../src/components/CmsComponent'), {
-  ssr: false,
-});
-
-export default function AdminPage() {
+const AdminPage = () => {
   const { data: session } = useSession();
+
+  useEffect(() => {
+    // Redirect to static admin page if authenticated
+    if (session) {
+      window.location.href = '/admin/index.html';
+    }
+  }, [session]);
 
   if (!session) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <Head>
+          <title>Admin | Sign In</title>
+        </Head>
         <div className="max-w-md w-full space-y-8">
           <div>
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
@@ -33,12 +37,17 @@ export default function AdminPage() {
     );
   }
 
+  // Show loading state while redirecting
   return (
-    <>
+    <div className="min-h-screen flex items-center justify-center">
       <Head>
-        <title>Admin | Content Manager</title>
+        <title>Admin | Loading...</title>
       </Head>
-      <CmsComponent />
-    </>
+      <div className="text-center">
+        <h2 className="text-xl font-semibold">Loading CMS...</h2>
+      </div>
+    </div>
   );
-}
+};
+
+export default AdminPage;
