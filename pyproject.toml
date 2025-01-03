@@ -2,3 +2,7 @@
 name = "repl-nix-workspace"
 version = "0.1.0"
 description = "Add your description here"
+dependencies = [
+    "flask-login>=0.6.3",
+    "flask-wtf>=1.2.2",
+]
