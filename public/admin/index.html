@@ -9,12 +9,14 @@
       console.log('Admin page loading...');
 
       // Get environment variables from Next.js runtime config
-      const GITHUB_REPO = '%NEXT_PUBLIC_GITHUB_REPO_FULL_NAME%';
+      const GITHUB_REPO = process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME;
       const SITE_URL = window.location.origin;
+      const CLIENT_ID = process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID;
 
       console.log('Environment variables:', {
         GITHUB_REPO,
-        SITE_URL
+        SITE_URL,
+        hasClientId: !!CLIENT_ID
       });
 
       window.CMS_CONFIG = {
@@ -23,11 +25,11 @@
           repo: GITHUB_REPO,
           branch: 'main',
           base_url: SITE_URL,
-          auth_endpoint: 'api/auth'
+          auth_type: 'implicit',
+          app_id: CLIENT_ID,
         },
         media_folder: 'public/uploads',
         public_folder: '/uploads',
-        local_backend: true,
         collections: [
           {
             name: 'pages',
