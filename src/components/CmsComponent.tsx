@@ -5,9 +5,11 @@ import type { CmsConfig } from 'decap-cms-core';
 const CmsComponent = () => {
   const [cmsLoaded, setCmsLoaded] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+  const mountRef = React.useRef(false);
 
   useEffect(() => {
-    let mounted = true;
+    if (mountRef.current) return;
+    mountRef.current = true;
     
     const loadCms = async () => {
       try {
