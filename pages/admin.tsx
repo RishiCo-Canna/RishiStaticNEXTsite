@@ -5,10 +5,8 @@ import Head from 'next/head';
 import ErrorBoundary from '../src/components/ErrorBoundary';
 
 // Dynamically import CMS component with no SSR
-const CmsComponent = dynamic(() => 
-  import('../src/components/CmsComponent').then((mod) => {
-    return mod.default || mod.CmsComponent;
-  }),
+const CmsComponent = dynamic(
+  () => import('../src/components/CmsComponent'),
   { 
     ssr: false,
     loading: () => (

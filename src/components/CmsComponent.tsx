@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { CmsConfig } from 'decap-cms-core';
 
 declare global {
@@ -7,11 +7,18 @@ declare global {
   }
 }
 
-export const CmsComponent: React.FC = () => {
+const CmsComponent = () => {
+  const [error, setError] = useState<Error | null>(null);
+
   useEffect(() => {
     const loadCms = async () => {
       try {
-        const CMS = (await import('decap-cms-app')).default;
+        // Dynamic import of the CMS
+        const CMS = await import('decap-cms-app');
+
+        if (!CMS || !CMS.default) {
+          throw new Error('Failed to load CMS module');
+        }
 
         // CMS Configuration
         const config: CmsConfig = {
@@ -52,19 +59,27 @@ export const CmsComponent: React.FC = () => {
         };
 
         // Initialize CMS with config
-        await CMS.init({ config });
+        await CMS.default.init({ config });
         console.log('CMS initialized successfully');
       } catch (error) {
         console.error('Failed to initialize CMS:', error);
-        throw error;
+        setError(error as Error);
       }
     };
 
     loadCms();
   }, []);
 
+  if (error) {
+    return (
+      <div className="cms-error">
+        <h2>Error Loading CMS</h2>
+        <pre>{error.message}</pre>
+      </div>
+    );
+  }
+
   return <div id="nc-root" />;
 };
 
-// Ensure we have both named and default exports
 export default CmsComponent;
