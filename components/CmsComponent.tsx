@@ -1,7 +1,5 @@
-
 import { useEffect } from 'react'
 import { useSession, signIn } from 'next-auth/react'
-import dynamic from 'next/dynamic'
 
 const CmsComponent = () => {
   const { data: session } = useSession()
@@ -9,6 +7,10 @@ const CmsComponent = () => {
   useEffect(() => {
     const initCMS = async () => {
       if (session) {
+        console.log('Initializing CMS...')
+        console.log('GitHub Repo:', process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME)
+        console.log('Base URL:', window.location.origin)
+
         const CMS = (await import('decap-cms-app')).default
         CMS.init({
           config: {
@@ -16,10 +18,10 @@ const CmsComponent = () => {
               name: 'github',
               repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME || '',
               branch: 'main',
-              auth_type: 'oauth',
               base_url: window.location.origin,
               auth_endpoint: 'api/auth'
             },
+            local_backend: process.env.NODE_ENV === 'development',
             media_folder: 'public/uploads',
             public_folder: '/uploads',
             collections: [
@@ -40,11 +42,11 @@ const CmsComponent = () => {
               }
             ]
           }
-        });
+        })
       }
-    };
-    initCMS();
-  }, [session]);
+    }
+    initCMS()
+  }, [session])
 
   if (!session) {
     return (
@@ -54,10 +56,10 @@ const CmsComponent = () => {
           Sign in with GitHub
         </button>
       </div>
-    );
+    )
   }
 
-  return <div id="nc-root" />;
-};
+  return <div id="nc-root" />
+}
 
-export default CmsComponent;
+export default CmsComponent

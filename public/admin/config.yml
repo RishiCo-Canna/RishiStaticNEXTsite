@@ -1,4 +1,3 @@
-
 backend:
   name: github
   repo: ${NEXT_PUBLIC_GITHUB_REPO_FULL_NAME}
@@ -8,6 +7,7 @@ backend:
 
 media_folder: public/uploads
 public_folder: /uploads
+local_backend: true
 
 collections:
   - name: pages
