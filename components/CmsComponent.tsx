@@ -1,6 +1,20 @@
 import { useEffect } from 'react'
 import { useSession, signIn } from 'next-auth/react'
-import type { CmsConfig } from 'decap-cms-core'
+
+// Extend Window interface to include CMS
+declare global {
+  interface Window {
+    CMS?: any;
+    CMS_MANUAL_INIT?: boolean;
+  }
+}
+
+// Extend Session type to include accessToken
+declare module "next-auth" {
+  interface Session {
+    accessToken?: string;
+  }
+}
 
 const CmsComponent = () => {
   const { data: session } = useSession()
@@ -9,11 +23,14 @@ const CmsComponent = () => {
     const initCMS = async () => {
       if (session) {
         try {
-          console.log('Loading CMS with session:', {
-            hasAccessToken: !!session.accessToken,
-            baseURL: process.env.NEXT_PUBLIC_SITE_URL
+          console.log('CMS Environment Variables:', {
+            repoName: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME,
+            siteUrl: process.env.NEXT_PUBLIC_SITE_URL,
+            clientId: process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID,
+            hasAccessToken: !!session.accessToken
           });
 
+          // Import CMS
           const CMS = (await import('decap-cms-app')).default;
 
           // Configure CMS
@@ -23,57 +40,53 @@ const CmsComponent = () => {
             // Add debug logging
             window.CMS.registerEventListener({
               name: 'debug',
-              handler: ({ type, payload }) => {
-                console.log(`CMS Event - ${type}:`, payload);
+              handler: (event: { type: string; payload: any }) => {
+                console.log(`CMS Event - ${event.type}:`, event.payload);
               },
             });
           }
 
-          const config: CmsConfig = {
-            backend: {
-              name: 'github',
-              repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME || '',
-              branch: 'main',
-              base_url: process.env.NEXT_PUBLIC_SITE_URL,
-              auth_endpoint: 'api/auth',
-              auth_type: 'implicit',
-              app_id: process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID
-            },
-            media_folder: '/public/uploads',
-            public_folder: '/uploads',
-            publish_mode: 'editorial_workflow',
-            collections: [
-              {
-                name: 'pages',
-                label: 'Pages',
-                files: [
-                  {
-                    name: 'home',
-                    label: 'Home Page',
-                    file: 'content/pages/home.md',
-                    fields: [
-                      { label: 'Title', name: 'title', widget: 'string' },
-                      { label: 'Content', name: 'content', widget: 'markdown' }
-                    ]
-                  },
-                  {
-                    name: 'hello',
-                    label: 'Hello World Page',
-                    file: 'content/pages/hello.md',
-                    fields: [
-                      { label: 'Title', name: 'title', widget: 'string' },
-                      { label: 'Content', name: 'content', widget: 'markdown' }
-                    ]
-                  }
-                ]
-              }
-            ]
-          };
-
-          // Initialize CMS with inline config
+          // Initialize CMS
           await CMS.init({
-            config,
-            load_config_file: false
+            config: {
+              backend: {
+                name: 'github',
+                repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME || '',
+                branch: 'main',
+                base_url: process.env.NEXT_PUBLIC_SITE_URL,
+                auth_endpoint: 'api/auth',
+                auth_type: 'implicit',
+                app_id: process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID
+              },
+              media_folder: 'public/uploads',
+              public_folder: '/uploads',
+              collections: [
+                {
+                  name: 'pages',
+                  label: 'Pages',
+                  files: [
+                    {
+                      name: 'home',
+                      label: 'Home Page',
+                      file: 'content/pages/home.md',
+                      fields: [
+                        { label: 'Title', name: 'title', widget: 'string' },
+                        { label: 'Content', name: 'content', widget: 'markdown' }
+                      ]
+                    },
+                    {
+                      name: 'hello',
+                      label: 'Hello World Page',
+                      file: 'content/pages/hello.md',
+                      fields: [
+                        { label: 'Title', name: 'title', widget: 'string' },
+                        { label: 'Content', name: 'content', widget: 'markdown' }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
           });
 
           console.log('CMS initialized successfully');

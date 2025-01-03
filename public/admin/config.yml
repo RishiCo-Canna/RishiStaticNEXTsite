@@ -1,12 +1,12 @@
 # Decap CMS Configuration
 backend:
   name: github
-  repo: {{NEXT_PUBLIC_GITHUB_REPO_FULL_NAME}}
+  repo: ${NEXT_PUBLIC_GITHUB_REPO_FULL_NAME}
   branch: main
-  base_url: {{NEXT_PUBLIC_SITE_URL}}
-  auth_endpoint: api/auth
+  base_url: ${NEXT_PUBLIC_SITE_URL}
+  auth_endpoint: api/auth # This will be relative to base_url
   auth_type: implicit
-  app_id: {{NEXT_PUBLIC_OAUTH_CLIENT_ID}}
+  app_id: ${NEXT_PUBLIC_OAUTH_CLIENT_ID}
 
 # Media and public folders
 media_folder: /public/uploads

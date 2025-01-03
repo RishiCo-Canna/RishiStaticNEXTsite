@@ -44,7 +44,7 @@ const nextConfig = {
           {
             loader: 'string-replace-loader',
             options: {
-              search: /\{\{([^}]+)\}\}/g,
+              search: /\$\{([^}]+)\}/g,
               replace: (match, p1) => {
                 const envVar = process.env[p1];
                 if (!envVar) {
