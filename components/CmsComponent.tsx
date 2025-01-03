@@ -46,7 +46,6 @@ const CmsComponent = () => {
                 auth_endpoint: 'api/auth',
                 token: accessToken
               },
-              local_backend: process.env.NODE_ENV === 'development',
               media_folder: 'public/uploads',
               public_folder: '/uploads',
               collections: [
@@ -91,11 +90,12 @@ const CmsComponent = () => {
     return (
       <div style={{ padding: '20px', textAlign: 'center' }}>
         <h2>Loading...</h2>
+        <p>Initializing CMS...</p>
       </div>
     )
   }
 
-  if (!session) {
+  if (!session && !window.location.hash.includes('access_token')) {
     return (
       <div style={{ padding: '20px', textAlign: 'center' }}>
         <h2>Please Sign In</h2>
@@ -103,7 +103,7 @@ const CmsComponent = () => {
         <button 
           onClick={() => {
             console.log('Initiating GitHub sign in')
-            signIn('github', { callbackUrl: '/admin' })
+            window.location.href = '/api/auth'
           }} 
           style={{ 
             padding: '10px 20px',
