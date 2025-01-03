@@ -26,6 +26,26 @@ const nextConfig = {
         ],
       },
     ]
+  },
+  // Process HTML files to inject environment variables
+  webpack: (config, { dev, isServer }) => {
+    if (!isServer && !dev) {
+      config.module.rules.push({
+        test: /\.html$/,
+        use: [
+          {
+            loader: 'string-replace-loader',
+            options: {
+              multiple: [
+                { search: '{{NEXT_PUBLIC_GITHUB_REPO_FULL_NAME}}', replace: process.env.GITHUB_REPO_FULL_NAME || '' },
+                { search: '{{NEXT_PUBLIC_OAUTH_CLIENT_ID}}', replace: process.env.OAUTH_CLIENT_ID || '' }
+              ]
+            }
+          }
+        ]
+      });
+    }
+    return config;
   }
 }
 
