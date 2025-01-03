@@ -2,12 +2,12 @@
 const nextConfig = {
   reactStrictMode: true,
   env: {
-    NEXT_PUBLIC_SITE_URL: process.env.REPL_SLUG && process.env.REPL_OWNER
+    NEXT_PUBLIC_SITE_URL: process.env.REPL_SLUG 
       ? `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co`
       : 'http://localhost:3000',
     NEXT_PUBLIC_GITHUB_REPO_FULL_NAME: process.env.GITHUB_REPO_FULL_NAME || 'RishiCo-Canna/RishiStaticNEXTsite',
     NEXT_PUBLIC_OAUTH_CLIENT_ID: process.env.OAUTH_CLIENT_ID,
-    NEXTAUTH_URL: process.env.REPL_SLUG && process.env.REPL_OWNER
+    NEXTAUTH_URL: process.env.REPL_SLUG
       ? `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co`
       : 'http://localhost:3000',
   },
@@ -19,17 +19,17 @@ const nextConfig = {
           {
             key: 'Content-Security-Policy',
             value: [
-              "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.unpkg.com https://unpkg.com",
-              "style-src 'self' 'unsafe-inline' https://*.unpkg.com https://unpkg.com",
-              "img-src 'self' data: blob: https:",
+              "default-src 'self' https://*.repl.co",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.unpkg.com https://unpkg.com https://*.repl.co",
+              "style-src 'self' 'unsafe-inline' https://*.unpkg.com https://unpkg.com https://*.repl.co",
+              "img-src 'self' data: blob: https: *",
               "media-src 'self' https:",
-              "connect-src 'self' https: wss:",
-              "font-src 'self' data:",
-              "frame-src 'self'",
+              "connect-src 'self' https: wss: https://*.repl.co",
+              "font-src 'self' data: https://*.repl.co",
+              "frame-src 'self' https://*.repl.co",
               "worker-src 'self' blob:",
               "child-src 'self' blob:",
-              "form-action 'self'",
+              "form-action 'self' https://*.repl.co",
               "base-uri 'self'",
               "frame-ancestors 'self'"
             ].join('; ')
