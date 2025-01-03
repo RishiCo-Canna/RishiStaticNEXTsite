@@ -1,36 +1,20 @@
-# Decap CMS Configuration
+
 backend:
   name: github
-  repo: ${NEXT_PUBLIC_GITHUB_REPO_FULL_NAME}
+  repo: your-username/your-repo # Replace with your GitHub username/repo
   branch: main
-  base_url: ${NEXT_PUBLIC_SITE_URL}
-  auth_endpoint: '/api/auth'
-  commit_messages:
-    create: 'Create {{collection}} "{{slug}}"'
-    update: 'Update {{collection}} "{{slug}}"'
-    delete: 'Delete {{collection}} "{{slug}}"'
-    uploadMedia: 'Upload "{{path}}"'
-    deleteMedia: 'Delete "{{path}}"'
+  auth_type: pkce
+  base_url: https://${process.env.REPLIT_DEV_DOMAIN}
+  auth_endpoint: api/auth
 
-# Media and public folders
-media_folder: /public/uploads
-public_folder: /uploads
-publish_mode: editorial_workflow
+media_folder: public/images
+public_folder: /images
 
-# Collections
 collections:
   - name: pages
     label: Pages
-    files:
-      - name: home
-        label: Home Page
-        file: content/pages/home.md
-        fields:
-          - { label: Title, name: title, widget: string }
-          - { label: Content, name: content, widget: markdown }
-      - name: hello
-        label: Hello World Page
-        file: content/pages/hello.md
-        fields:
-          - { label: Title, name: title, widget: string }
-          - { label: Content, name: content, widget: markdown }
+    folder: content/pages
+    create: true
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Body, name: body, widget: markdown }
