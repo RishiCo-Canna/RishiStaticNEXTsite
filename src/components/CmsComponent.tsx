@@ -40,13 +40,15 @@ const CmsComponent = () => {
       try {
         const { repo, clientId, siteUrl } = validateConfig();
 
+        const currentOrigin = window.location.origin;
+
         const config = {
           local_backend: false,
           backend: {
             name: 'github' as const,
             repo,
             branch: 'main',
-            base_url: siteUrl,
+            base_url: currentOrigin,
             auth_endpoint: 'api/auth',
             auth_scope: 'repo',
             app_id: clientId
