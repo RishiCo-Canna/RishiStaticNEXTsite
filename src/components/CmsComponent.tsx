@@ -1,8 +1,7 @@
-
 import React, { useEffect, useState } from 'react';
 import type { CmsConfig } from 'decap-cms-core';
 
-const CmsComponent = () => {
+const CmsComponent: React.FC = () => {
   const [cmsLoaded, setCmsLoaded] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const mountRef = React.useRef(false);
@@ -11,14 +10,15 @@ const CmsComponent = () => {
     if (mountRef.current) return;
     mountRef.current = true;
     let mounted = true;
-    
+
     const loadCms = async () => {
       try {
-        const CMS = await import('decap-cms-app');
-        
+        // Import CMS dynamically
+        const CMS = (await import('decap-cms-app')).default;
+
         if (!mounted) return;
-        
-        if (!CMS || !CMS.default) {
+
+        if (!CMS) {
           throw new Error('Failed to load CMS module');
         }
 
@@ -47,11 +47,16 @@ const CmsComponent = () => {
           ]
         };
 
-        await CMS.default.init({ config });
-        setCmsLoaded(true);
+        // Initialize CMS with config
+        await CMS.init({ config });
+        if (mounted) {
+          setCmsLoaded(true);
+        }
       } catch (error) {
         console.error('Failed to initialize CMS:', error);
-        setError(error as Error);
+        if (mounted) {
+          setError(error as Error);
+        }
       }
     };
 
@@ -59,10 +64,10 @@ const CmsComponent = () => {
 
     return () => {
       mounted = false;
-      if (window.CMS) {
+      // Clean up CMS instance
+      if (typeof window !== 'undefined' && (window as any).CMS) {
         try {
-          // Cleanup CMS instance
-          window.CMS = undefined;
+          (window as any).CMS = undefined;
           setCmsLoaded(false);
         } catch (error) {
           console.error('Error during CMS cleanup:', error);

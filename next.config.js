@@ -15,7 +15,7 @@ const nextConfig = {
     return [
       {
         source: '/admin/:path*',
-        destination: '/admin/:path*', // Serve static files from public/admin
+        destination: '/admin/:path*',
       },
     ];
   },
@@ -27,8 +27,8 @@ const nextConfig = {
           {
             key: 'Content-Security-Policy',
             value: [
-              "default-src 'self' https://*.github.com https://*.githubusercontent.com https://*.repl.co https://*.unpkg.com https://unpkg.com https://identity.netlify.com",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.unpkg.com https://unpkg.com https://identity.netlify.com",
+              "default-src 'self' https://*.github.com https://*.githubusercontent.com https://*.repl.co https://*.unpkg.com https://unpkg.com",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.unpkg.com https://unpkg.com",
               "style-src 'self' 'unsafe-inline' https://*.unpkg.com https://unpkg.com",
               "img-src 'self' data: blob: https: *",
               "connect-src 'self' https: wss: https://api.github.com",
