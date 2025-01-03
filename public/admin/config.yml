@@ -1,27 +1,28 @@
+
 backend:
   name: github
-  repo: ${NEXT_PUBLIC_GITHUB_REPO_FULL_NAME}
+  repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME
   branch: main
-  base_url: ${NEXT_PUBLIC_SITE_URL}
+  auth_type: oauth
+  base_url: process.env.NEXT_PUBLIC_SITE_URL
   auth_endpoint: api/auth
 
 media_folder: public/uploads
 public_folder: /uploads
-local_backend: true
 
 collections:
   - name: pages
     label: Pages
     files:
-      - name: hello
-        label: Hello World Page
-        file: content/pages/hello.md
-        fields:
-          - { label: Title, name: title, widget: string }
-          - { label: Content, name: content, widget: markdown }
       - name: home
         label: Home Page
         file: content/pages/home.md
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Content, name: content, widget: markdown }
+      - name: hello
+        label: Hello World Page
+        file: content/pages/hello.md
         fields:
           - { label: Title, name: title, widget: string }
           - { label: Content, name: content, widget: markdown }

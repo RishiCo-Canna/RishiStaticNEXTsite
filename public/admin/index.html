@@ -5,18 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Content Manager</title>
-    <script>
-      // Define process.env for the CMS
-      window.process = {
-        env: {
-          NEXT_PUBLIC_GITHUB_REPO_FULL_NAME: '{{NEXT_PUBLIC_GITHUB_REPO_FULL_NAME}}',
-          NEXT_PUBLIC_SITE_URL: '{{NEXT_PUBLIC_SITE_URL}}',
-          NEXT_PUBLIC_OAUTH_CLIENT_ID: '{{NEXT_PUBLIC_OAUTH_CLIENT_ID}}'
-        }
-      };
-    </script>
   </head>
   <body>
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <script>
+      window.CMS.init();
+    </script>
   </body>
 </html>
