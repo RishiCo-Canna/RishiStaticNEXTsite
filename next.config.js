@@ -11,26 +11,28 @@ const nextConfig = {
       ? `https://${process.env.REPL_SLUG}-${process.env.REPL_OWNER}.repl.co`
       : 'http://localhost:3000',
   },
-  headers: async () => [
-    {
-      source: '/:path*',
-      headers: [
-        {
-          key: 'Content-Security-Policy',
-          value: [
-            "default-src 'self' 'unsafe-inline' 'unsafe-eval';",
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://github.com;",
-            "style-src 'self' 'unsafe-inline' https://unpkg.com;",
-            "img-src 'self' data: blob: https:;",
-            "connect-src 'self' https://*.repl.co https://*.repl.dev https://*.replit.dev https://api.github.com https://github.com https://unpkg.com;",
-            "form-action 'self' https://github.com;",
-            "frame-ancestors 'self';",
-            "frame-src 'self' https://github.com;"
-          ].join(' ')
-        }
-      ]
-    }
-  ]
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self' 'unsafe-inline' 'unsafe-eval';",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://identity.netlify.com https://github.com;",
+              "style-src 'self' 'unsafe-inline' https://unpkg.com;",
+              "img-src 'self' data: blob: https:;",
+              "connect-src 'self' https://*.repl.co https://*.repl.dev https://*.replit.dev https://api.github.com https://github.com https://unpkg.com;",
+              "form-action 'self' https://github.com;",
+              "frame-ancestors 'self';",
+              "frame-src 'self' https://github.com;"
+            ].join(' ')
+          }
+        ]
+      }
+    ];
+  }
 };
 
 module.exports = nextConfig;
