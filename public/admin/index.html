@@ -36,7 +36,7 @@
         try {
           window.CMS.init({
             config: {
-              load_config_file: false,
+              load_config_file: true,
               backend: {
                 name: 'github',
                 repo: 'RishiCo-Canna/RishiStaticNEXTsite',
@@ -44,22 +44,7 @@
                 auth_scope: 'repo',
                 base_url: window.location.origin,
                 auth_endpoint: '/api/auth'
-              },
-              local_backend: false,
-              media_folder: 'public/images',
-              public_folder: '/images',
-              collections: [
-                {
-                  name: 'content_pages',
-                  label: 'Content Pages',
-                  folder: 'content/pages',
-                  create: true,
-                  fields: [
-                    { label: 'Title', name: 'title', widget: 'string' },
-                    { label: 'Body', name: 'body', widget: 'markdown' }
-                  ]
-                }
-              ]
+              }
             }
           }).then(() => {
             if (loader) {
