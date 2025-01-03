@@ -9,6 +9,7 @@ export default async function handler(
   const clientSecret = process.env.OAUTH_CLIENT_SECRET;
 
   if (!clientId || !clientSecret) {
+    console.error('Missing OAuth credentials');
     return res.status(500).json({ error: 'Missing OAuth credentials' });
   }
 
@@ -18,14 +19,17 @@ export default async function handler(
   }
 
   try {
+    console.log('Auth endpoint called with URL:', req.url);
     const params = new URLSearchParams(req.url?.split('?')[1]);
     const code = params.get('code');
-    
+
     if (!code) {
+      console.error('No code provided in callback');
       res.redirect(302, `/admin/#error=invalid-code`);
       return;
     }
 
+    console.log('Exchanging code for token...');
     const tokenResponse = await fetch(
       `https://github.com/login/oauth/access_token`,
       {
@@ -43,12 +47,15 @@ export default async function handler(
     );
 
     const tokenData = await tokenResponse.json();
+    console.log('Token exchange response:', { hasError: !!tokenData.error, hasToken: !!tokenData.access_token });
 
     if (tokenData.error) {
+      console.error('Error exchanging code for token:', tokenData.error);
       res.redirect(302, `/admin/#error=${tokenData.error}`);
       return;
     }
 
+    console.log('Successfully obtained access token');
     res.redirect(302, `/admin/#access_token=${tokenData.access_token}`);
   } catch (error) {
     console.error('Error during OAuth flow:', error);

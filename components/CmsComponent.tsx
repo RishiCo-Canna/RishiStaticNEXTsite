@@ -7,34 +7,33 @@ const CmsComponent = () => {
   const [initializationStage, setInitializationStage] = useState<string>('not-started')
 
   useEffect(() => {
+    // Check for error in URL hash
+    const hashParams = new URLSearchParams(window.location.hash.slice(1));
+    const errorParam = hashParams.get('error');
+    if (errorParam) {
+      setError(`Authentication error: ${errorParam}`);
+      return;
+    }
+
     const initCMS = async () => {
       console.log('CMS Initialization Starting:', {
         sessionStatus: status,
         sessionExists: !!session,
-        accessToken: session?.accessToken,
+        accessToken: session?.accessToken || hashParams.get('access_token'),
       })
 
-      if (session?.accessToken) {
+      const accessToken = session?.accessToken || hashParams.get('access_token');
+
+      if (accessToken) {
         try {
           setInitializationStage('loading-cms')
           console.log('Loading CMS with config:', {
-            sessionExists: !!session,
-            hasAccessToken: !!session.accessToken,
+            hasAccessToken: !!accessToken,
             repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME,
-            baseUrl: window.location.origin,
-            oauth: {
-              clientId: process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID,
-              authScope: 'repo,user'
-            }
+            baseUrl: window.location.origin
           })
 
           const CMS = (await import('decap-cms-app')).default
-
-          // Add event listeners for debugging
-          window.addEventListener('error', (event) => {
-            console.error('CMS error:', event.error)
-            setError(event.error?.message || 'Unknown error occurred')
-          })
 
           setInitializationStage('configuring-cms')
           CMS.init({
@@ -43,11 +42,9 @@ const CmsComponent = () => {
                 name: 'github',
                 repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME || '',
                 branch: 'main',
-                auth_type: 'pkce',
                 base_url: window.location.origin,
                 auth_endpoint: 'api/auth',
-                app_id: process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID,
-                auth_scope: 'repo,user',
+                token: accessToken
               },
               local_backend: process.env.NODE_ENV === 'development',
               media_folder: 'public/uploads',
@@ -79,10 +76,10 @@ const CmsComponent = () => {
           setInitializationStage('error')
         }
       } else {
-        console.log('No session or access token available:', {
+        console.log('No access token available:', {
           status,
           sessionExists: !!session,
-          accessTokenExists: !!session?.accessToken
+          hashToken: hashParams.get('access_token')
         })
       }
     }
