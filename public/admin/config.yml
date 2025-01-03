@@ -1,0 +1,20 @@
+backend:
+  name: github
+  repo: process.env.GITHUB_REPO_FULL_NAME
+  branch: main
+  base_url: ''
+  auth_endpoint: api/auth
+
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  - name: pages
+    label: Pages
+    files:
+      - name: home
+        label: Home Page
+        file: content/pages/home.md
+        fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Content, name: content, widget: markdown }
