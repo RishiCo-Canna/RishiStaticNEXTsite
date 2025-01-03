@@ -8,7 +8,7 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
       authorization: {
         params: {
-          scope: 'repo user'
+          scope: 'read:user user:email repo'
         }
       }
     }),
@@ -31,7 +31,7 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: '/admin',
-    error: '/admin', // Error code passed in query string as ?error=
+    error: '/admin',
   },
   debug: process.env.NODE_ENV === 'development'
 };

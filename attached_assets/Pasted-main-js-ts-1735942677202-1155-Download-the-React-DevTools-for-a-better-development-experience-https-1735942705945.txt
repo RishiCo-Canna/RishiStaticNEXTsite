@@ -1,0 +1,161 @@
+main.js?ts=1735942677202:1155 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+warn-once.js:16 Do not add <script> tags using next/head (see <script> tag with src="https://identity.netlify.com/v1/netlify-identity-widget.js"). Use next/script instead. 
+See more info here: https://nextjs.org/docs/messages/no-script-tags-in-head-component
+warnOnce @ warn-once.js:16
+eval @ head.js:134
+reduceComponents @ head.js:127
+emitChange @ side-effect.js:22
+eval @ side-effect.js:55
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533Understand this warningAI
+head-manager.js:100 Refused to load the script 'https://identity.netlify.com/v1/netlify-identity-widget.js' because it violates the following Content Security Policy directive: "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.unpkg.com https://unpkg.com https://*.replit.dev". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.
+
+eval @ head-manager.js:100
+updateElements @ head-manager.js:100
+eval @ head-manager.js:137
+updateHead @ head-manager.js:136
+emitChange @ side-effect.js:22
+eval @ side-effect.js:55
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533Understand this errorAI
+head-manager.js:100 Refused to load the script 'https://identity.netlify.com/v1/netlify-identity-widget.js' because it violates the following Content Security Policy directive: "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.unpkg.com https://unpkg.com https://*.replit.dev". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback.
+
+eval @ head-manager.js:100
+updateElements @ head-manager.js:100
+eval @ head-manager.js:137
+updateHead @ head-manager.js:136
+emitChange @ side-effect.js:22
+eval @ side-effect.js:55
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+eval @ react-dom.development.js:26764
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533Understand this errorAI
+CmsComponent.tsx:34 [CMS] Starting initialization...
+CmsComponent.tsx:34 [CMS] Starting initialization...
+node_modules_decap-cms-app_dist_decap-cms-app_js.js:17 decap-cms-app 3.4.0
+CmsComponent.tsx:71 [CMS] Initializing with config...
+CmsComponent.tsx:72 decap-cms-core 3.5.0
+CmsComponent.tsx:72 Warning: You are importing createRoot from "react-dom" which is not supported. You should instead import it from "react-dom/client".
+console.error @ client.js:2
+window.console.error @ setup-hydration-warning.js:18
+printWarning @ react-dom.development.js:86
+error @ react-dom.development.js:60
+createRoot$1 @ react-dom.development.js:29791
+t.default @ decap-cms-app.js:395
+initializeCms @ CmsComponent.tsx:72
+await in initializeCms
+eval @ CmsComponent.tsx:90
+commitHookEffectListMount @ react-dom.development.js:23145
+commitPassiveMountOnFiber @ react-dom.development.js:24921
+commitPassiveMountEffects_complete @ react-dom.development.js:24886
+commitPassiveMountEffects_begin @ react-dom.development.js:24873
+commitPassiveMountEffects @ react-dom.development.js:24861
+flushPassiveEffectsImpl @ react-dom.development.js:27034
+flushPassiveEffects @ react-dom.development.js:26979
+commitRootImpl @ react-dom.development.js:26930
+commitRoot @ react-dom.development.js:26677
+performSyncWorkOnRoot @ react-dom.development.js:26112
+flushSyncCallbacks @ react-dom.development.js:12042
+eval @ react-dom.development.js:25646Understand this errorAI
+CmsComponent.tsx:71 [CMS] Initializing with config...
+CmsComponent.tsx:72 decap-cms-core 3.5.0
+CmsComponent.tsx:72 Warning: You are importing createRoot from "react-dom" which is not supported. You should instead import it from "react-dom/client".
+console.error @ client.js:2
+window.console.error @ setup-hydration-warning.js:18
+printWarning @ react-dom.development.js:86
+error @ react-dom.development.js:60
+createRoot$1 @ react-dom.development.js:29791
+t.default @ decap-cms-app.js:395
+initializeCms @ CmsComponent.tsx:72
+await in initializeCms
+eval @ CmsComponent.tsx:90
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+commitRootImpl @ react-dom.development.js:26930
+commitRoot @ react-dom.development.js:26677
+performSyncWorkOnRoot @ react-dom.development.js:26112
+flushSyncCallbacks @ react-dom.development.js:12042
+eval @ react-dom.development.js:25646Understand this errorAI
+CmsComponent.tsx:72 Warning: You are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
+console.error @ client.js:2
+window.console.error @ setup-hydration-warning.js:18
+printWarning @ react-dom.development.js:86
+error @ react-dom.development.js:60
+warnIfReactDOMContainerInDEV @ react-dom.development.js:29466
+createRoot @ react-dom.development.js:29343
+createRoot$1 @ react-dom.development.js:29795
+t.default @ decap-cms-app.js:395
+initializeCms @ CmsComponent.tsx:72
+await in initializeCms
+eval @ CmsComponent.tsx:90
+commitHookEffectListMount @ react-dom.development.js:23145
+invokePassiveEffectMountInDEV @ react-dom.development.js:25149
+invokeEffectsInDev @ react-dom.development.js:27346
+commitDoubleInvokeEffectsInDEV @ react-dom.development.js:27325
+flushPassiveEffectsImpl @ react-dom.development.js:27051
+flushPassiveEffects @ react-dom.development.js:26979
+commitRootImpl @ react-dom.development.js:26930
+commitRoot @ react-dom.development.js:26677
+performSyncWorkOnRoot @ react-dom.development.js:26112
+flushSyncCallbacks @ react-dom.development.js:12042
+eval @ react-dom.development.js:25646Understand this errorAI
+2CmsComponent.tsx:79 [CMS] Initialization complete
+client.js:2 Warning: Failed prop type: invariant is not defined
+    at I (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:395:87769)
+    at v (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:487:2113893)
+    at t (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:487:2127389)
+    at t (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:487:2123804)
+    at x (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:416:70662)
+    at l (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:487:2108476)
+    at eval (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:395:85159)
+    at v (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:487:2113893)
+    at d (webpack-internal:///./node_modules/decap-cms-app/dist/decap-cms-app.js:487:2111941)
+console.error @ client.js:2
+window.console.error @ setup-hydration-warning.js:18
+printWarning @ react.development.js:210
+error @ react.development.js:184
+checkPropTypes @ react.development.js:2075
+validatePropTypes @ react.development.js:2276
+createElementWithValidation @ react.development.js:2380
+eval @ decap-cms-app.js:487
+updateContextConsumer @ react-dom.development.js:21202
+beginWork @ react-dom.development.js:21647
+beginWork$1 @ react-dom.development.js:27421
+performUnitOfWork @ react-dom.development.js:26552
+workLoopSync @ react-dom.development.js:26461
+renderRootSync @ react-dom.development.js:26429
+performConcurrentWorkOnRoot @ react-dom.development.js:25733
+workLoop @ scheduler.development.js:266
+flushWork @ scheduler.development.js:239
+performWorkUntilDeadline @ scheduler.development.js:533Understand this errorAI
+admin#/:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this errorAI
+admin#/:1 Unchecked runtime.lastError: The message port closed before a response was received.Understand this errorAI
+websocket.js:46 [HMR] connected
