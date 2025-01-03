@@ -14,19 +14,15 @@ const nextConfig = {
           {
             key: 'Content-Security-Policy',
             value: [
-              "frame-ancestors 'self' http://localhost:* https://*.repl.co https://*.repl.dev https://*.replit.dev;",
-              "default-src 'self' https://api.github.com https://github.com;",
+              "frame-ancestors 'self' https://*.repl.co https://*.repl.dev https://*.replit.dev;",
+              "default-src 'self' https://api.github.com https://github.com https://unpkg.com;",
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com;",
-              "style-src 'self' 'unsafe-inline';",
-              "img-src 'self' data: https:;",
-              "connect-src 'self' https://api.github.com http://localhost:* https://*.repl.co https://*.repl.dev https://github.com;",
-              "form-action 'self' https://github.com http://localhost:* https://*.repl.co https://*.repl.dev;",
-              "frame-src 'self' http://localhost:* https://*.repl.co https://*.repl.dev https://*.replit.dev;"
+              "style-src 'self' 'unsafe-inline' https://unpkg.com;",
+              "img-src 'self' data: https: blob:;",
+              "connect-src 'self' https://api.github.com https://*.repl.co https://*.repl.dev https://github.com https://unpkg.com;",
+              "form-action 'self' https://github.com https://*.repl.co https://*.repl.dev;",
+              "frame-src 'self' https://*.repl.co https://*.repl.dev https://*.replit.dev;"
             ].join(' ')
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'SAMEORIGIN'
           }
         ]
       }
