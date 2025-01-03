@@ -13,15 +13,21 @@ const AdminPage = () => {
         const CMS = (await import('decap-cms-app')).default;
         console.log('CMS loaded successfully');
 
-        // Initialize CMS
+        // Get the current origin for the callback URL
+        const origin = window.location.origin;
+        console.log('Current origin:', origin);
+
+        // Initialize CMS with OAuth configuration
         await CMS.init({
           config: {
             backend: {
               name: 'github',
               repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME,
               branch: 'main',
-              base_url: window.location.origin,
-              auth_endpoint: '/api/auth'
+              base_url: origin,
+              auth_endpoint: '/api/auth',
+              auth_callback_path: '/admin/#callback',
+              auth_scope: 'repo'
             },
             load_config_file: false,
             media_folder: 'public/uploads',

@@ -16,11 +16,13 @@ const nextConfig = {
           key: 'Content-Security-Policy',
           value: [
             "default-src 'self' 'unsafe-inline' 'unsafe-eval';",
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com;",
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://github.com;",
             "style-src 'self' 'unsafe-inline' https://unpkg.com;",
             "img-src 'self' data: blob: https:;",
             "connect-src 'self' https://*.repl.co https://*.repl.dev https://*.replit.dev https://api.github.com https://github.com https://unpkg.com;",
-            "frame-ancestors 'none';"
+            "form-action 'self' https://github.com;",
+            "frame-ancestors 'self';",
+            "frame-src 'self' https://github.com;"
           ].join(' ')
         }
       ]
