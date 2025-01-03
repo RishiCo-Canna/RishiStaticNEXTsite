@@ -8,7 +8,7 @@ export default NextAuth({
       clientSecret: process.env.OAUTH_CLIENT_SECRET!,
       authorization: {
         params: {
-          scope: 'public_repo',
+          scope: 'repo',  // Updated scope for private repository access
         },
       },
     }),

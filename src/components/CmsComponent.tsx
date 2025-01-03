@@ -47,7 +47,7 @@ const CmsComponent = () => {
             branch: 'main',
             base_url: siteUrl,
             auth_endpoint: 'api/auth',
-            auth_scope: 'repo',  // Updated to 'repo' for private repository access
+            auth_scope: 'repo',  // Scope for private repository access
             app_id: clientId
           },
           media_folder: 'public/uploads',
@@ -76,7 +76,7 @@ const CmsComponent = () => {
               ]
             }
           ]
-        } as const;
+        };
 
         await CMS.init({ config });
         setError(null);
