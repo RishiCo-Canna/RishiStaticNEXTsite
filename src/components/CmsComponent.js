@@ -2,6 +2,10 @@
 import { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import CMS from 'decap-cms-app';
+import { createRoot } from 'react-dom/client';
+
+// Override CMS's default createRoot
+window.createRoot = createRoot;
 
 const CmsComponent = () => {
   const { data: session } = useSession();

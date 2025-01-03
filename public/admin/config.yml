@@ -1,3 +1,4 @@
+
 backend:
   name: github
   repo: RishiCo-Canna/RishiStaticNEXTsite
@@ -5,6 +6,8 @@ backend:
   auth_scope: repo
   base_url: ${NEXT_PUBLIC_SITE_URL}
   auth_endpoint: api/auth
+
+local_backend: false
 
 media_folder: public/images
 public_folder: /images

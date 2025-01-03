@@ -41,6 +41,7 @@ const CmsComponent = () => {
         const { repo, clientId, siteUrl } = validateConfig();
 
         const config = {
+          local_backend: false,
           backend: {
             name: 'github' as const,
             repo,
