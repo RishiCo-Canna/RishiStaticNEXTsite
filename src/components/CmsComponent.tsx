@@ -36,6 +36,7 @@ const CmsComponent: React.FC<Props> = () => {
               base_url: siteUrl,
               auth_endpoint: 'api/auth',
               app_id: clientId,
+              auth_scope: 'repo'
             },
             media_folder: 'public/uploads',
             public_folder: '/uploads',
