@@ -12,10 +12,10 @@ media_folder: "public/images"
 public_folder: "/images"
 
 collections:
-  - name: pages
-    label: Pages
-    folder: content/pages
+  - name: "content_pages"
+    label: "Content Pages"
+    folder: "content/pages"
     create: true
     fields:
-      - { label: Title, name: title, widget: string }
-      - { label: Body, name: body, widget: markdown }
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Body", name: "body", widget: "markdown" }
