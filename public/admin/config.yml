@@ -2,7 +2,7 @@ backend:
   name: github
   repo: RishiCo-Canna/RishiStaticNEXTsite
   branch: main
-  auth_scope: public_repo
+  auth_scope: repo
   base_url: http://localhost:3000
   auth_endpoint: api/auth
 
