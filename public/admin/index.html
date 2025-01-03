@@ -7,69 +7,99 @@
   </head>
   <body>
     <!-- Include the script that builds the page and powers Decap CMS -->
-    <script src="https://unpkg.com/decap-cms-app@latest/dist/decap-cms.js"></script>
+    <script src="https://unpkg.com/decap-cms@3.1.0-beta.0/dist/decap-cms.js"></script>
     <script>
       console.log('Admin page loading...');
 
       // Initialize CMS configuration
       const initCMS = async () => {
-        console.log('Initializing CMS...');
+        try {
+          console.log('Initializing CMS...');
 
-        // Load configuration from our API
-        const response = await fetch('/api/config');
-        const config = await response.json();
-        console.log('Config loaded:', config);
+          // Load configuration from our API
+          const response = await fetch('/api/config');
+          const config = await response.json();
+          console.log('Config loaded:', config);
 
-        // Ensure we're using HTTPS URL
-        const baseUrl = config.NEXT_PUBLIC_SITE_URL.startsWith('https') 
-          ? config.NEXT_PUBLIC_SITE_URL 
-          : config.NEXT_PUBLIC_SITE_URL.replace('http://', 'https://');
+          // Ensure we're using HTTPS URL
+          const baseUrl = config.NEXT_PUBLIC_SITE_URL.startsWith('https') 
+            ? config.NEXT_PUBLIC_SITE_URL 
+            : config.NEXT_PUBLIC_SITE_URL.replace('http://', 'https://');
 
-        window.CMS.init({
-          config: {
-            load_config_file: false,
-            backend: {
-              name: 'github',
-              repo: config.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME,
-              branch: 'main',
-              auth_type: 'pkce',
-              base_url: baseUrl,
-              auth_endpoint: 'api/auth',
-              site_domain: baseUrl.replace(/^https?:\/\//, ''),
-              app_id: config.NEXT_PUBLIC_OAUTH_CLIENT_ID
-            },
-            local_backend: false,
-            publish_mode: 'editorial_workflow',
-            media_folder: 'public/uploads',
-            public_folder: '/uploads',
-            collections: [
-              {
-                name: 'pages',
-                label: 'Pages',
-                files: [
-                  {
-                    name: 'home',
-                    label: 'Home Page',
-                    file: 'content/pages/home.md',
-                    fields: [
-                      { label: 'Title', name: 'title', widget: 'string' },
-                      { label: 'Content', name: 'content', widget: 'markdown' }
-                    ]
-                  },
-                  {
-                    name: 'hello',
-                    label: 'Hello World Page',
-                    file: 'content/pages/hello.md',
-                    fields: [
-                      { label: 'Title', name: 'title', widget: 'string' },
-                      { label: 'Content', name: 'content', widget: 'markdown' }
-                    ]
+          // Wait for CMS to be available
+          const waitForCMS = () => {
+            return new Promise((resolve, reject) => {
+              if (window.CMS) {
+                resolve(window.CMS);
+              } else {
+                const timeout = setTimeout(() => {
+                  reject(new Error('CMS failed to load after 10 seconds'));
+                }, 10000);
+
+                const interval = setInterval(() => {
+                  if (window.CMS) {
+                    clearTimeout(timeout);
+                    clearInterval(interval);
+                    resolve(window.CMS);
                   }
-                ]
+                }, 100);
               }
-            ]
-          }
-        });
+            });
+          };
+
+          // Wait for CMS to load then initialize
+          const cms = await waitForCMS();
+          console.log('CMS object available, initializing...');
+
+          cms.init({
+            config: {
+              load_config_file: false,
+              backend: {
+                name: 'github',
+                repo: config.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME,
+                branch: 'main',
+                auth_type: 'pkce',
+                base_url: baseUrl,
+                auth_endpoint: 'api/auth',
+                site_domain: baseUrl.replace(/^https?:\/\//, ''),
+                app_id: config.NEXT_PUBLIC_OAUTH_CLIENT_ID
+              },
+              local_backend: false,
+              publish_mode: 'editorial_workflow',
+              media_folder: 'public/uploads',
+              public_folder: '/uploads',
+              collections: [
+                {
+                  name: 'pages',
+                  label: 'Pages',
+                  files: [
+                    {
+                      name: 'home',
+                      label: 'Home Page',
+                      file: 'content/pages/home.md',
+                      fields: [
+                        { label: 'Title', name: 'title', widget: 'string' },
+                        { label: 'Content', name: 'content', widget: 'markdown' }
+                      ]
+                    },
+                    {
+                      name: 'hello',
+                      label: 'Hello World Page',
+                      file: 'content/pages/hello.md',
+                      fields: [
+                        { label: 'Title', name: 'title', widget: 'string' },
+                        { label: 'Content', name: 'content', widget: 'markdown' }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          });
+        } catch (error) {
+          console.error('Failed to initialize CMS:', error);
+          document.body.innerHTML += `<div style="color: red; padding: 20px;">Failed to initialize CMS: ${error.message}</div>`;
+        }
       };
 
       // Start initialization when DOM is loaded
