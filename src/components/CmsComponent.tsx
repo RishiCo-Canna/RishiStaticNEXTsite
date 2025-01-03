@@ -7,7 +7,7 @@ declare global {
   }
 }
 
-const CmsComponent = () => {
+const CmsComponent: React.FC = () => {
   useEffect(() => {
     const loadCms = async () => {
       try {
