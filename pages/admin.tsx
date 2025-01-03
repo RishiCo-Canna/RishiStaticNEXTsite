@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { signIn, signOut, useSession } from 'next-auth/react';
-import dynamic from 'next/dynamic';
 import Head from 'next/head';
 
 const AdminPage = () => {
@@ -20,25 +19,20 @@ const AdminPage = () => {
         console.log('Session found, loading CMS...');
         const CMS = (await import('decap-cms-app')).default;
 
-        // Get the current origin
-        const origin = window.location.origin;
-        console.log('Current origin:', origin);
-
-        // Initialize CMS with the access token
         await CMS.init({
           config: {
             backend: {
               name: 'github',
               repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME,
               branch: 'main',
-              base_url: origin,
-              auth_type: 'pkce', // Use PKCE flow
-              app_id: process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID,
+              auth_scope: 'repo',
+              base_url: window.location.origin,
+              auth_endpoint: 'api/auth',
               token: session.accessToken
             },
-            load_config_file: false,
-            media_folder: 'public/uploads',
-            public_folder: '/uploads',
+            local_backend: false,
+            media_folder: 'public/images',
+            public_folder: '/images',
             collections: [
               {
                 name: 'pages',
@@ -66,7 +60,6 @@ const AdminPage = () => {
     loadCMS();
   }, [session]);
 
-  // Show login button if not authenticated
   if (!session) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -121,7 +114,6 @@ const AdminPage = () => {
 
 export default AdminPage;
 
-// Disable automatic static optimization for this page
 export const getServerSideProps = () => {
   return { props: {} };
 };
