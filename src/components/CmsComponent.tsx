@@ -31,9 +31,9 @@ const CmsComponent: React.FC<Props> = () => {
           ].filter(Boolean).join(', ')}`);
         }
 
-        console.log('Initializing CMS with config:', {
+        console.log('CMS Initialization starting with:', {
           repo,
-          siteUrl,
+          baseUrl: siteUrl,
           clientId: clientId.substring(0, 8) + '...'
         });
 
@@ -45,7 +45,7 @@ const CmsComponent: React.FC<Props> = () => {
               repo,
               branch: 'main',
               base_url: siteUrl,
-              auth_endpoint: '/api/auth',
+              auth_endpoint: 'api/auth',
               auth_type: 'pkce',
               app_id: clientId
             },

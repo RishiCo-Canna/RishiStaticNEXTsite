@@ -28,9 +28,7 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_GITHUB_REPO_FULL_NAME: process.env.GITHUB_REPO_FULL_NAME,
     NEXT_PUBLIC_OAUTH_CLIENT_ID: process.env.OAUTH_CLIENT_ID,
-    NEXT_PUBLIC_SITE_URL: process.env.REPL_SLUG 
-      ? `https://${process.env.REPL_SLUG}.worf.replit.dev` 
-      : process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+    NEXT_PUBLIC_SITE_URL: `https://${process.env.REPL_SLUG}.worf.replit.dev`
   },
   async headers() {
     return [

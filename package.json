@@ -17,6 +17,7 @@
     "decap-cms-app": "^3.4.0",
     "decap-cms-backend-github": "^3.2.2",
     "jsonwebtoken": "^9.0.2",
+    "kill-port": "^2.0.1",
     "next": "^13.5.8",
     "next-auth": "^4.24.11",
     "react": "^18.3.1",
