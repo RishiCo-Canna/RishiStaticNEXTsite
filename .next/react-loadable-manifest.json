@@ -1,10 +1,4 @@
 {
-  "../src/components/CmsComponent.js -> decap-cms-app": {
-    "id": "../src/components/CmsComponent.js -> decap-cms-app",
-    "files": [
-      "static/chunks/node_modules_decap-cms-app_dist_decap-cms-app_js.js"
-    ]
-  },
   "admin.js -> ../src/components/CmsComponent": {
     "id": "admin.js -> ../src/components/CmsComponent",
     "files": [
