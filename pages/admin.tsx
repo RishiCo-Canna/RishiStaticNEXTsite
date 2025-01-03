@@ -6,7 +6,7 @@ import ErrorBoundary from '../src/components/ErrorBoundary';
 
 // Dynamically import CMS component with no SSR
 const CmsComponent = dynamic(
-  () => import('../src/components/CmsComponent').then(mod => mod.default),
+  () => import('../src/components/CmsComponent'),
   { 
     ssr: false,
     loading: () => (
@@ -19,6 +19,13 @@ const CmsComponent = dynamic(
 
 const AdminPage = () => {
   const { data: session, status } = useSession();
+
+  useEffect(() => {
+    // Ensure we're in the browser
+    if (typeof window !== 'undefined') {
+      // Add any required initialization here
+    }
+  }, []);
 
   if (status === 'loading') {
     return (

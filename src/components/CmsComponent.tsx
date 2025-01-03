@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import type { CmsConfig } from 'decap-cms-core';
 
 declare global {
@@ -20,10 +20,10 @@ const CmsComponent: React.FC = () => {
             name: 'github',
             repo: 'RishiCo-Canna/RishiStaticNEXTsite',
             branch: 'main',
-            auth_scope: 'repo',
             base_url: window.location.origin,
-            auth_endpoint: '/api/auth'
+            auth_endpoint: 'api/auth'
           },
+          local_backend: process.env.NODE_ENV === 'development',
           media_folder: 'public/images',
           public_folder: '/images',
           collections: [
@@ -56,6 +56,7 @@ const CmsComponent: React.FC = () => {
         await CMS.init({ config });
       } catch (error) {
         console.error('Failed to initialize CMS:', error);
+        throw error; // Propagate error to ErrorBoundary
       }
     };
 
