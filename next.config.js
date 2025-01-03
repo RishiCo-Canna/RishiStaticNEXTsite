@@ -1,3 +1,4 @@
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -19,35 +20,24 @@ const nextConfig = {
           {
             key: 'Content-Security-Policy',
             value: [
-              "default-src 'self' https://*.repl.co https://*.replit.dev",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.unpkg.com https://unpkg.com https://*.repl.co https://*.replit.dev",
-              "style-src 'self' 'unsafe-inline' https://*.unpkg.com https://unpkg.com https://*.repl.co https://*.replit.dev",
-              "img-src 'self' data: blob: https: *",
+              "default-src 'self' https://*.replit.dev https://api.github.com",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com",
+              "style-src 'self' 'unsafe-inline' https://unpkg.com",
+              "img-src 'self' data: blob: https://* *",
               "media-src 'self' https:",
-              "connect-src 'self' https: wss: https://*.repl.co https://*.replit.dev",
-              "font-src 'self' data: https://*.repl.co https://*.replit.dev",
-              "frame-src 'self' https://*.repl.co https://*.replit.dev",
+              "connect-src 'self' https: wss:",
+              "font-src 'self' data:",
+              "frame-src 'self' https:",
               "worker-src 'self' blob:",
               "child-src 'self' blob:",
-              "form-action 'self' https://*.repl.co https://*.replit.dev",
+              "form-action 'self'",
               "base-uri 'self'",
               "frame-ancestors 'self'"
             ].join('; ')
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'SAMEORIGIN'
           }
         ]
       }
     ];
-  },
-  webpack: (config, { isServer }) => {
-    // Enable webpack performance hints
-    config.performance = {
-      hints: 'warning'
-    };
-    return config;
   }
 };
 
