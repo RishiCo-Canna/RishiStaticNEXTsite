@@ -21,10 +21,6 @@
           const config = await response.json();
           console.log('Config loaded:', config);
 
-          // Ensure we're using HTTPS URL
-          const baseUrl = config.NEXT_PUBLIC_SITE_URL.startsWith('https') 
-            ? config.NEXT_PUBLIC_SITE_URL 
-            : config.NEXT_PUBLIC_SITE_URL.replace('http://', 'https://');
 
           // Wait for CMS to be available
           const waitForCMS = () => {
@@ -59,10 +55,11 @@
                 repo: config.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME,
                 branch: 'main',
                 auth_type: 'pkce',
-                base_url: baseUrl,
-                auth_endpoint: 'api/auth',
-                site_domain: baseUrl.replace(/^https?:\/\//, ''),
-                app_id: config.NEXT_PUBLIC_OAUTH_CLIENT_ID
+                base_url: config.NEXT_PUBLIC_SITE_URL,
+                auth_endpoint: '/api/auth',
+                api_root: 'https://api.github.com',
+                site_domain: config.NEXT_PUBLIC_SITE_URL.replace(/^https?:\/\//, ''),
+                client_id: config.NEXT_PUBLIC_OAUTH_CLIENT_ID
               },
               local_backend: false,
               publish_mode: 'editorial_workflow',

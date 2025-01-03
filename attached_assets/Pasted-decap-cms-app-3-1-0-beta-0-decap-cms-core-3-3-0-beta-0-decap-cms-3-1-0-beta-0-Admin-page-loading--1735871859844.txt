@@ -1,0 +1,20 @@
+decap-cms-app 3.1.0-beta.0
+decap-cms-core 3.3.0-beta.0
+decap-cms 3.1.0-beta.0
+Admin page loading...
+Initializing CMS...
+Config loaded: 
+Object {NEXT_PUBLIC_GITHUB_REPO_FULL_NAME: "RishiCo-Canna/RishiWebsite", NEXT_PUBLIC_SITE_URL: "https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev", NEXT_PUBLIC_OAUTH_CLIENT_ID: "Ov23liMKn4l1R9rb3onj"}
+CMS object available, initializing...
+decap-cms-core 3.3.0-beta.0
+DOMException {}
+stack: "NotFoundError: Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.↵ at hl (https://unpkg.com/decap-cms@3.1.0-beta.0/dist/decap-cms.js:485:2303304)↵ at pl (https://unpkg.com/decap-cms@3.1.0-beta.0/dist/decap-cms.js:485:2303008)↵ at hl (https://unpkg.com/decap-cms@3.1.0-beta.0/dist/decap-cms.js:485:2303957)↵ at pl (https://unpkg.com/decap-cms@3.1.0-beta.0/dist/decap-cms.js:485:2303008)↵ at hl (https://unpkg.com/decap-cms@3.1.0-beta.0/dist/decap-cms.js:485:2303765)↵ at gl (https://unpkg.com/decap-cms@3.1.0-beta.0/dist/decap-cms.js:485:2304577)↵ at vl (https://unpkg.com/decap-cms@3.1.0-beta.0/dist/decap-cms.js:485:2304975)↵ at gl (https://unpkg.com/decap-cms@3.1.0-beta.0/dist/decap-cms.js:485:2304727)↵ at vl (https://unpkg.com/decap-cms@3.1.0-beta.0/dist/decap-cms.js:485:2306155)↵ at gl (https://unpkg.com/decap-cms@3.1.0-beta.0/dist/decap-cms.js:485:2304727)"
+get stack: ƒ ()
+set stack: ƒ ()
+[[Prototype]]: DOMException
+
+DOMException {}
+stack: "NotFoundError: Failed to execute 'removeChild' on 'Node': The node to be removed is not a child of this node.↵ at hl (https://unpkg.com/decap-cms@3.1.0-beta.0/dist/decap-cms.js:485:2303304)↵ at pl (https://unpkg.com/decap-cms@3.1.0-beta.0/dist/decap-cms.js:485:2303008)↵ at hl (https://unpkg.com/decap-cms@3.1.0-beta.0/dist/decap-cms.js:485:2303957)↵ at pl (https://unpkg.com/decap-cms@3.1.0-beta.0/dist/decap-cms.js:485:2303008)↵ at hl (https://unpkg.com/decap-cms@3.1.0-beta.0/dist/decap-cms.js:485:2303765)↵ at gl (https://unpkg.com/decap-cms@3.1.0-beta.0/dist/decap-cms.js:485:2304577)↵ at vl (https://unpkg.com/decap-cms@3.1.0-beta.0/dist/decap-cms.js:485:2304975)↵ at gl (https://unpkg.com/decap-cms@3.1.0-beta.0/dist/decap-cms.js:485:2304727)↵ at vl (https://unpkg.com/decap-cms@3.1.0-beta.0/dist/decap-cms.js:485:2306155)↵ at gl (https://unpkg.com/decap-cms@3.1.0-beta.0/dist/decap-cms.js:485:2304727)"
+get stack: ƒ ()
+set stack: ƒ ()
+[[Prototype]]: DOMException
