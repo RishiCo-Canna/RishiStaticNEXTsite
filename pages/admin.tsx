@@ -6,7 +6,7 @@ import ErrorBoundary from '../src/components/ErrorBoundary';
 
 // Dynamically import CMS component with no SSR
 const CmsComponent = dynamic(
-  () => import('../src/components/CmsComponent'),
+  () => import('../src/components/CmsComponent').then(mod => mod.default),
   { 
     ssr: false,
     loading: () => (

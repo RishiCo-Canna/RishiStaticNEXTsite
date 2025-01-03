@@ -1,2 +1,1 @@
-
-// This file is deprecated in favor of CmsComponent.tsx
+// This file should be deleted as we're using CmsComponent.tsx
