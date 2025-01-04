@@ -9,6 +9,9 @@ const nextConfig = {
       ? `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co`
       : 'http://localhost:3000',
     NEXT_PUBLIC_GITHUB_REPO_FULL_NAME: process.env.GITHUB_REPO_FULL_NAME || 'RishiCo-Canna/RishiStaticNEXTsite',
+    NEXT_PUBLIC_CALLBACK_URL: process.env.REPL_SLUG 
+      ? `https://${process.env.REPL_SLUG}.${process.env.REPL_OWNER}.repl.co/api/auth/callback/github`
+      : 'http://localhost:3000/api/auth/callback/github',
   },
   async headers() {
     return [
