@@ -8,8 +8,7 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
       authorization: {
         params: {
-          scope: 'read:user user:email repo',
-          redirect_uri: 'https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev/api/auth/callback/github'
+          scope: 'read:user user:email repo'
         }
       }
     }),
@@ -17,7 +16,7 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   cookies: {
     sessionToken: {
-      name: `next-auth.session-token`,
+      name: 'next-auth.session-token',
       options: {
         httpOnly: true,
         sameSite: 'lax',
@@ -26,7 +25,7 @@ export const authOptions: NextAuthOptions = {
       }
     },
     callbackUrl: {
-      name: `next-auth.callback-url`,
+      name: 'next-auth.callback-url',
       options: {
         httpOnly: true,
         sameSite: 'lax',
@@ -35,7 +34,7 @@ export const authOptions: NextAuthOptions = {
       }
     },
     csrfToken: {
-      name: `next-auth.csrf-token`,
+      name: 'next-auth.csrf-token',
       options: {
         httpOnly: true,
         sameSite: 'lax',
@@ -51,7 +50,7 @@ export const authOptions: NextAuthOptions = {
       }
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token, user }) {
       if (session.user) {
         session.user.id = token.sub as string;
         session.accessToken = token.accessToken;

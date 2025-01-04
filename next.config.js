@@ -16,9 +16,9 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.unpkg.com https://unpkg.com https://*.replit.dev https://api.github.com",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.unpkg.com https://unpkg.com https://*.replit.dev https://github.com",
               "style-src 'self' 'unsafe-inline' https://*.unpkg.com https://unpkg.com https://*.replit.dev",
-              "img-src 'self' data: blob: https: *",
+              "img-src 'self' data: blob: https://*.githubusercontent.com https://*.github.com https://*.replit.dev",
               "media-src 'self' https:",
               "connect-src 'self' https: wss: https://*.replit.dev https://api.github.com https://github.com",
               "font-src 'self' data: https://*.replit.dev",
@@ -27,7 +27,7 @@ const nextConfig = {
               "child-src 'self' blob:",
               "form-action 'self' https://*.replit.dev https://github.com",
               "base-uri 'self'",
-              "frame-ancestors 'none'"
+              "frame-ancestors 'self'"
             ].join('; ')
           }
         ]
