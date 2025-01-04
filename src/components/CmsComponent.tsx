@@ -38,26 +38,17 @@ const CmsComponent: React.FC = () => {
               repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME!,
               branch: 'main',
               base_url: window.location.origin,
-              auth_endpoint: 'api/auth'
+              auth_endpoint: '/api/auth'
             },
-            load_config_file: false,
-            media_folder: 'public/images',
-            public_folder: '/images',
-            collections: [
-              {
-                name: 'pages',
-                label: 'Pages',
-                folder: 'content/pages',
-                create: true,
-                fields: [
-                  { label: 'Title', name: 'title', widget: 'string' },
-                  { label: 'Body', name: 'body', widget: 'markdown' }
-                ]
-              }
-            ]
+            load_config_file: true,
+            media_folder: 'public/uploads',
+            public_folder: '/uploads',
+            local_backend: false,
+            display_url: process.env.NEXT_PUBLIC_SITE_URL,
           };
 
           console.log('[CMS] Initializing with config...');
+          // Let Decap CMS handle its own DOM manipulation
           cmsRef.current = await CMS.init({ config });
           initializedRef.current = true;
           console.log('[CMS] Initialization complete');
