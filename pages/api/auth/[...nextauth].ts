@@ -14,12 +14,15 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    strategy: "jwt",
+  },
   cookies: {
     sessionToken: {
       name: 'next-auth.session-token',
       options: {
         httpOnly: true,
-        sameSite: 'lax',
+        sameSite: 'none',
         path: '/',
         secure: true
       }
@@ -27,8 +30,7 @@ export const authOptions: NextAuthOptions = {
     callbackUrl: {
       name: 'next-auth.callback-url',
       options: {
-        httpOnly: true,
-        sameSite: 'lax',
+        sameSite: 'none',
         path: '/',
         secure: true
       }
@@ -37,7 +39,7 @@ export const authOptions: NextAuthOptions = {
       name: 'next-auth.csrf-token',
       options: {
         httpOnly: true,
-        sameSite: 'lax',
+        sameSite: 'none',
         path: '/',
         secure: true
       }
@@ -58,7 +60,7 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-  debug: process.env.NODE_ENV === 'development'
+  debug: true
 };
 
 export default NextAuth(authOptions);
