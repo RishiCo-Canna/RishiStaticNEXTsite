@@ -8,12 +8,42 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
       authorization: {
         params: {
-          scope: 'read:user user:email repo'
+          scope: 'read:user user:email repo',
+          redirect_uri: 'https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev/api/auth/callback/github'
         }
       }
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
+  cookies: {
+    sessionToken: {
+      name: `next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: true
+      }
+    },
+    callbackUrl: {
+      name: `next-auth.callback-url`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: true
+      }
+    },
+    csrfToken: {
+      name: `next-auth.csrf-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: true
+      }
+    }
+  },
   callbacks: {
     async jwt({ token, account }) {
       if (account) {
@@ -28,10 +58,6 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
-  },
-  pages: {
-    signIn: '/admin',
-    error: '/admin',
   },
   debug: process.env.NODE_ENV === 'development'
 };
