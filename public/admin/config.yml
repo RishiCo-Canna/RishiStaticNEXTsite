@@ -1,10 +1,9 @@
-
 backend:
   name: github
   repo: RishiCo-Canna/RishiStaticNEXTsite
   branch: main
-  base_url: https://${process.env.REPL_ID}-${process.env.REPL_OWNER}.repl.dev
-  auth_endpoint: /api/auth
+  base_url: https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev
+  auth_endpoint: api/auth/signin/github
 
 media_folder: public/images
 public_folder: /images
