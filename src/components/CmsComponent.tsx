@@ -2,37 +2,73 @@ import React, { useEffect, useRef, useState } from 'react';
 import ErrorBoundary from './ErrorBoundary';
 import type CMS from 'decap-cms-app';
 import { CmsConfig } from 'decap-cms-core';
+import { createRoot } from 'react-dom/client';
 
 const CmsComponent: React.FC = () => {
   const [error, setError] = useState<Error | null>(null);
   const mountedRef = useRef(false);
-  const initializedRef = useRef(false);
   const cmsRef = useRef<any>(null);
   const rootRef = useRef<HTMLDivElement>(null);
+  const rootInstanceRef = useRef<any>(null);
 
   useEffect(() => {
+    mountedRef.current = true;
+
     const initializeCms = async () => {
       try {
-        // Skip if already initialized or unmounted
-        if (initializedRef.current || !mountedRef.current || !rootRef.current) {
+        setError(null);
+
+        if (!rootRef.current) {
+          console.warn('[CMS] Root element not found');
           return;
+        }
+
+        // Clean up existing root instance if it exists
+        if (rootInstanceRef.current) {
+          rootInstanceRef.current.unmount();
+          rootInstanceRef.current = null;
+        }
+
+        // Clean up existing CMS instance
+        if (cmsRef.current) {
+          console.log('[CMS] Cleaning up previous instance');
+          cmsRef.current = null;
         }
 
         console.log('[CMS] Starting initialization...');
         const CMS = (await import('decap-cms-app')).default;
 
-        // Set initialization flag before init to prevent double initialization
-        initializedRef.current = true;
+        if (!mountedRef.current) return;
 
-        // Let config.yml handle the configuration
-        await CMS.init({
-          config: {
-            load_config_file: true,
-            local_backend: false,
-          }
-        });
+        const config: CmsConfig = {
+          backend: {
+            name: 'github' as const,
+            repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME!,
+            branch: 'main',
+            base_url: window.location.origin,
+            auth_endpoint: 'api/auth'
+          },
+          load_config_file: false,
+          media_folder: 'public/images',
+          public_folder: '/images',
+          collections: [
+            {
+              name: 'pages',
+              label: 'Pages',
+              folder: 'content/pages',
+              create: true,
+              fields: [
+                { label: 'Title', name: 'title', widget: 'string' },
+                { label: 'Body', name: 'body', widget: 'markdown' }
+              ]
+            }
+          ]
+        };
 
+        console.log('[CMS] Initializing with config...');
+        cmsRef.current = await CMS.init({ config });
         console.log('[CMS] Initialization complete');
+
       } catch (err) {
         console.error('[CMS] Initialization failed:', err);
         if (mountedRef.current) {
@@ -41,22 +77,22 @@ const CmsComponent: React.FC = () => {
       }
     };
 
-    // Set mounted flag
-    mountedRef.current = true;
-
-    // Initialize CMS
+    // Initialize when the component mounts
     initializeCms();
 
     return () => {
       mountedRef.current = false;
-      initializedRef.current = false;
-
-      // Clean up by removing the CMS root element content
-      if (rootRef.current) {
-        rootRef.current.innerHTML = '';
+      if (rootInstanceRef.current) {
+        try {
+          rootInstanceRef.current.unmount();
+        } catch (err) {
+          console.warn('[CMS] Cleanup error:', err);
+        }
+        rootInstanceRef.current = null;
       }
+      cmsRef.current = null;
     };
-  }, []); // Empty dependency array for single initialization
+  }, []);
 
   if (error) {
     return (
@@ -67,10 +103,6 @@ const CmsComponent: React.FC = () => {
           className="mt-4 px-4 py-2 bg-red-100 text-red-800 rounded hover:bg-red-200"
           onClick={() => {
             setError(null);
-            initializedRef.current = false;
-            if (rootRef.current) {
-              rootRef.current.innerHTML = '';
-            }
             window.location.reload();
           }}
         >

@@ -2,9 +2,8 @@ backend:
   name: github
   repo: RishiCo-Canna/RishiStaticNEXTsite
   branch: main
-  auth_scope: repo
   base_url: https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev
-  auth_endpoint: /api/auth
+  auth_endpoint: api/auth
 
 # Media and public folder configuration
 media_folder: public/uploads
@@ -29,16 +28,4 @@ collections:
     fields:
       - { label: "Product Name", name: "title", widget: "string" }
       - { label: "Description", name: "description", widget: "markdown" }
-      - { 
-          label: "Price", 
-          name: "price", 
-          widget: "number", 
-          value_type: "float", 
-          min: 0 
-        }
-      - {
-          label: "Featured Image",
-          name: "image",
-          widget: "image",
-          required: false
-        }
+      - { label: "Price", name: "price", widget: "number", value_type: "float" }

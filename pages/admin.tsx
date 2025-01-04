@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { signIn, useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
+import Script from 'next/script';
 
 // Disable SSR for CMS component
 const CmsComponent = dynamic(
@@ -32,8 +33,17 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="admin-container">
-      <CmsComponent />
-    </div>
+    <>
+      <Script 
+        src="https://identity.netlify.com/v1/netlify-identity-widget.js"
+        strategy="beforeInteractive"
+        onError={(e) => {
+          console.error('Failed to load identity widget:', e);
+        }}
+      />
+      <div className="admin-container">
+        <CmsComponent />
+      </div>
+    </>
   );
 }
