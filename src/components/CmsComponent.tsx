@@ -24,7 +24,6 @@ const CmsComponent: React.FC = () => {
         // Clean up any existing CMS instance
         if (cmsRef.current) {
           console.log('[CMS] Cleaning up previous instance');
-          // Clear the root element safely
           if (rootRef.current) {
             rootRef.current.innerHTML = '';
           }
@@ -45,12 +44,13 @@ const CmsComponent: React.FC = () => {
         const config = {
           backend: {
             name: 'github',
-            repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME,
+            repo: 'RishiCo-Canna/RishiStaticNEXTsite',
             branch: 'main',
             base_url: window.location.origin,
-            auth_endpoint: 'api/auth'
+            auth_endpoint: 'api/auth/signin/github'
           },
           load_config_file: false,
+          local_backend: process.env.NODE_ENV === 'development',
           media_folder: 'public/images',
           public_folder: '/images',
           collections: [
@@ -62,6 +62,17 @@ const CmsComponent: React.FC = () => {
               fields: [
                 { label: 'Title', name: 'title', widget: 'string' },
                 { label: 'Body', name: 'body', widget: 'markdown' }
+              ]
+            },
+            {
+              name: 'products',
+              label: 'Products',
+              folder: 'content/products',
+              create: true,
+              fields: [
+                { label: 'Name', name: 'name', widget: 'string' },
+                { label: 'Description', name: 'description', widget: 'markdown' },
+                { label: 'Price', name: 'price', widget: 'number' }
               ]
             }
           ]
