@@ -1,1 +1,14 @@
-{}
+{
+  "../src/components/CmsComponent.tsx -> decap-cms-app": {
+    "id": "../src/components/CmsComponent.tsx -> decap-cms-app",
+    "files": [
+      "static/chunks/node_modules_decap-cms-app_dist_decap-cms-app_js.js"
+    ]
+  },
+  "admin.tsx -> ../src/components/CmsComponent": {
+    "id": "admin.tsx -> ../src/components/CmsComponent",
+    "files": [
+      "static/chunks/src_components_CmsComponent_tsx.js"
+    ]
+  }
+}
