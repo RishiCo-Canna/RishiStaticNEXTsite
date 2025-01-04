@@ -9,7 +9,6 @@ const CmsComponent: React.FC = () => {
   const mountedRef = useRef(false);
   const cmsRef = useRef<any>(null);
   const rootRef = useRef<HTMLDivElement>(null);
-  const rootInstanceRef = useRef<any>(null);
 
   useEffect(() => {
     mountedRef.current = true;
@@ -21,18 +20,6 @@ const CmsComponent: React.FC = () => {
         if (!rootRef.current) {
           console.warn('[CMS] Root element not found');
           return;
-        }
-
-        // Clean up existing root instance if it exists
-        if (rootInstanceRef.current) {
-          rootInstanceRef.current.unmount();
-          rootInstanceRef.current = null;
-        }
-
-        // Clean up existing CMS instance
-        if (cmsRef.current) {
-          console.log('[CMS] Cleaning up previous instance');
-          cmsRef.current = null;
         }
 
         console.log('[CMS] Starting initialization...');
@@ -82,15 +69,13 @@ const CmsComponent: React.FC = () => {
 
     return () => {
       mountedRef.current = false;
-      if (rootInstanceRef.current) {
+      if (cmsRef.current) {
         try {
-          rootInstanceRef.current.unmount();
+          cmsRef.current = null;
         } catch (err) {
           console.warn('[CMS] Cleanup error:', err);
         }
-        rootInstanceRef.current = null;
       }
-      cmsRef.current = null;
     };
   }, []);
 
