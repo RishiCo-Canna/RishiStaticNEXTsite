@@ -11,68 +11,52 @@ const CmsComponent: React.FC = () => {
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!mountedRef.current) {
-      mountedRef.current = true;
-
-      const initializeCms = async () => {
-        try {
-          setError(null);
-
-          if (!rootRef.current) {
-            console.warn('[CMS] Root element not found');
-            return;
-          }
-
-          // Skip if CMS is already initialized
-          if (initializedRef.current || cmsRef.current) {
-            console.log('[CMS] Already initialized, skipping');
-            return;
-          }
-
-          console.log('[CMS] Starting initialization...');
-          const CMS = (await import('decap-cms-app')).default;
-
-          const config: CmsConfig = {
-            backend: {
-              name: 'github' as const,
-              repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME!,
-              branch: 'main',
-              base_url: window.location.origin,
-              auth_endpoint: '/api/auth'
-            },
-            load_config_file: true,
-            media_folder: 'public/uploads',
-            public_folder: '/uploads',
-            local_backend: false,
-            display_url: process.env.NEXT_PUBLIC_SITE_URL,
-          };
-
-          console.log('[CMS] Initializing with config...');
-          // Let Decap CMS handle its own DOM manipulation
-          cmsRef.current = await CMS.init({ config });
-          initializedRef.current = true;
-          console.log('[CMS] Initialization complete');
-
-        } catch (err) {
-          console.error('[CMS] Initialization failed:', err);
-          if (mountedRef.current) {
-            setError(err instanceof Error ? err : new Error('Failed to initialize CMS'));
-          }
+    const initializeCms = async () => {
+      try {
+        // Skip if already initialized or unmounted
+        if (initializedRef.current || !mountedRef.current || !rootRef.current) {
+          return;
         }
-      };
 
-      initializeCms();
-    }
+        console.log('[CMS] Starting initialization...');
+        const CMS = (await import('decap-cms-app')).default;
+
+        // Set initialization flag before init to prevent double initialization
+        initializedRef.current = true;
+
+        // Let config.yml handle the configuration
+        await CMS.init({
+          config: {
+            load_config_file: true,
+            local_backend: false,
+          }
+        });
+
+        console.log('[CMS] Initialization complete');
+      } catch (err) {
+        console.error('[CMS] Initialization failed:', err);
+        if (mountedRef.current) {
+          setError(err instanceof Error ? err : new Error('Failed to initialize CMS'));
+        }
+      }
+    };
+
+    // Set mounted flag
+    mountedRef.current = true;
+
+    // Initialize CMS
+    initializeCms();
 
     return () => {
       mountedRef.current = false;
-      if (cmsRef.current) {
-        console.log('[CMS] Cleaning up...');
-        cmsRef.current = null;
-      }
       initializedRef.current = false;
+
+      // Clean up by removing the CMS root element content
+      if (rootRef.current) {
+        rootRef.current.innerHTML = '';
+      }
     };
-  }, []); // Empty dependency array ensures single initialization
+  }, []); // Empty dependency array for single initialization
 
   if (error) {
     return (
@@ -84,6 +68,9 @@ const CmsComponent: React.FC = () => {
           onClick={() => {
             setError(null);
             initializedRef.current = false;
+            if (rootRef.current) {
+              rootRef.current.innerHTML = '';
+            }
             window.location.reload();
           }}
         >
