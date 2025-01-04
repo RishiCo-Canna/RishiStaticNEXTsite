@@ -23,11 +23,13 @@ const CmsComponent: React.FC = () => {
           return;
         }
 
-        // Clean up existing CMS and root instances
+        // Clean up existing root instance if it exists
         if (rootInstanceRef.current) {
           rootInstanceRef.current.unmount();
           rootInstanceRef.current = null;
         }
+
+        // Clean up existing CMS instance
         if (cmsRef.current) {
           console.log('[CMS] Cleaning up previous instance');
           cmsRef.current = null;
