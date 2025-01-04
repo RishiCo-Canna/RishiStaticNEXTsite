@@ -1,27 +1,46 @@
-
 backend:
   name: github
   repo: RishiCo-Canna/RishiStaticNEXTsite
   branch: main
-  base_url: https://${process.env.REPL_ID}-${process.env.REPL_OWNER}.repl.dev
-  auth_endpoint: /api/auth
+  auth_endpoint: api/auth
+  base_url: https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev
+  commit_messages:
+    create: 'Create {{collection}} "{{slug}}"'
+    update: 'Update {{collection}} "{{slug}}"'
+    delete: 'Delete {{collection}} "{{slug}}"'
+    uploadMedia: 'Upload "{{path}}"'
+    deleteMedia: 'Delete "{{path}}"'
 
-media_folder: public/images
-public_folder: /images
+# Media and public folder configuration
+media_folder: public/uploads
+public_folder: /uploads
 
+# Editorial workflow
+publish_mode: editorial_workflow
+
+# Collections
 collections:
-  - name: pages
-    label: Pages
-    folder: content/pages
+  - name: "pages"
+    label: "Pages"
+    folder: "content/pages"
     create: true
+    slug: "{{slug}}"
     fields:
-      - { label: Title, name: title, widget: string }
-      - { label: Body, name: body, widget: markdown }
-  - name: products
-    label: Products
-    folder: content/products
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Publish Date", name: "date", widget: "datetime" }
+      - { label: "Featured Image", name: "thumbnail", widget: "image", required: false }
+      - { label: "Body", name: "body", widget: "markdown" }
+      - { label: "SEO Description", name: "description", widget: "text", required: false }
+
+  - name: "products"
+    label: "Products"
+    folder: "content/products"
     create: true
+    slug: "{{slug}}"
     fields:
-      - { label: Name, name: name, widget: string }
-      - { label: Description, name: description, widget: markdown }
-      - { label: Price, name: price, widget: number }
+      - { label: "Product Name", name: "title", widget: "string" }
+      - { label: "SKU", name: "sku", widget: "string" }
+      - { label: "Price", name: "price", widget: "number", value_type: "float" }
+      - { label: "Description", name: "description", widget: "markdown" }
+      - { label: "Featured Image", name: "image", widget: "image" }
+      - { label: "Category", name: "category", widget: "select", options: ["flower", "concentrate", "edible", "topical"] }
