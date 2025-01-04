@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ErrorBoundary from './ErrorBoundary';
+import { CmsConfig } from 'decap-cms-core';
 
 const CmsComponent: React.FC = () => {
   const [error, setError] = useState<Error | null>(null);
@@ -41,18 +42,17 @@ const CmsComponent: React.FC = () => {
         }
 
         // Configure CMS
-        const config = {
+        const config: CmsConfig = {
           backend: {
-            name: 'github',
+            name: 'github' as const,
             repo: 'RishiCo-Canna/RishiStaticNEXTsite',
             branch: 'main',
             base_url: window.location.origin,
             auth_endpoint: 'api/auth/signin/github'
           },
           load_config_file: false,
-          local_backend: process.env.NODE_ENV === 'development',
-          media_folder: 'public/images',
-          public_folder: '/images',
+          media_folder: 'public/uploads',
+          public_folder: '/uploads',
           collections: [
             {
               name: 'pages',
@@ -70,16 +70,16 @@ const CmsComponent: React.FC = () => {
               folder: 'content/products',
               create: true,
               fields: [
-                { label: 'Name', name: 'name', widget: 'string' },
+                { label: 'Product Name', name: 'title', widget: 'string' },
                 { label: 'Description', name: 'description', widget: 'markdown' },
-                { label: 'Price', name: 'price', widget: 'number' }
+                { label: 'Price', name: 'price', widget: 'number', value_type: 'float' }
               ]
             }
           ]
         };
 
         // Initialize CMS with config
-        console.log('[CMS] Initializing with config...');
+        console.log('[CMS] Initializing with config:', config);
         cmsRef.current = await CMS.init({ config });
 
         if (!mountedRef.current) {
@@ -115,7 +115,6 @@ const CmsComponent: React.FC = () => {
       if (cmsRef.current && rootRef.current) {
         console.log('[CMS] Cleaning up on unmount');
         try {
-          // Safely clear the root element
           if (rootRef.current.firstChild) {
             rootRef.current.innerHTML = '';
           }
