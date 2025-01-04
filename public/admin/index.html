@@ -20,7 +20,32 @@
 
         // Configure the CMS
         window.decapInit = () => {
-          window.CMS.init()
+          const config = {
+            backend: {
+              name: 'github',
+              repo: 'RishiCo-Canna/RishiStaticNEXTsite',
+              branch: 'main',
+              base_url: 'https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev',
+              auth_endpoint: 'api/auth/callback/github'
+            },
+            load_config_file: false,
+            media_folder: 'public/uploads',
+            public_folder: '/uploads',
+            collections: [
+              {
+                name: 'pages',
+                label: 'Pages',
+                folder: 'content/pages',
+                create: true,
+                fields: [
+                  { label: 'Title', name: 'title', widget: 'string' },
+                  { label: 'Body', name: 'body', widget: 'markdown' }
+                ]
+              }
+            ]
+          };
+
+          window.CMS.init({ config })
             .then(() => {
               console.log('[CMS] Initialized successfully');
             })

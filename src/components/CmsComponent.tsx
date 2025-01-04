@@ -47,8 +47,8 @@ const CmsComponent: React.FC = () => {
             name: 'github' as const,
             repo: 'RishiCo-Canna/RishiStaticNEXTsite',
             branch: 'main',
-            base_url: window.location.origin,
-            auth_endpoint: 'api/auth/signin/github'
+            base_url: 'https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev',
+            auth_endpoint: 'api/auth/callback/github'
           },
           load_config_file: false,
           media_folder: 'public/uploads',

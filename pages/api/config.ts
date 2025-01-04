@@ -4,10 +4,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  // Get the Replit temporary URL
-  const siteUrl = process.env.REPL_SLUG && process.env.REPL_OWNER
-    ? `https://${process.env.REPL_SLUG}-${process.env.REPL_OWNER}.repl.co`
-    : 'http://localhost:3000'
+  // Use the specific Replit URL
+  const siteUrl = 'https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev'
 
   res.json({
     siteUrl,
