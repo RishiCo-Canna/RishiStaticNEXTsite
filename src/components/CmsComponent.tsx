@@ -1,16 +1,24 @@
+'use client';
+
 import React, { useEffect, useRef, useState } from 'react';
 import ErrorBoundary from './ErrorBoundary';
 import type CMS from 'decap-cms-app';
 import { CmsConfig } from 'decap-cms-core';
-import invariant from 'tiny-invariant';
 
 const CmsComponent: React.FC = () => {
   const [error, setError] = useState<Error | null>(null);
+  const [isClient, setIsClient] = useState(false);
   const mountedRef = useRef(false);
   const cmsRef = useRef<any>(null);
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isClient) return; // Only run on client side
+
     mountedRef.current = true;
     let cmsInstance: any = null;
 
@@ -97,7 +105,12 @@ const CmsComponent: React.FC = () => {
         }
       }
     };
-  }, []);
+  }, [isClient]); // Only run when isClient changes
+
+  // Don't render anything during SSR
+  if (!isClient) {
+    return null;
+  }
 
   if (error) {
     return (

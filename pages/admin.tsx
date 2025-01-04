@@ -1,23 +1,20 @@
-
 import dynamic from 'next/dynamic'
-import { useEffect } from 'react'
+
+// Import CmsComponent dynamically with SSR disabled
+const CmsComponent = dynamic(
+  () => import('../src/components/CmsComponent'),
+  { ssr: false }
+)
 
 const AdminPage = () => {
-  useEffect(() => {
-    ;(async () => {
-      if (process.env.NODE_ENV === 'development') {
-        const CMS = (await import('decap-cms-app')).default
-        CMS.init()
-      }
-    })()
-  }, [])
-
   return (
     <>
       <head>
+        <title>Content Management</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <script src="https://identity.netlify.com/v1/netlify-identity-widget.js" async></script>
       </head>
-      <div id="nc-root"></div>
+      <CmsComponent />
     </>
   )
 }
