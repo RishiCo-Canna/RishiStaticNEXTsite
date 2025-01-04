@@ -8,7 +8,6 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
       authorization: {
         params: {
-          // These scopes are required for Decap CMS to work with GitHub
           scope: 'read:user user:email repo'
         }
       }
@@ -19,51 +18,54 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
+  useSecureCookies: true,
   cookies: {
     sessionToken: {
-      name: 'next-auth.session-token',
+      name: `__Secure-next-auth.session-token`,
       options: {
         httpOnly: true,
         sameSite: 'none',
         path: '/',
-        secure: true
+        secure: true,
+        domain: '.replit.dev'
       }
     },
     callbackUrl: {
-      name: 'next-auth.callback-url',
-      options: {
-        sameSite: 'none',
-        path: '/',
-        secure: true
-      }
-    },
-    csrfToken: {
-      name: 'next-auth.csrf-token',
+      name: `__Secure-next-auth.callback-url`,
       options: {
         httpOnly: true,
         sameSite: 'none',
         path: '/',
-        secure: true
+        secure: true,
+        domain: '.replit.dev'
+      }
+    },
+    csrfToken: {
+      name: `__Host-next-auth.csrf-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'none',
+        path: '/',
+        secure: true,
+        domain: '.replit.dev'
       }
     }
   },
   callbacks: {
     async jwt({ token, account }) {
-      // Persist the OAuth access_token to the token right after signin
       if (account) {
         token.accessToken = account.access_token;
       }
       return token;
     },
     async session({ session, token }) {
-      // Send properties to the client
       if (session.user) {
         session.accessToken = token.accessToken;
       }
       return session;
     },
   },
-  debug: true
+  debug: true,
 };
 
 export default NextAuth(authOptions);

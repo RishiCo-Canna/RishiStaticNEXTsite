@@ -4,6 +4,7 @@ backend:
   branch: main
   auth_endpoint: "/api/auth"
   base_url: https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev
+  api_root: https://api.github.com
 
 # Media and public folder configuration
 media_folder: public/uploads
