@@ -1,22 +1,45 @@
-import dynamic from 'next/dynamic'
+import { useEffect, useState } from 'react';
+import { signIn, useSession } from 'next-auth/react';
+import dynamic from 'next/dynamic';
+import Head from 'next/head';
 
-// Import CmsComponent dynamically with SSR disabled
+// Disable SSR for CMS component
 const CmsComponent = dynamic(
   () => import('../src/components/CmsComponent'),
   { ssr: false }
-)
+);
 
-const AdminPage = () => {
+export default function AdminPage() {
+  const { data: session, status } = useSession();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+
+    if (status === 'unauthenticated') {
+      signIn('github');
+    }
+  }, [status]);
+
+  // Show loading state during SSR or authentication
+  if (!isClient || status === 'loading') {
+    return <div>Loading...</div>;
+  }
+
+  if (!session) {
+    return <div>Authenticating...</div>;
+  }
+
   return (
     <>
-      <head>
-        <title>Content Management</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <Head>
+        <title>Admin Dashboard - Content Management</title>
+        <meta name="robots" content="noindex" />
         <script src="https://identity.netlify.com/v1/netlify-identity-widget.js" async></script>
-      </head>
-      <CmsComponent />
+      </Head>
+      <div className="admin-container">
+        <CmsComponent />
+      </div>
     </>
-  )
+  );
 }
-
-export default AdminPage

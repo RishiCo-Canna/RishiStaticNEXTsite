@@ -4,23 +4,29 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Content Manager</title>
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  </head>
-  <body>
-    <!-- Include the script that builds the page and powers Decap CMS -->
-    <script src="/decap-cms-app.js"></script>
+    <!-- Prevent double initialization in Next.js context -->
     <script>
       if (window.parent !== window) {
         console.log('[CMS] Detected iframe context, skipping standalone initialization');
+        document.write('CMS is managed by Next.js application');
       } else {
-        window.decapCmsOnLoad = () => {
-          console.log('[CMS] Initializing...');
-          window.CMS.init()
-            .then(() => console.log('[CMS] Initialized successfully'))
-            .catch(err => console.error('[CMS] Initialization failed:', err));
+        // Load CMS only in standalone mode
+        const script = document.createElement('script');
+        script.src = 'https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js';
+        script.defer = true;
+        script.onload = () => {
+          console.log('[CMS] Script loaded in standalone mode');
+          if (window.CMS) {
+            window.CMS.init()
+              .then(() => console.log('[CMS] Initialized in standalone mode'))
+              .catch(err => console.error('[CMS] Standalone initialization failed:', err));
+          }
         };
+        document.head.appendChild(script);
       }
     </script>
+  </head>
+  <body>
     <div id="nc-root"></div>
   </body>
 </html>

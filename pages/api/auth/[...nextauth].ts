@@ -14,40 +14,32 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
-  session: {
-    strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60, // 30 days
-  },
-  useSecureCookies: true,
   cookies: {
     sessionToken: {
-      name: `__Secure-next-auth.session-token`,
+      name: 'next-auth.session-token',
       options: {
         httpOnly: true,
-        sameSite: 'none',
+        sameSite: 'lax',
         path: '/',
-        secure: true,
-        domain: '.replit.dev'
+        secure: true
       }
     },
     callbackUrl: {
-      name: `__Secure-next-auth.callback-url`,
+      name: 'next-auth.callback-url',
       options: {
         httpOnly: true,
-        sameSite: 'none',
+        sameSite: 'lax',
         path: '/',
-        secure: true,
-        domain: '.replit.dev'
+        secure: true
       }
     },
     csrfToken: {
-      name: `__Host-next-auth.csrf-token`,
+      name: 'next-auth.csrf-token',
       options: {
         httpOnly: true,
-        sameSite: 'none',
+        sameSite: 'lax',
         path: '/',
-        secure: true,
-        domain: '.replit.dev'
+        secure: true
       }
     }
   },
@@ -58,14 +50,15 @@ export const authOptions: NextAuthOptions = {
       }
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token, user }) {
       if (session.user) {
+        session.user.id = token.sub as string;
         session.accessToken = token.accessToken;
       }
       return session;
     },
   },
-  debug: true,
+  debug: process.env.NODE_ENV === 'development'
 };
 
 export default NextAuth(authOptions);
