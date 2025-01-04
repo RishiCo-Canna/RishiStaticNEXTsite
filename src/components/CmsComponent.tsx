@@ -71,9 +71,9 @@ const CmsComponent: React.FC = () => {
         try {
           cmsRef.current = await CMS.init({ config });
           console.log('[CMS] Initialization complete');
-        } catch (initError) {
+        } catch (initError: unknown) {
           console.error('[CMS] Initialization failed:', initError);
-          throw new Error(`CMS initialization failed: ${initError.message}`);
+          throw new Error(`CMS initialization failed: ${initError instanceof Error ? initError.message : 'Unknown error'}`);
         }
 
       } catch (err) {
