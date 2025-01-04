@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import ErrorBoundary from './ErrorBoundary';
 import type CMS from 'decap-cms-app';
 import { CmsConfig } from 'decap-cms-core';
-import { createRoot } from 'react-dom/client';
 
 const CmsComponent: React.FC = () => {
   const [error, setError] = useState<Error | null>(null);
@@ -23,21 +22,23 @@ const CmsComponent: React.FC = () => {
         }
 
         console.log('[CMS] Starting initialization...');
+        // Dynamically import CMS to avoid SSR issues
         const CMS = (await import('decap-cms-app')).default;
 
         if (!mountedRef.current) return;
 
+        // Enhanced configuration with better error handling
         const config: CmsConfig = {
           backend: {
-            name: 'github' as const,
-            repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME!,
+            name: 'github',
+            repo: 'RishiCo-Canna/RishiStaticNEXTsite',
             branch: 'main',
             base_url: window.location.origin,
             auth_endpoint: 'api/auth'
           },
           load_config_file: false,
-          media_folder: 'public/images',
-          public_folder: '/images',
+          media_folder: 'public/uploads',
+          public_folder: '/uploads',
           collections: [
             {
               name: 'pages',
@@ -48,16 +49,33 @@ const CmsComponent: React.FC = () => {
                 { label: 'Title', name: 'title', widget: 'string' },
                 { label: 'Body', name: 'body', widget: 'markdown' }
               ]
+            },
+            {
+              name: 'products',
+              label: 'Products',
+              folder: 'content/products',
+              create: true,
+              fields: [
+                { label: 'Product Name', name: 'title', widget: 'string' },
+                { label: 'Description', name: 'description', widget: 'markdown' },
+                { label: 'Price', name: 'price', widget: 'number', value_type: 'float' }
+              ]
             }
           ]
         };
 
-        console.log('[CMS] Initializing with config...');
-        cmsRef.current = await CMS.init({ config });
-        console.log('[CMS] Initialization complete');
+        console.log('[CMS] Initializing with config:', config);
+
+        try {
+          cmsRef.current = await CMS.init({ config });
+          console.log('[CMS] Initialization complete');
+        } catch (initError) {
+          console.error('[CMS] Initialization failed:', initError);
+          throw new Error(`CMS initialization failed: ${initError.message}`);
+        }
 
       } catch (err) {
-        console.error('[CMS] Initialization failed:', err);
+        console.error('[CMS] Setup error:', err);
         if (mountedRef.current) {
           setError(err instanceof Error ? err : new Error('Failed to initialize CMS'));
         }
