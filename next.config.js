@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   env: {
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev',
+    NEXTAUTH_URL: 'https://09947623-be9f-4899-956d-87e3e868f824-00-qam5g0scl8i3.worf.replit.dev',
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
   },
   async headers() {

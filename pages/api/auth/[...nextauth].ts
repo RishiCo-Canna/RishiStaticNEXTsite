@@ -38,7 +38,20 @@ export const authOptions: NextAuthOptions = {
     error: '/admin',
     signOut: '/admin'
   },
-  debug: process.env.NODE_ENV === 'development'
+  debug: process.env.NODE_ENV === 'development',
+  // Enforce specific callback URL
+  useSecureCookies: true,
+  cookies: {
+    sessionToken: {
+      name: `next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: true
+      }
+    }
+  }
 };
 
 export default NextAuth(authOptions);

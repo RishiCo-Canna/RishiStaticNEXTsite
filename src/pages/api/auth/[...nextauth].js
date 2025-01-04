@@ -4,8 +4,13 @@ import GithubProvider from 'next-auth/providers/github'
 export default NextAuth({
   providers: [
     GithubProvider({
-      clientId: process.env.OAUTH_CLIENT_ID,
-      clientSecret: process.env.OAUTH_CLIENT_SECRET,
+      clientId: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      authorization: {
+        params: {
+          scope: 'repo user'
+        }
+      }
     }),
   ],
   callbacks: {
@@ -16,8 +21,16 @@ export default NextAuth({
       return token
     },
     async session({ session, token }) {
-      session.accessToken = token.accessToken
+      if (session.user) {
+        session.user.id = token.sub as string;
+        session.accessToken = token.accessToken;
+      }
       return session
     }
+  },
+  pages: {
+    signIn: '/admin',
+    error: '/admin',
+    signOut: '/admin'
   }
 })
