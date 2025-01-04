@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { signIn, useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
-import Head from 'next/head';
+import Script from 'next/script';
 
 // Disable SSR for CMS component
 const CmsComponent = dynamic(
@@ -32,11 +32,10 @@ export default function AdminPage() {
 
   return (
     <>
-      <Head>
-        <title>Admin Dashboard - Content Management</title>
-        <meta name="robots" content="noindex" />
-        <script src="https://identity.netlify.com/v1/netlify-identity-widget.js" async></script>
-      </Head>
+      <Script 
+        src="https://identity.netlify.com/v1/netlify-identity-widget.js"
+        strategy="beforeInteractive"
+      />
       <div className="admin-container">
         <CmsComponent />
       </div>

@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ErrorBoundary from './ErrorBoundary';
+import type CMS from 'decap-cms-app';
+import { CmsConfig } from 'decap-cms-core';
 
 const CmsComponent: React.FC = () => {
   const [error, setError] = useState<Error | null>(null);
@@ -24,7 +26,6 @@ const CmsComponent: React.FC = () => {
         // Clean up any existing CMS instance
         if (cmsRef.current) {
           console.log('[CMS] Cleaning up previous instance');
-          // Clear the root element safely
           if (rootRef.current) {
             rootRef.current.innerHTML = '';
           }
@@ -33,7 +34,7 @@ const CmsComponent: React.FC = () => {
 
         console.log('[CMS] Starting initialization...');
 
-        // Import CMS dynamically
+        // Import CMS dynamically to avoid SSR issues
         const CMS = (await import('decap-cms-app')).default;
 
         if (!mountedRef.current) {
@@ -41,11 +42,11 @@ const CmsComponent: React.FC = () => {
           return;
         }
 
-        // Configure CMS
-        const config = {
+        // Configure CMS with proper typing
+        const config: CmsConfig = {
           backend: {
-            name: 'github',
-            repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME,
+            name: 'github' as const,
+            repo: process.env.NEXT_PUBLIC_GITHUB_REPO_FULL_NAME!,
             branch: 'main',
             base_url: window.location.origin,
             auth_endpoint: 'api/auth'
@@ -89,13 +90,8 @@ const CmsComponent: React.FC = () => {
     if (document.readyState === 'complete') {
       initializeCms();
     } else {
-      const handleLoad = () => {
-        if (mountedRef.current) {
-          initializeCms();
-        }
-      };
-      window.addEventListener('load', handleLoad);
-      return () => window.removeEventListener('load', handleLoad);
+      window.addEventListener('load', initializeCms);
+      return () => window.removeEventListener('load', initializeCms);
     }
 
     // Cleanup function
@@ -104,10 +100,7 @@ const CmsComponent: React.FC = () => {
       if (cmsRef.current && rootRef.current) {
         console.log('[CMS] Cleaning up on unmount');
         try {
-          // Safely clear the root element
-          if (rootRef.current.firstChild) {
-            rootRef.current.innerHTML = '';
-          }
+          rootRef.current.innerHTML = '';
         } catch (err) {
           console.warn('[CMS] Cleanup error:', err);
         }
@@ -125,9 +118,7 @@ const CmsComponent: React.FC = () => {
           className="mt-4 px-4 py-2 bg-red-100 text-red-800 rounded hover:bg-red-200"
           onClick={() => {
             setError(null);
-            if (mountedRef.current) {
-              window.location.reload();
-            }
+            window.location.reload();
           }}
         >
           Retry
