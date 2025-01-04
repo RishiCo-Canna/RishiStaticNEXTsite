@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import ErrorBoundary from './ErrorBoundary';
 import type CMS from 'decap-cms-app';
 import { CmsConfig } from 'decap-cms-core';
+import invariant from 'tiny-invariant';
 
 const CmsComponent: React.FC = () => {
   const [error, setError] = useState<Error | null>(null);
@@ -11,6 +12,7 @@ const CmsComponent: React.FC = () => {
 
   useEffect(() => {
     mountedRef.current = true;
+    let cmsInstance: any = null;
 
     const initializeCms = async () => {
       try {
@@ -87,9 +89,9 @@ const CmsComponent: React.FC = () => {
 
     return () => {
       mountedRef.current = false;
-      if (cmsRef.current) {
+      if (cmsInstance) {
         try {
-          cmsRef.current = null;
+          cmsInstance.close();
         } catch (err) {
           console.warn('[CMS] Cleanup error:', err);
         }
