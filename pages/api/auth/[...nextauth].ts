@@ -8,7 +8,8 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
       authorization: {
         params: {
-          scope: 'read:user user:email repo'
+          scope: 'read:user user:email repo',
+          redirect_uri: process.env.NEXTAUTH_URL + '/api/auth/callback/github'
         }
       }
     }),
@@ -50,7 +51,7 @@ export const authOptions: NextAuthOptions = {
       }
       return token;
     },
-    async session({ session, token, user }) {
+    async session({ session, token }) {
       if (session.user) {
         session.user.id = token.sub as string;
         session.accessToken = token.accessToken;
