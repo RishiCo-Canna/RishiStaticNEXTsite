@@ -2,47 +2,42 @@ import React, { useEffect, useRef, useState } from 'react';
 import ErrorBoundary from './ErrorBoundary';
 import type CMS from 'decap-cms-app';
 import { CmsConfig } from 'decap-cms-core';
+import { createRoot } from 'react-dom/client';
 
 const CmsComponent: React.FC = () => {
   const [error, setError] = useState<Error | null>(null);
   const mountedRef = useRef(false);
   const cmsRef = useRef<any>(null);
   const rootRef = useRef<HTMLDivElement>(null);
+  const rootInstanceRef = useRef<any>(null);
 
   useEffect(() => {
     mountedRef.current = true;
 
     const initializeCms = async () => {
       try {
-        // Clear any previous error state
         setError(null);
 
-        // Safety check for root element
         if (!rootRef.current) {
           console.warn('[CMS] Root element not found');
           return;
         }
 
-        // Clean up any existing CMS instance
+        // Clean up existing CMS and root instances
+        if (rootInstanceRef.current) {
+          rootInstanceRef.current.unmount();
+          rootInstanceRef.current = null;
+        }
         if (cmsRef.current) {
           console.log('[CMS] Cleaning up previous instance');
-          if (rootRef.current) {
-            rootRef.current.innerHTML = '';
-          }
           cmsRef.current = null;
         }
 
         console.log('[CMS] Starting initialization...');
-
-        // Import CMS dynamically to avoid SSR issues
         const CMS = (await import('decap-cms-app')).default;
 
-        if (!mountedRef.current) {
-          console.log('[CMS] Component unmounted during initialization');
-          return;
-        }
+        if (!mountedRef.current) return;
 
-        // Configure CMS with proper typing
         const config: CmsConfig = {
           backend: {
             name: 'github' as const,
@@ -68,16 +63,10 @@ const CmsComponent: React.FC = () => {
           ]
         };
 
-        // Initialize CMS with config
         console.log('[CMS] Initializing with config...');
         cmsRef.current = await CMS.init({ config });
-
-        if (!mountedRef.current) {
-          console.log('[CMS] Component unmounted after initialization');
-          return;
-        }
-
         console.log('[CMS] Initialization complete');
+
       } catch (err) {
         console.error('[CMS] Initialization failed:', err);
         if (mountedRef.current) {
@@ -86,26 +75,20 @@ const CmsComponent: React.FC = () => {
       }
     };
 
-    // Initialize only when the DOM is ready
-    if (document.readyState === 'complete') {
-      initializeCms();
-    } else {
-      window.addEventListener('load', initializeCms);
-      return () => window.removeEventListener('load', initializeCms);
-    }
+    // Initialize when the component mounts
+    initializeCms();
 
-    // Cleanup function
     return () => {
       mountedRef.current = false;
-      if (cmsRef.current && rootRef.current) {
-        console.log('[CMS] Cleaning up on unmount');
+      if (rootInstanceRef.current) {
         try {
-          rootRef.current.innerHTML = '';
+          rootInstanceRef.current.unmount();
         } catch (err) {
           console.warn('[CMS] Cleanup error:', err);
         }
-        cmsRef.current = null;
+        rootInstanceRef.current = null;
       }
+      cmsRef.current = null;
     };
   }, []);
 

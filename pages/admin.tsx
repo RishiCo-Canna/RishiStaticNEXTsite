@@ -15,7 +15,9 @@ export default function AdminPage() {
 
   useEffect(() => {
     setIsClient(true);
+  }, []);
 
+  useEffect(() => {
     if (status === 'unauthenticated') {
       signIn('github');
     }
@@ -35,6 +37,9 @@ export default function AdminPage() {
       <Script 
         src="https://identity.netlify.com/v1/netlify-identity-widget.js"
         strategy="beforeInteractive"
+        onError={(e) => {
+          console.error('Failed to load identity widget:', e);
+        }}
       />
       <div className="admin-container">
         <CmsComponent />
